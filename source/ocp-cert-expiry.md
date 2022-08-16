@@ -1,4 +1,5 @@
 # OCP Cert Expiry and Resolution
+
 In the event that oauth is down, indicated by "connection refused" running any
 OC command against the API. The issue is most likely caused by an expired
 internal cluster certificate. Internal cluster certs have an expiry of 30d.
