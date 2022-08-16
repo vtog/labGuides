@@ -14,7 +14,10 @@ release = 'main'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['myst_parser']
+extensions = [
+    'myst_parser',
+    'sphinx_copybutton'
+]
 myst_enable_extensions = [
     "colon_fence"
 ]
