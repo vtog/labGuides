@@ -12,6 +12,7 @@ Welcome to lab_rat's documentation!
 
    adding-node-day2
    create-key-cert-pair
+   local-registry-quick-start
    lso-odf-quick-start
    ocp-cert-expiry
    simple-bind-config
