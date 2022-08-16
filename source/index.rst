@@ -8,7 +8,7 @@ Welcome to lab_rat's documentation!
 
 .. toctree::
    :maxdepth: 0
-   :caption: Contents:
+   :caption: Content:
 
    adding-node-day2
    create-key-cert-pair
@@ -17,9 +17,3 @@ Welcome to lab_rat's documentation!
    simple-bind-config
    starting-the-cluster
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
