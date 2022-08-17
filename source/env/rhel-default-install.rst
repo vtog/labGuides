@@ -27,6 +27,23 @@ These instruction configure RHEL8 with my preferred settings.
       sudo dnf group install "Development Tools"
       sudo dnf install git python3-pip cmake httpd-tools
 
+#. Install KVM
+
+   .. code-block:: bash
+
+      sudo dnf install virt-install virt-viewer virt-manager virt-top libvirt
+      
+      sudo systemctl enable --now libvirtd
+
+   .. note:: You'll need to configure firewalld to allow external traffic to connect to the
+      virtual network via the host. The following firewall-cmd's allow the virtual network to
+      access port 53 and any external host access to the virtual network.
+
+      .. code-block:: bash
+
+         sudo firewall-cmd --add-source=192.168.122.0/24 --zone=home --permanent
+         sudo firewall-cmd --add-service=dns --zone=home --permanent
+
 #. Update PIP and install misc packages
 
    .. code-block:: bash
