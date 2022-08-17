@@ -27,6 +27,15 @@ These instruction configure RHEL8 with my preferred settings.
       sudo dnf group install "Development Tools"
       sudo dnf install git python3-pip cmake httpd-tools
 
+#. Install brave browser
+
+   .. code-block:: bash
+
+      sudo dnf install dnf-plugins-core
+      sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
+      sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+      sudo dnf install brave-browser
+
 #. Install KVM
 
    .. code-block:: bash
@@ -53,14 +62,15 @@ These instruction configure RHEL8 with my preferred settings.
       # add misc packages
       pip install ansible awscli Pygments wheel
 
-#. Install brave
+#. Add Sphinx document build environment
 
    .. code-block:: bash
-
-      sudo dnf install dnf-plugins-core
-      sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
-      sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-      sudo dnf install brave-browser
+   
+      pip install sphinx sphinx_rtd_theme sphinx-pdj-theme sphinx-copybutton myst-parser
+      
+      # F5 Theme
+      pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag sphinxcontrib.blockdiag sphinxcontrib-websupport
+      sudo dnf install graphviz
 
 #. Modify sshd
 
@@ -91,7 +101,7 @@ These instruction configure RHEL8 with my preferred settings.
 
 #. Setup .dotfiles
 
-   .. note:: This assumes the "dotfiles" repo exists
+   .. note:: This assumes my "dotfiles" repo exists
 
    .. code-block:: bash
 
@@ -171,13 +181,3 @@ These instruction configure RHEL8 with my preferred settings.
       : PlugInstall
       : q
       : q
-
-#. Add Sphinx build environment
-
-   .. code-block:: bash
-   
-      pip install sphinx sphinx_rtd_theme sphinx-pdj-theme sphinx-copybutton
-      
-      # F5 Theme
-      pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag sphinxcontrib.blockdiag sphinxcontrib-websupport
-      sudo dnf install graphviz
