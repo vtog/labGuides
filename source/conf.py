@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'lab_rat'
+project = 'lab-how-tos'
 copyright = '2022, Vince Tognaci'
 author = 'Vince Tognaci'
 release = 'main'
