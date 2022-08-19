@@ -8,4 +8,4 @@ Lab Environment How-To's
    rhel-default-install
    simple-bind-config
    create-key-cert-pair
-
+   intel-i350
