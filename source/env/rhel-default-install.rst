@@ -3,6 +3,9 @@ Setup Fedora/RHEL
 
 These instruction configure RHEL8 with my preferred settings.
 
+.. warning:: This is a work in progress. I need to walk through this a couple more times to ensure I captured
+   everything.
+
 #. Setup fusion free and non-free
 
    .. code-block:: bash

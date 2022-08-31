@@ -1,8 +1,10 @@
 # Local Registry Quick Start
 
-This document will describe the installation of the Local Storage Operator (LSO)
-and OpenShift Data Foundations (ODF). LSO is a pre-requisite for installing ODF
-on OpenShift nodes that will use local block devices.
+After configuring storage you can create a PVC for the local registry. The following walks through configuring
+
+- Local auth with HTPasswd
+- A PVC for the Image Registry
+- Starting the local registry
 
 :::{important}
 These instructions assume you've configured a persistant volume (PV). More
