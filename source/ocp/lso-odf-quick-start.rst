@@ -79,5 +79,26 @@ Install and Configure OpenShift Data Foundation (ODF)
 #. You should see the total "Available raw capacity" of your selected nodes
 #. Click Next
 #. Leave defaults and click Next
-#. Review the information; if acceptable click "Create StorageSystem"
+#. Review the information, if acceptable click "Create StorageSystem"
+
+   .. note:: This can take several minutes to complete.
+
+#. Verify “ocs-storagecluster-cephfs” is created
+
+   .. code-block:: console
+
+      oc get sc
+
+   .. attention:: Do NOT attempt the next step unless you see the newly created
+      storage class.
+
+   .. image:: images/ocgetsc.png
+
+#. Set the default storage class to “ocs-storagecluster-cephfs”
+
+   .. code-block:: console
+
+      oc patch storageclass ocs-storagecluster-cephfs -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
+
+   .. image:: images/ocgetscdef.png   
 

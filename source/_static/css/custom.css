@@ -6,27 +6,27 @@ img {
 #  margin-bottom: 24px;
 #}
 
-.section ol.loweralpha > li { 
-  list-style: lower-alpha;
-  padding-bottom: 5px;
-}
+#.section ol.loweralpha > li { 
+#  list-style: lower-alpha;
+#  padding-bottom: 5px;
+#}
 
-.section ol.upperalpha > li { 
-  list-style: upper-alpha;
-  padding-bottom: 5px;
-}
+#.section ol.upperalpha > li { 
+#  list-style: upper-alpha;
+#  padding-bottom: 5px;
+#}
 
-.section ol.arabic > li {
-  list-style: decimal;
-  padding-bottom: 5px;
-}
+#.section ol.arabic > li {
+#  list-style: decimal;
+#  padding-bottom: 5px;
+#}
 
-.section ol.lowerroman > li {
-  list-style: lower-roman;
-  padding-bottom: 5px;
-}
+#.section ol.lowerroman > li {
+#  list-style: lower-roman;
+#  padding-bottom: 5px;
+#}
 
-.section ol.upperroman > li {
-  list-style: upper-roman;
-  padding-bottom: 5px;
-}
+#.section ol.upperroman > li {
+#  list-style: upper-roman;
+#  padding-bottom: 5px;
+#}
