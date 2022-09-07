@@ -1,4 +1,4 @@
-Welcome to vtog's Lab How-To's!
+Welcome to vtog's Quick Starts!
 ===============================
 
 .. toctree::

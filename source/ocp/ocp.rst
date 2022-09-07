@@ -5,9 +5,10 @@ OpenShift How-To's
    :maxdepth: 0
    :caption: Content:
 
-   adding-node-day2
-   local-registry-quick-start
+   assissted-installer-notes
    lso-odf-quick-start
+   local-registry-quick-start
+   adding-node-day2
    ocp-cert-expiry
    starting-the-cluster
 
