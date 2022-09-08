@@ -1,10 +1,14 @@
 img {
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 }
 
-#table {
-#  margin-bottom: 24px;
-#}
+li:last-child {
+  margin-bottom: 10px;
+}
+
+table {
+  margin-bottom: 10px;
+}
 
 #.section ol.loweralpha > li { 
 #  list-style: lower-alpha;
@@ -30,3 +34,4 @@ img {
 #  list-style: upper-roman;
 #  padding-bottom: 5px;
 #}
+

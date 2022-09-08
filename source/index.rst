@@ -2,7 +2,7 @@ Welcome to vtog's Quick Starts!
 ===============================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 0
    :caption: Content:
 
    ocp/ocp
