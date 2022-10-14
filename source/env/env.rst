@@ -5,7 +5,7 @@ Lab Environment How-To's
    :maxdepth: 0
    :caption: Content:
 
-   rhel-default-install
-   simple-bind-config
    create-key-cert-pair
    intel-i350
+   rhel-default-install
+   simple-bind-config
