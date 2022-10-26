@@ -11,7 +11,7 @@ quick start will cover the following topics:
 .. important:: These instructions assume you've configured a persistant volume
    (PV). More specifically followed the `Local Storage & ODF Operator Quick Start <./lso-odf-quick-start.html>`_
 
-   For LSO only see `Local Stroage Operator + Image Registry Quick Start <./lso-lr-quick-start.html>`_
+   For LSO only see `Local Storage Operator + Image Registry Quick Start <./lso-lr-quick-start.html>`_
 
 Configure the Image Registry storage claim
 -------------------------------------------

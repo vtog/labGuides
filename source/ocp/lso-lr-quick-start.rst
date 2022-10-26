@@ -1,4 +1,4 @@
-Local Stroage Operator + Image Registry Quick Start
+Local Storage Operator + Image Registry Quick Start
 ===================================================
 
 This document will describe the installation of the Local Storage Operator
