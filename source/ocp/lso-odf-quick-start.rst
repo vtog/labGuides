@@ -1,5 +1,5 @@
-LSO & ODF Quick Start
-=====================
+Local Storage & ODF Operator Quick Start
+========================================
 
 This document will describe the installation of the Local Storage Operator
 (LSO) and OpenShift Data Foundations (ODF). LSO is a pre-requisite for
@@ -102,8 +102,8 @@ Install and Configure OpenShift Data Foundation (ODF)
 
    .. image:: images/ocgetscdef.png   
 
-Disable Noobaa
---------------
+Optional: Disable Noobaa
+------------------------
 
 1. Create and the following CRD. "vi disableNoobaa.yaml"
 
@@ -140,3 +140,4 @@ I've noticed deleting PVC sometimes doesn't work and they'll be stuck in the
 .. code-block:: console
 
    oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
+

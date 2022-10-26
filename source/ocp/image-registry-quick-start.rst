@@ -1,4 +1,4 @@
-Local Registry Quick Start
+Image Registry Quick Start
 ==========================
 
 After configuring storage you can create a PVC for the local registry. This
@@ -9,10 +9,12 @@ quick start will cover the following topics:
 - Create an HTPasswd file using linux
 
 .. important:: These instructions assume you've configured a persistant volume
-   (PV). More specifically followed the "LSO & ODF Quick Start".
+   (PV). More specifically followed the `Local Storage & ODF Operator Quick Start <./lso-odf-quick-start.html>`_
 
-Configure the local Image Registry storage claim
-------------------------------------------------
+   For LSO only see `Local Stroage Operator + Image Registry Quick Start <./lso-lr-quick-start.html>`_
+
+Configure the Image Registry storage claim
+-------------------------------------------
 
 #. Change project
 
@@ -44,8 +46,8 @@ Configure the local Image Registry storage claim
 
       oc get pvc
 
-Local registry default route
-----------------------------
+Set the Image Registry's default route
+--------------------------------------
 
 #. Set the defaultRoute to true
 

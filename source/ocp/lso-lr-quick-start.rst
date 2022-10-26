@@ -118,7 +118,7 @@ Configure the Image Registry storage claim
         name: image-registry-storage
         namespace: openshift-image-registry
       spec:
-        storageClassName: lso
+        storageClassName: lso-fs
         accessModes:
         - ReadWriteOnce
         resources:

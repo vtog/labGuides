@@ -9,7 +9,7 @@ OpenShift How-To's
    assissted-installer-notes
    lso-lr-quick-start
    lso-odf-quick-start
-   local-registry-quick-start
+   image-registry-quick-start
    ocp-cert-expiry
    self-contained-cluster.rst
    starting-the-cluster
