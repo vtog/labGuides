@@ -69,6 +69,9 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       rendezvousIP: 192.168.122.21
       hosts:
         - hostname: host21
+          role: master
+          rootDeviceHints:
+            deviceName: /dev/sda
           interfaces:
             - name: enp1s0
               macAddress: 52:54:00:f4:16:21
