@@ -1,10 +1,9 @@
 Assissted Install Notes
 =======================
 
-Using the following simple templates to get started with AI. These can be
-dropped in via the UI.
+The following are notes on deploying OCP with the console AI.
 
-#. Static network configuration
+#. AI console static network configuration
 
    .. code-block:: yaml
 
@@ -32,7 +31,7 @@ dropped in via the UI.
           next-hop-interface: enp1s0
           table-id: 254
 
-#. MAC / IP mappings
+#. KVM MAC/IP mappings
 
    .. code-block:: yaml
 
@@ -45,6 +44,7 @@ dropped in via the UI.
       <host mac='52:54:00:f4:16:27' ip='192.168.122.27'/>
       <host mac='52:54:00:f4:16:28' ip='192.168.122.28'/>
       <host mac='52:54:00:f4:16:29' ip='192.168.122.29'/>
+      <host mac='52:54:00:f4:16:30' ip='192.168.122.30'/>
       <host mac='52:54:00:f4:16:31' ip='192.168.122.31'/>
       <host mac='52:54:00:f4:16:32' ip='192.168.122.32'/>
       <host mac='52:54:00:f4:16:33' ip='192.168.122.33'/>
@@ -54,4 +54,14 @@ dropped in via the UI.
       <host mac='52:54:00:f4:16:37' ip='192.168.122.37'/>
       <host mac='52:54:00:f4:16:38' ip='192.168.122.38'/>
       <host mac='52:54:00:f4:16:39' ip='192.168.122.39'/>
+      <host mac='52:54:00:f4:16:40' ip='192.168.122.40'/>
+      <host mac='52:54:00:f4:16:41' ip='192.168.122.41'/>
+      <host mac='52:54:00:f4:16:42' ip='192.168.122.42'/>
+      <host mac='52:54:00:f4:16:43' ip='192.168.122.43'/>
+      <host mac='52:54:00:f4:16:44' ip='192.168.122.44'/>
+      <host mac='52:54:00:f4:16:45' ip='192.168.122.45'/>
+      <host mac='52:54:00:f4:16:46' ip='192.168.122.46'/>
+      <host mac='52:54:00:f4:16:47' ip='192.168.122.47'/>
+      <host mac='52:54:00:f4:16:48' ip='192.168.122.48'/>
+      <host mac='52:54:00:f4:16:49' ip='192.168.122.49'/>
 
