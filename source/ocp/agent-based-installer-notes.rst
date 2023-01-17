@@ -55,9 +55,9 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
               bootMACAddress: 52:54:00:f4:16:26
           apiVIP: "192.168.122.120"
           ingressVIP: "192.168.122.121"
-      pullSecret: '{"auths":{"cloud.openshift.com":{"auth":"..."}}}
+      pullSecret: '{“auths”:{“fake”:{“auth”: “bar”}}}'
       sshKey: |
-        ssh-rsa
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
 
 #. agent-config.yaml (repeat "hostname" block for each host).
 
