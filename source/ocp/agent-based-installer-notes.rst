@@ -8,6 +8,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 #. install-config.yaml
 
    .. code-block:: yaml
+      :emphasize-lines: 2, 14, 20, 45-49
 
       apiVersion: v1
       baseDomain: lab.local
@@ -62,6 +63,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 #. agent-config.yaml (repeat "hostname" block for each host).
 
    .. code-block:: yaml
+      :emphasize-lines: 3, 4, 6, 9, 11, 12, 15, 19, 23, 31, 35, 36
 
       apiVersion: v1alpha1
       metadata:
@@ -104,14 +106,14 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 #. With the latest "openshift-install" run the following command. In my case
    I'm using a "workdir" with my support yaml files.
 
-   .. code-block:: yaml
+   .. code-block:: console
 
       ./openshift-install agent create image --dir workdir
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
    with the following command:
 
-   .. code-block:: yaml
+   .. code-block:: console
 
       ./openshift-install agent wait-for install-complete --dir workdir
 

@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'lab-how-tos'
-copyright = '2022, Vince Tognaci'
+copyright = '2023, Vince Tognaci'
 author = 'Vince Tognaci'
 release = 'main'
 
@@ -33,9 +33,11 @@ source_suffix = {
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-import sphinx_pdj_theme
-html_theme = 'sphinx_pdj_theme'
-html_theme_path = [sphinx_pdj_theme.get_html_theme_path()]
+html_theme = 'sphinx_rtd_theme'
+#import sphinx_pdj_theme
+#html_theme = 'sphinx_pdj_theme'
+#html_theme_path = [sphinx_pdj_theme.get_html_theme_path()]
+html_logo = '_static/redhat.png'
 
 html_static_path = ['_static']
 html_css_files = ['css/custom.css']
