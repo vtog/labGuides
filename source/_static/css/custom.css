@@ -1,44 +1,45 @@
 img {
-  margin-bottom: 10px;
+  margin-bottom: 20px !important;
 }
 
-li:last-child {
-  margin-bottom: 10px;
+#li:first-child {
+#  margin-top: 0px !important;
+#  margin-bottom: 0px !important;
+#}
+
+#li:last-child {
+#  margin-top: 0px !important;
+#  margin-bottom: 0px !important;
+#}
+
+#table {
+#  margin-bottom: 10px !important;
+#}
+
+.section ol.arabic > li {
+  list-style: decimal !important;
 }
 
-table {
-  margin-bottom: 10px;
+.section ol.upperalpha > li {
+  list-style: upper-alpha !important;
 }
 
-#.section ol.loweralpha > li { 
-#  list-style: lower-alpha;
-#  padding-bottom: 5px;
-#}
+.section ol.loweralpha > li { 
+  list-style: lower-alpha !important;
+}
 
-#.section ol.upperalpha > li { 
-#  list-style: upper-alpha;
-#  padding-bottom: 5px;
-#}
+.section ol.upperroman > li {
+  list-style: upper-roman !important;
+}
 
-#.section ol.arabic > li {
-#  list-style: decimal;
-#  padding-bottom: 5px;
-#}
-
-#.section ol.lowerroman > li {
-#  list-style: lower-roman;
-#  padding-bottom: 5px;
-#}
-
-#.section ol.upperroman > li {
-#  list-style: upper-roman;
-#  padding-bottom: 5px;
-#}
+.section ol.lowerroman > li {
+  list-style: lower-roman !important;
+}
 
 .highlight .hll {
   background-color: #ffff00 !important;
-  margin:0px 0px !important;
-  padding:0px 0px !important;
+  margin: 0px 0px !important;
+  padding: 0px 0px !important;
   display: inline !important;
 }
 
