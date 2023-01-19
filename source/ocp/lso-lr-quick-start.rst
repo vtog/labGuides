@@ -63,19 +63,19 @@ Configure the Image Registry storage claim
 
 #. Change project
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc project openshift-image-registry
 
 #. Set image registry to Managed by patching the config
 
-   .. code-block:: console
+   .. code-block:: bash
 
-      oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec
+      oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed"}}'
 
 #. Add the PVC by editing the image registry config
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc edit configs.imageregistry.operator.openshift.io cluster
 
@@ -87,7 +87,7 @@ Configure the Image Registry storage claim
 
 #. Check pvc STATUS = "Bound"
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get pvc
 
@@ -99,7 +99,7 @@ Configure the Image Registry storage claim
 
    First delete the pvc:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc delete pvc image-registry-storage
 
@@ -128,7 +128,7 @@ Configure the Image Registry storage claim
 
    Create the new pvc:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc create -f imageregpvc.yaml
 
@@ -137,31 +137,31 @@ Set the Image Registry's default route
 
 #. Set the defaultRoute to true
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
 
 #. Get the default registry route
 
-   .. code-block:: console
+   .. code-block:: bash
 
       HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
 
 #. Get the cluster’s default certificate and add to the clients local ca-trust
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee
 
 #. Update the clients local ca-trust
 
-   .. code-block:: console
+   .. code-block:: bash
 
       sudo update-ca-trust enable
 
 #. Log in with podman using the default route
 
-   .. code-block:: console
+   .. code-block:: bash
 
       podman login -u kubeadmin -p $(oc whoami -t) $HOST
 

@@ -9,20 +9,20 @@ following commands you can confirm expired certs and resolve the issue.
 
 #. SSH to any master node.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       ssh core@master1
       sudo -s
 
 #. Export recovery KUBECONFIG for local cluster management.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       export KUBECONFIG=/etc/kubernetes/static-pod-resources/kube-apiserver-certs/secrets/node-kubeconfigs/localhost-recovery.kubeconfig
 
 #. View pending CSR's (should see several in the pending state).
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get csr
 
@@ -38,13 +38,13 @@ NOTES
 -----
 #. Download for review csr-signer cert and key.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc extract secret/csr-signer -n openshift-kube-controller-manager --to /home/user/ --confirm
 
 #. View csr-signer cert (this shows the 30d expiry)
 
-   .. code-block:: console
+   .. code-block:: bash
 
       openssl x509 -text -noout -in /home/user/tls.crt
 

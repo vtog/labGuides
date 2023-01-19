@@ -106,14 +106,14 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 #. With the latest "openshift-install" run the following command. In my case
    I'm using a "workdir" with my support yaml files.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       ./openshift-install agent create image --dir workdir
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
    with the following command:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       ./openshift-install agent wait-for install-complete --dir workdir
 

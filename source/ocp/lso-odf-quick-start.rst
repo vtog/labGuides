@@ -85,7 +85,7 @@ Install and Configure OpenShift Data Foundation (ODF)
 
 #. Verify “ocs-storagecluster-cephfs” is created
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get sc
 
@@ -96,7 +96,7 @@ Install and Configure OpenShift Data Foundation (ODF)
 
 #. Set the default storage class to “ocs-storagecluster-cephfs”
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc patch storageclass ocs-storagecluster-cephfs -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
 
@@ -120,14 +120,14 @@ Optional: Disable Noobaa
 
 #. Apply CRD
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc apply -f disableNoobaa.yaml
 
 
 #. Remove Noobaa objects
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc delete noobaas.noobaa.io  --all
 
@@ -137,7 +137,7 @@ Notes
 I've noticed deleting PVC sometimes doesn't work and they'll be stuck in the
 "Terminating" phase.  The following command will remove them:
 
-.. code-block:: console
+.. code-block:: bash
 
    oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
 

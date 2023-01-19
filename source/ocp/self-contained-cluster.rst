@@ -15,7 +15,7 @@ Find, List and Copy Images
 
    Download the images:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       curl https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.9.43/release.txt -o release-4.9.43.txt
 
@@ -24,13 +24,13 @@ Find, List and Copy Images
 
 #. To get the list of images, do the following:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       grep openshift-release-dev release-4.9.43.txt | grep quay.io | awk '{print $2}' | grep -v From > images.lst
 
 #. Now we need to add the Operator images to the list of requirements.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc adm catalog mirror registry.redhat.io/redhat/redhat-operator-index:v4.9 file:///local/index -a pull-secret.json --insecure --index-filter-by-os='linux/amd64' --manifests-only
 
@@ -40,7 +40,7 @@ Find, List and Copy Images
 
 #. Show list of operators
 
-   .. code-block:: console
+   .. code-block:: bash
 
       awk -F "/" '{print $2}' manifests-redhat-operator-index-1665676536/mapping.txt | sort | uniq
 
@@ -48,7 +48,7 @@ Find, List and Copy Images
  
    .. note:: In our lab we'll focus on the ODF and Local Storage operators.
  
-   .. code-block:: console
+   .. code-block:: bash
  
       grep odf4 manifests-redhat-operator-index-1665676536/mapping.txt | awk -F "=" '{print $1}' > operators.lst
  
@@ -56,7 +56,7 @@ Find, List and Copy Images
  
 #. Copy images.lst and oparators.lst to node
 
-   .. code-block:: console
+   .. code-block:: bash
 
       scp *.lst core@192.168.122.31:~
 
@@ -70,7 +70,7 @@ Find, List and Copy Images
 
    First the release images:
 
-   .. code-block:: console
+   .. code-block:: bash
 
       ssh core@192.168.122.31
 
@@ -80,13 +80,13 @@ Find, List and Copy Images
 
    Now the operator images:
 
-   .. code-block:: console
+   .. code-block:: bash
    
       for image in `cat operators.lst`; do sudo crictl pull $image; done;
 
 #. Create the alternate location and copy the images
 
-   .. code-block:: console
+   .. code-block:: bash
 
       sudo -s
 
@@ -102,7 +102,7 @@ Find, List and Copy Images
 
    .. note:: If root (and you should be) you'll need to type "exit" twice
 
-   .. code-block:: console
+   .. code-block:: bash
 
       exit
 
@@ -111,7 +111,7 @@ Find, List and Copy Images
    For this to work the private key will need to be copied to the primary node.
    In my example 192.168.122.31
 
-   .. code-block:: console
+   .. code-block:: bash
 
       scp ~/.ssh/id_rsa core@192.168.122.31:~
    
@@ -119,13 +119,13 @@ Find, List and Copy Images
 
    SSH back to primary node
 
-   .. code-block:: console
+   .. code-block:: bash
 
       ssh core@192.168.122.31
 
    Configure ssh access
 
-   .. code-block:: console
+   .. code-block:: bash
 
       sudo mkdir /root/.ssh
 
@@ -133,7 +133,7 @@ Find, List and Copy Images
 
    Sync nodes
 
-   .. code-block:: console
+   .. code-block:: bash
 
       sudo rsync -av /home/core/images core@1921.168.122.32:~
 
@@ -170,7 +170,7 @@ Find, List and Copy Images
 
 #. Apply the previously created MachineConfig to the cluster
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc apply -f 99-container-master-storage-conf.yaml
 
@@ -178,7 +178,7 @@ Find, List and Copy Images
 
 #. Confirm mcp is done updating the MachineConfig
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc get mcp
 
@@ -189,7 +189,7 @@ Find, List and Copy Images
 
 #. Disabling the default OperatorHub sources
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
 
@@ -197,19 +197,19 @@ Find, List and Copy Images
 
    Download the global cluster pull secret
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc extract secret/pull-secret -n openshift-config --to=.
 
    Edit/remove the "cloud.openshift.com" JSON entry from the pull secret
 
-   .. code-block:: console
+   .. code-block:: bash
 
       "cloud.openshift.com":{"auth":"<hash>","email":"<email_address>"}
 
    Update the global cluset pull secret
 
-   .. code-block:: console
+   .. code-block:: bash
 
       oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=<pull_secret_location> 
 
@@ -224,7 +224,7 @@ Find, List and Copy Images
    Lets confirm the number of images. The count for "true" should be the same
    on each node.
 
-   .. code-block:: console
+   .. code-block:: bash
 
       ssh core@192.168.122.31 sudo podman images | grep true | wc -l
       ssh core@192.168.122.32 sudo podman images | grep true | wc -l
