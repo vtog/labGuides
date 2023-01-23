@@ -5,6 +5,9 @@ The following are notes on deploying OCP with the NEW (4.12) agent-based
 installer. Two files are required to build the ISO, "install-config.yaml" and
 "agent-config.yaml".
 
+.. seealso:: For more detail: `Preparing to install with the Agent-based installer
+   <https://docs.openshift.com/container-platform/4.12/installing/installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.html>`_.
+
 #. install-config.yaml
 
    .. code-block:: yaml
