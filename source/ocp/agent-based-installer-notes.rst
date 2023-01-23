@@ -6,9 +6,23 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 "agent-config.yaml".
 
 .. seealso:: For more detail: `Preparing to install with the Agent-based installer
-   <https://docs.openshift.com/container-platform/4.12/installing/installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.html>`_.
+   <https://docs.openshift.com/container-platform/4.12/installing/installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.html>`_
 
-#. install-config.yaml
+#. Download the latest v4.12.x openshift-install utility found here:
+   `OpenShift mirror site <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest>`_
+
+#. Install nmstate
+
+   .. code-block:: bash
+
+      sudo dnf install /usr/bin/nmstatectl -y
+#. Create a work subdir
+
+   .. code-block:: bash
+
+      mkdir ~/workdir
+
+#. Create "install-config.yaml" and save in ~/workdir
 
    .. code-block:: yaml
       :emphasize-lines: 2, 14, 20, 45-49
@@ -63,7 +77,9 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       sshKey: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
 
-#. agent-config.yaml (repeat "hostname" block for each host).
+#. Create agent-config.yaml and save in ~/workdir
+
+   .. important:: Repeat "-hostname" block for each host of your config.
 
    .. code-block:: yaml
       :emphasize-lines: 3, 4, 6, 9, 11, 12, 15, 19, 23, 31, 35, 36
@@ -106,8 +122,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   next-hop-interface: enp1s0
                   table-id: 254
 
-#. With the latest "openshift-install" run the following command. In my case
-   I'm using a "workdir" with my support yaml files.
+#. With "openshift-install" downloaded in step 1, run the following command. In
+   my case I'm using a "workdir" dir to supply the required yaml files.
 
    .. code-block:: bash
 
