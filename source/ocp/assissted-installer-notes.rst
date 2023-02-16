@@ -64,7 +64,7 @@ The following are notes on deploying OCP with the console AI.
           next-hop-interface: bond0
           table-id: 254
 
-#. AI console bonded network config
+#. AI console bonded-vlan network config
 
    .. code-block:: yaml
 
