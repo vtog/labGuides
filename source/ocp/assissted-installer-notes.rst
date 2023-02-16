@@ -3,7 +3,7 @@ Assissted Install Notes
 
 The following are notes on deploying OCP with the console AI.
 
-#. AI console static network configuration
+#. AI console simple network config
 
    .. code-block:: yaml
 
@@ -29,6 +29,78 @@ The following are notes on deploying OCP with the console AI.
         - destination: 0.0.0.0/0
           next-hop-address: 192.168.122.1
           next-hop-interface: enp1s0
+          table-id: 254
+
+#. AI console bonded network config
+
+   .. code-block:: yaml
+
+      dns-resolver:
+        config:
+          server:
+          - 192.168.122.1
+      interfaces:
+      - name: bond0
+        ipv4:
+          address:
+          - ip: 192.168.122.21
+            prefix-length: 24
+          dhcp: false
+          enabled: true
+        ipv6:
+          enabled: false
+        link-aggregation:
+          mode: active-backup
+          port:
+          - enp1s0
+          - enp1s1
+        state: up
+        type: bond
+        mtu: 9000
+      routes:
+        config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.122.1
+          next-hop-interface: bond0
+          table-id: 254
+
+#. AI console bonded network config
+
+   .. code-block:: yaml
+
+      dns-resolver:
+        config:
+          server:
+          - 192.168.122.1
+      interfaces:
+      - name: bond0
+        link-aggregation:
+          mode: active-backup
+          port:
+          - enp1s0
+          - enp1s1
+        state: up
+        type: bond
+        mtu: 9000
+      - name: bond0.302
+        ipv4:
+          address:
+          - ip: 192.168.122.21
+            prefix-length: 24
+          dhcp: false
+          enabled: true
+        ipv6:
+          enabled: false
+        state: up
+        type: vlan
+        vlan:
+          base-iface: bond0
+          id: 302
+      routes:
+        config:
+        - destination: 0.0.0.0/0
+          next-hop-address: 192.168.122.1
+          next-hop-interface: bond0.302
           table-id: 254
 
 #. KVM MAC/IP mappings
