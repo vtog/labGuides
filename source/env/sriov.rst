@@ -9,7 +9,14 @@ will guide you through configuring the VF's and passing them to KVM.
    .. code-block:: bash
 
       sudo lshw -c network -businfo
+
+   .. image:: ./images/sriov-devices.png
+
+   .. code-block:: bash
+
       sudo lspci -vs 0000:03:00.0
+
+   .. image:: ./images/sriov-capable.png
 
 #. Discover number of allowable VF's for each interface.
 
@@ -18,25 +25,29 @@ will guide you through configuring the VF's and passing them to KVM.
       cat /sys/class/net/enp3s0f0/device/sriov_totalvfs
       cat /sys/class/net/enp3s0f1/device/sriov_totalvfs
 
-#. Enable VF's. In my case I have two interfaces that support up to 7 VF's each.
+#. Enable VF's. In my case I have two interfaces and in the previous step I
+   discoverd that each support up to 7 VF's.
 
    .. code-block:: bash
 
-      sudo echo 7 > /sys/class/net/enp3s0f0/device/sriov_numvfs
-      sudo echo 7 > /sys/class/net/enp3s0f1/device/sriov_numvfs
+      echo 7 | sudo tee /sys/class/net/enp3s0f0/device/sriov_numvfs
+      echo 7 | sudo tee /sys/class/net/enp3s0f1/device/sriov_numvfs
 
    .. important:: These changes will be lost upon reboot. Make them permanent
-      by adding the lines to "/etc/rc.d/rc.local". Be sure to make "rc.local"
-      executable.
+      by adding the lines to "/etc/rc.d/rc.local". You can remove "sudo" from
+      each line. Be sure to make "rc.local" executable.
 
 #. Verify VF's are available.
 
    .. code-block:: bash
 
-      lspci | grep Virtual
+      sudo lshw -c network -businfo
+
+   .. image:: ./images/sriov-verify.png
 
 #. MAC addresses change between reboots. If needed you can configure a static
-   MAC address for each VF.
+   MAC address for each VF. I used the previous informantion for the last three
+   octets.
 
    .. code-block:: bash
 
@@ -57,8 +68,8 @@ will guide you through configuring the VF's and passing them to KVM.
       sudo ip link set enp3s0f1 vf 6 mac 52:54:00:03:13:01
 
    .. important:: These changes will be lost upon reboot. Make them permanent
-      by adding the lines to "/etc/rc.d/rc.local". Be sure to make "rc.local"
-      executable.
+      by adding the lines to "/etc/rc.d/rc.local". You can remove "sudo" from
+      each line. Be sure to make "rc.local" executable.
 
 #. Verify new MAC address's
 
