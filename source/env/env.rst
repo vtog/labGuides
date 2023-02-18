@@ -5,7 +5,8 @@ Lab Environment How-To's
    :maxdepth: 0
    :caption: Content:
 
-   create-key-cert-pair
-   intel-i350
    rhel-default-install
    simple-bind-config
+   sriov.rst
+   create-key-cert-pair
+   intel-i350
