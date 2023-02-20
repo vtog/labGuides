@@ -7,6 +7,6 @@ Lab Environment How-To's
 
    rhel-default-install
    simple-bind-config
-   sriov.rst
+   sriov
    create-key-cert-pair
    intel-i350

@@ -8,6 +8,7 @@ OpenShift How-To's
    adding-node-day2
    assissted-installer-notes
    agent-based-installer-notes
+   sriov
    lso-lr-quick-start
    lso-odf-quick-start
    image-registry-quick-start

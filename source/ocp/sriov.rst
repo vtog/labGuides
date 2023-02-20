@@ -1,5 +1,9 @@
-Enable SR-IOV on RHEL/KVM
-=========================
+Enable SR-IOV on OCP VM
+=======================
+
+.. attention:: These instructions assume the virtual functions are configured.
+   If not see `Enable SR-IOV on RHEL/KVM <../env/sriov.html>`_
+
 
 For lab purposed I purchased an old Intel I350 SRIOV capable card. The steps
 will guide you through configuring the VF's and passing them to KVM.
@@ -10,13 +14,9 @@ will guide you through configuring the VF's and passing them to KVM.
 
       sudo lshw -c network -businfo
 
-   .. image:: ./images/sriov-devices.png
-
    .. code-block:: bash
 
       sudo lspci -vs 0000:03:00.0
-
-   .. image:: ./images/sriov-capable.png
 
 #. Discover number of allowable VF's for each interface.
 
@@ -42,8 +42,6 @@ will guide you through configuring the VF's and passing them to KVM.
    .. code-block:: bash
 
       sudo lshw -c network -businfo
-
-   .. image:: ./images/sriov-verify.png
 
 #. MAC addresses change between reboots. If needed you can configure a static
    MAC address for each VF. I used the previous informantion for the last three
@@ -77,7 +75,4 @@ will guide you through configuring the VF's and passing them to KVM.
 
       ip link show enp3s0f0
       ip link show enp3s0f1
-
-.. attention:: For OCP VM instructions see 
-   `Enable SR-IOV on OCP VM <../ocp/sriov.html>`_
 
