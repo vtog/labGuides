@@ -33,7 +33,7 @@ will guide you through configuring the VF's and passing them to KVM.
       echo 7 | sudo tee /sys/class/net/enp3s0f0/device/sriov_numvfs
       echo 7 | sudo tee /sys/class/net/enp3s0f1/device/sriov_numvfs
 
-   .. important:: These changes will be lost upon reboot. Make them permanent
+   .. attention:: These changes will be lost upon reboot. Make them permanent
       by adding the lines to "/etc/rc.d/rc.local". You can remove "sudo" from
       each line. Be sure to make "rc.local" executable.
 
@@ -67,7 +67,7 @@ will guide you through configuring the VF's and passing them to KVM.
       sudo ip link set enp3s0f1 vf 5 mac 52:54:00:03:12:05
       sudo ip link set enp3s0f1 vf 6 mac 52:54:00:03:13:01
 
-   .. important:: These changes will be lost upon reboot. Make them permanent
+   .. attention:: These changes will be lost upon reboot. Make them permanent
       by adding the lines to "/etc/rc.d/rc.local". You can remove "sudo" from
       each line. Be sure to make "rc.local" executable.
 
@@ -78,6 +78,6 @@ will guide you through configuring the VF's and passing them to KVM.
       ip link show enp3s0f0
       ip link show enp3s0f1
 
-.. attention:: For OCP VM instructions see 
+.. important:: For OCP VM instructions see 
    `Enable SR-IOV on OCP VM <../ocp/sriov.html>`_
 
