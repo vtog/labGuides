@@ -46,7 +46,7 @@ will guide you through configuring the VF's and passing them to KVM.
    .. image:: ./images/sriov-verify.png
 
 #. MAC addresses change between reboots. If needed you can configure a static
-   MAC address for each VF. I used the previous informantion for the last three
+   MAC address for each VF. I used the previous information for the last three
    octets.
 
    .. code-block:: bash
