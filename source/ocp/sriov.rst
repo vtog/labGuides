@@ -17,9 +17,9 @@ Prerequisites
 
    .. image:: ./images/sriov-lspci-out.png
 
-#. In the example output above, the **PCI Device ID** is "8086:1520" and the
-   **Kernel Module** is "igbvf". This information will be required int the
-   next section.
+   .. hint:: In the example output above, the **PCI Device ID** is "8086:1520"
+      and the **Kernel Module** is "igbvf". This information will be required
+      in the next section.
 
 Prepare Hosts
 -------------
@@ -260,6 +260,9 @@ Install SRIOV Network Device Plugin
 
 Test SRIOV Device Plugin
 ------------------------
+
+.. tip:: My test example below creates all objects in the "sriovdp" project.
+   Any project is acceptable but requires a "NetworkAttachmentDefinition".
 
 #. Create NetworkAttachmentDefinition ``sriov-net.yaml`` and run
    ``oc create -f sriov_machineConfig_pool.yaml``
