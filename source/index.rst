@@ -1,5 +1,5 @@
-Welcome to vtog's Quick Starts!
-===============================
+Welcome to vtog's Lab Guides!
+=============================
 
 .. toctree::
    :maxdepth: 0
