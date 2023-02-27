@@ -1,5 +1,5 @@
-Adding Node to Cluster
-======================
+Adding Node to Cluster (day2)
+=============================
 
 The Assisted Installer has the ability to add Nodes to the cluster but the new
 Node is not created in the same way as the original Nodes. The original Nodes

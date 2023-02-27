@@ -76,6 +76,17 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       pullSecret: '{“auths”:{“fake”:{“auth”: “bar”}}}'
       sshKey: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
+      imageContentSources:
+      - mirrors:
+        - mirror.lab.local:8443/openshift/release
+        source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+      - mirrors:
+        - mirror.lab.local:8443/openshift/release-images
+        source: quay.io/openshift-release-dev/ocp-release
+      additionalTrustBundle: |
+        -----BEGIN CERTIFICATE-----
+        <Add rootCA.pem here>
+        -----END CERTIFICATE-----
 
 #. Create agent-config.yaml and save in ~/workdir
 

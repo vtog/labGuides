@@ -5,9 +5,10 @@ OpenShift How-To's
    :maxdepth: 0
    :caption: Content:
 
-   adding-node-day2
    assissted-installer-notes
    agent-based-installer-notes
+   adding-node-day2
+   local-mirror-registry
    sriov
    lso-lr-quick-start
    lso-odf-quick-start

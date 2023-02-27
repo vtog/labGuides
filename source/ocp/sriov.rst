@@ -262,7 +262,8 @@ Test SRIOV Device Plugin
 ------------------------
 
 .. tip:: My test example below creates all objects in the "sriovdp" project.
-   Any project is acceptable but requires a "NetworkAttachmentDefinition".
+   Any project is acceptable but requires a "NetworkAttachmentDefinition" in
+   that NameSpace.
 
 #. Create NetworkAttachmentDefinition ``sriov-net.yaml`` and run
    ``oc create -f sriov_machineConfig_pool.yaml``
