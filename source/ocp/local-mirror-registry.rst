@@ -68,6 +68,11 @@ I'm using:
 #. Access mirror via browser at `<https://mirror.lab.local:8443>`_
 
    .. hint:: Username = "init" / Password = "password"
+#. Uninstall Registry
+
+   .. code-block:: bash
+
+      sudo ./mirror-registry uninstall --quayRoot /mirror/ocp4 --quayStorage /mirror/ocp4
 
 Mirror Images to Local Registry
 -------------------------------
@@ -78,19 +83,19 @@ Mirror Images to Local Registry
 
 #. Convert "pull secret" to json format.
 
+   .. attention:: You may need to install "jq" for this step.
+
    .. code-block:: bash
 
       cat ./pull-secret.txt | jq . > ./pull-secret.json
 
-   .. attention:: You may need to install "jq" for this step.
-
 #. Copy pull-secret.json to ~/.docker and rename config.json
+
+   .. attention:: You man need to create ~/.docker directory.
 
    .. code-block:: bash
 
       cp ./pull-secret.json ~/.docker/config.json
-
-   .. attention:: You man need to create ~/.docker directory.
 
 #. Generate the base64-encoded user name and password for mirror registry.
 
@@ -99,7 +104,7 @@ Mirror Images to Local Registry
       echo -n 'init:password' | base64 -w0
 
 #. Modify ~/.docker/config.json by adding local mirror information. Use the
-   previous steps encode output for "auth".
+   previous steps encoded output for "auth".
 
    .. code-block:: bash
       :emphasize-lines: 3-5
@@ -124,13 +129,14 @@ Mirror Images to Local Registry
         }
       }
             
-#. Create the following "imageset-config.yaml" file. In my file below I'm
-   mirroring OCP v4.12. I've also added some additional operators and images.
+#. Create the following "imageset-config.yaml" file. In the file below I'm
+   mirroring OCP v4.12, more specifically only v4.12.2. I've also added some
+   additional operators and images.
 
    .. important:: Be sure path in imageURL (line 5)  matches the path assigned for "quayRoot".
 
    .. code-block:: bash
-      :emphasize-lines: 5
+      :emphasize-lines: 5,10-12
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
@@ -142,17 +148,46 @@ Mirror Images to Local Registry
         platform:
           channels:
           - name: stable-4.12
-            type: ocp
+            minVersion: 4.12.2
+            maxVersion: 4.12.2
         operators:
         - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
           packages:
           - name: local-storage-operator
+            channels:
+              - name: stable
+                minVersion: '4.12.0-202302061702'
           - name: odf-operator
+            channels:
+              - name: stable-4.12
+                minVersion: '4.12.0'
           - name: sriov-network-operator
+            channels:
+              - name: stable
+                minVersion: '4.12.0-202302072142'
+          - name: lvms-operator
+            channels:
+              - name: stable-4.12
+                minVersion: '4.12.0'
+          - name: metallb-operator
+            channels:
+              - name: stable
+                minVersion: '4.12.0-202302141816'
         additionalImages:
         - name: registry.redhat.io/ubi8/ubi:latest
         - name: registry.redhat.io/ubi9/ubi:latest
         helm: {}
+
+   .. tip:: To discover operators by their package name and also which channels
+      and versions exist use the following commands.
+
+      .. code-block:: bash
+
+         # List ALL available operators
+         oc mirror list operators --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
+
+         # List package specific inormation for an operator
+         oc mirror list operators --package sriov-network-operator --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
 
 #. Mirror the registry.
 

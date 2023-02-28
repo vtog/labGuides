@@ -25,7 +25,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 #. Create "install-config.yaml" and save in ~/workdir
 
    .. code-block:: yaml
-      :emphasize-lines: 2, 14, 20, 45-49
+      :emphasize-lines: 2, 14, 20, 26-30
 
       apiVersion: v1
       baseDomain: lab.local
@@ -52,28 +52,9 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
         - 172.30.0.0/16
       platform:
         baremetal:
-          hosts:
-            - name: host21
-              role: master
-              bootMACAddress: 52:54:00:f4:16:21
-            - name: host22
-              role: master
-              bootMACAddress: 52:54:00:f4:16:22
-            - name: host23
-              role: master
-              bootMACAddress: 52:54:00:f4:16:23
-            - name: host24
-              role: worker
-              bootMACAddress: 52:54:00:f4:16:24
-            - name: host25
-              role: worker
-              bootMACAddress: 52:54:00:f4:16:25
-            - name: host26
-              role: woker
-              bootMACAddress: 52:54:00:f4:16:26
           apiVIP: "192.168.122.120"
           ingressVIP: "192.168.122.121"
-      pullSecret: '{“auths”:{“fake”:{“auth”: “bar”}}}'
+      pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
       sshKey: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
       imageContentSources:
@@ -85,7 +66,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
         source: quay.io/openshift-release-dev/ocp-release
       additionalTrustBundle: |
         -----BEGIN CERTIFICATE-----
-        <Add rootCA.pem here>
+        <Use rootCA.pem for mirror registry here>
         -----END CERTIFICATE-----
 
 #. Create agent-config.yaml and save in ~/workdir
@@ -93,7 +74,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    .. important:: Repeat "-hostname" block for each host of your config.
 
    .. code-block:: yaml
-      :emphasize-lines: 3, 4, 6, 9, 11, 12, 15, 19, 23, 31, 35, 36
+      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 16, 20, 28, 32, 33
 
       apiVersion: v1alpha1
       metadata:
@@ -102,8 +83,6 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       hosts:
         - hostname: host21
           role: master
-          rootDeviceHints:
-            deviceName: /dev/sda
           interfaces:
             - name: enp1s0
               macAddress: 52:54:00:f4:16:21
@@ -113,7 +92,6 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                 type: ethernet
                 state: up
                 mtu: 9000
-                mac-address: 52:54:00:f4:16:21
                 ipv4:
                   enabled: true
                   address:
