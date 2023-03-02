@@ -68,7 +68,8 @@ I'm using:
 #. Access mirror via browser at `<https://mirror.lab.local:8443>`_
 
    .. hint:: Username = "init" / Password = "password"
-#. If need the following command will uninstall registry.
+
+#. If needed the following command will uninstall the registry.
 
    .. code-block:: bash
 
