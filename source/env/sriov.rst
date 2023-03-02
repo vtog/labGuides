@@ -81,3 +81,43 @@ will guide you through configuring the VF's and passing them to KVM.
 .. important:: For OCP VM instructions see 
    `Enable SR-IOV on OCP VM <../ocp/sriov.html>`_
 
+#. Update "/etc/rc.d/rc.local"
+
+   .. code-block:: bash
+
+      echo 7 | tee /sys/class/net/enp3s0f0/device/sriov_numvfs
+      ip link set enp3s0f0 vf 0 mac 52:54:00:03:10:00
+      ip link set enp3s0f0 vf 1 mac 52:54:00:03:10:04
+      ip link set enp3s0f0 vf 2 mac 52:54:00:03:11:00
+      ip link set enp3s0f0 vf 3 mac 52:54:00:03:11:04
+      ip link set enp3s0f0 vf 4 mac 52:54:00:03:12:00
+      ip link set enp3s0f0 vf 5 mac 52:54:00:03:12:04
+      ip link set enp3s0f0 vf 6 mac 52:54:00:03:13:00
+
+      echo 7 | tee /sys/class/net/enp3s0f1/device/sriov_numvfs
+      ip link set enp3s0f1 vf 0 mac 52:54:00:03:10:01
+      ip link set enp3s0f1 vf 1 mac 52:54:00:03:10:05
+      ip link set enp3s0f1 vf 2 mac 52:54:00:03:11:01
+      ip link set enp3s0f1 vf 3 mac 52:54:00:03:11:05
+      ip link set enp3s0f1 vf 4 mac 52:54:00:03:12:01
+      ip link set enp3s0f1 vf 5 mac 52:54:00:03:12:05
+      ip link set enp3s0f1 vf 6 mac 52:54:00:03:13:01
+
+      echo 7 | tee /sys/class/net/ens6f0/device/sriov_numvfs
+      ip link set ens6f0 vf 0 mac 52:54:00:a6:10:00
+      ip link set ens6f0 vf 1 mac 52:54:00:a6:10:04
+      ip link set ens6f0 vf 2 mac 52:54:00:a6:11:00
+      ip link set ens6f0 vf 3 mac 52:54:00:a6:11:04
+      ip link set ens6f0 vf 4 mac 52:54:00:a6:12:00
+      ip link set ens6f0 vf 5 mac 52:54:00:a6:12:04
+      ip link set ens6f0 vf 6 mac 52:54:00:a6:13:00
+
+      echo 7 | tee /sys/class/net/ens6f1/device/sriov_numvfs
+      ip link set ens6f1 vf 0 mac 52:54:00:a6:10:01
+      ip link set ens6f1 vf 1 mac 52:54:00:a6:10:05
+      ip link set ens6f1 vf 2 mac 52:54:00:a6:11:01
+      ip link set ens6f1 vf 3 mac 52:54:00:a6:11:05
+      ip link set ens6f1 vf 4 mac 52:54:00:a6:12:01
+      ip link set ens6f1 vf 5 mac 52:54:00:a6:12:05
+      ip link set ens6f1 vf 6 mac 52:54:00:a6:13:01
+
