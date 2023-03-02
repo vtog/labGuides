@@ -217,3 +217,11 @@ Mirror Images to Local Registry
 
       oc apply -f ./oc-mirror-workspace/results-xxxxxxxxxx/
 
+#. The ability to install operators from the local mirror requires the default
+   operator hub to be disabled.
+
+   .. code-block:: bash
+
+      oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
+
+
