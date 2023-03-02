@@ -68,7 +68,7 @@ I'm using:
 #. Access mirror via browser at `<https://mirror.lab.local:8443>`_
 
    .. hint:: Username = "init" / Password = "password"
-#. Uninstall Registry
+#. If need the following command will uninstall registry.
 
    .. code-block:: bash
 
@@ -133,7 +133,8 @@ Mirror Images to Local Registry
    mirroring OCP v4.12, more specifically only v4.12.2. I've also added some
    additional operators and images.
 
-   .. important:: Be sure path in imageURL (line 5)  matches the path assigned for "quayRoot".
+   .. important:: Be sure path in imageURL (line 5) matches the path assigned
+      earlier for "quayRoot".
 
    .. code-block:: bash
       :emphasize-lines: 5,10-12
@@ -149,7 +150,7 @@ Mirror Images to Local Registry
           channels:
           - name: stable-4.12
             minVersion: 4.12.2
-            maxVersion: 4.12.2
+            maxVersion: 4.12.4
         operators:
         - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
           packages:
@@ -173,13 +174,19 @@ Mirror Images to Local Registry
             channels:
               - name: stable
                 minVersion: '4.12.0-202302141816'
+          - name: kubernetes-nmstate-operator
+            channels:
+              - name: stable
+              minVersion: '4.12.0-202302171855'
         additionalImages:
         - name: registry.redhat.io/ubi8/ubi:latest
         - name: registry.redhat.io/ubi9/ubi:latest
+        - name: quay.io/openshift/origin-sriov-network-device-plugin:4.12
+        - name: docker.io/centos/tools
         helm: {}
 
-   .. tip:: To discover operators by their package name and also which channels
-      and versions exist use the following commands.
+   .. tip:: To discover operators by their package name, applicable channels,
+      and versions use the following commands.
 
       .. code-block:: bash
 
@@ -224,4 +231,6 @@ Mirror Images to Local Registry
 
       oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
 
+.. attention:: Any update to the operator list requires the "CatalogSource" to
+   be updated. 
 
