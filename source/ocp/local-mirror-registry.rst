@@ -136,6 +136,10 @@ Mirror Images to Local Registry
 
    .. important:: Be sure path in imageURL (line 5) matches the path assigned
       earlier for "quayRoot".
+   
+   .. note:: "graph: true" mirror's the graph data to our disconnected registry
+      which enables our disconnected clusters to show the visual of what
+      versions we can update to.
 
    .. code-block:: bash
       :emphasize-lines: 5,10-12
@@ -149,9 +153,10 @@ Mirror Images to Local Registry
       mirror:
         platform:
           channels:
-          - name: stable-4.12
-            minVersion: 4.12.2
-            maxVersion: 4.12.4
+          graph: true
+            - name: stable-4.12
+              minVersion: 4.12.2
+              maxVersion: 4.12.4
         operators:
         - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
           packages:
