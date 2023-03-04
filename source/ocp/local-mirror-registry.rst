@@ -184,10 +184,18 @@ Mirror Images to Local Registry
             channels:
               - name: stable
               minVersion: '4.12.0-202302171855'
+          - name: kubevirt-hyperconverged
+            channels:
+              - name: stable
+              minVersion: '4.12.1'
+          - name: cincinnati-operator
+            channels:
+              - name: v1
         additionalImages:
         - name: registry.redhat.io/ubi8/ubi:latest
         - name: registry.redhat.io/ubi9/ubi:latest
         - name: quay.io/openshift/origin-sriov-network-device-plugin:4.12
+        - name: registry.redhat.io/openshift4/dpdk-base-rhel8  
         - name: docker.io/centos/tools
         helm: {}
 
