@@ -113,7 +113,7 @@ Mirror Images to Local Registry
       {
         "auths": {
           "mirror.lab.local:8443": {
-            "auth": "aW5pdDpwYXNzd29yZA==",
+            "auth": "aW5pdDpwYXNzd29yZA=="
           },
           "quay.io": {
             "auth": "b3BlbnNo...",

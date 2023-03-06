@@ -1,5 +1,5 @@
-OpenShift How-To's
-==================
+OpenShift Lab Guides
+====================
 
 .. toctree::
    :maxdepth: 0

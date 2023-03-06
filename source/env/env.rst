@@ -1,5 +1,5 @@
-Lab Environment How-To's
-========================
+Platform/Environment Lab Guides
+===============================
 
 .. toctree::
    :maxdepth: 0
