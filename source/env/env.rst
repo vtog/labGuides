@@ -2,7 +2,7 @@ Platform/Environment Lab Guides
 ===============================
 
 .. toctree::
-   :maxdepth: 0
+   :maxdepth: 1
    :caption: Content:
 
    rhel-default-install

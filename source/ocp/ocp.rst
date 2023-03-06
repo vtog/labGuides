@@ -2,7 +2,7 @@ OpenShift Lab Guides
 ====================
 
 .. toctree::
-   :maxdepth: 0
+   :maxdepth: 1
    :caption: Content:
 
    assissted-installer-notes
