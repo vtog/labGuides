@@ -18,7 +18,6 @@ import sphinx_rtd_theme
 
 extensions = [
     'sphinx_rtd_theme',
-    'myst_parser',
     'sphinx_copybutton'
 ]
 myst_enable_extensions = [
@@ -37,9 +36,6 @@ source_suffix = {
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
-#import sphinx_pdj_theme
-#html_theme = 'sphinx_pdj_theme'
-#html_theme_path = [sphinx_pdj_theme.get_html_theme_path()]
 html_theme_path = ["_themes", ]
 html_logo = '_static/redhat.png'
 

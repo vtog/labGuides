@@ -1,6 +1,4 @@
 docutils==0.16
-sphinx==4.5.0
-#sphinx_pdj_theme
+sphinx==5.3.0
 sphinx_rtd_theme
 sphinx_copybutton
-myst-parser
