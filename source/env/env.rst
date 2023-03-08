@@ -6,6 +6,7 @@ Platform/Environment Lab Guides
    :caption: Content:
 
    rhel-default-install
+   kvm
    simple-bind-config
    sriov
    create-key-cert-pair
