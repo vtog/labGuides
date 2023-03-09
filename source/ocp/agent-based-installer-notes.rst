@@ -74,7 +74,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    .. important:: Repeat "-hostname" block for each host of your config.
 
    .. code-block:: yaml
-      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 16, 20, 28, 32, 33
+      :caption: Ethernet Network Example
+      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 20, 28, 32, 33
 
       apiVersion: v1alpha1
       metadata:
@@ -103,12 +104,54 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
             dns-resolver:
               config:
                 server:
-                  - 192.168.122.1
+                  - 192.168.1.72
             routes:
               config:
                 - destination: 0.0.0.0/0
                   next-hop-address: 192.168.122.1
                   next-hop-interface: enp1s0
+                  table-id: 254
+
+   .. code-block:: yaml
+      :caption: VLAN Network Example
+      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 18, 19, 23, 31, 35, 36
+
+      apiVersion: v1alpha1
+      metadata:
+        name: ocp1
+      rendezvousIP: 192.168.122.21
+      hosts:
+        - hostname: host21
+          role: master
+          interfaces:
+            - name: enp1s0
+              macAddress: 52:54:00:f4:16:21
+          networkConfig:
+            interfaces:
+              - name: enp1s0.122
+                type: vlan
+                state: up
+                mtu: 9000
+                vlan:
+                  base-iface: enp1s0
+                  id: 122
+                ipv4:
+                  enabled: true
+                  address:
+                    - ip: 192.168.122.21
+                      prefix-length: 24
+                  dhcp: false
+                ipv6:
+                  enabled: false
+            dns-resolver:
+              config:
+                server:
+                  - 192.168.1.72
+            routes:
+              config:
+                - destination: 0.0.0.0/0
+                  next-hop-address: 192.168.122.1
+                  next-hop-interface: enp1s0.122
                   table-id: 254
 
 #. With "openshift-install" downloaded in step 1, run the following command. In
