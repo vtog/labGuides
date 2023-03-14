@@ -33,17 +33,19 @@ Create Local Host Mirror Registry
 Identify Mirror Registry hostname and storage directory variables. In my case
 I'm using:
 
-- quayHostname = "mirror.lab.local"
-- quayRoot     = "/mirror/ocp4"
-- quayStorage  = "/mirror/ocp4"
-- pgStorage    = "/mirror/ocp4"
-- initPassword = "password"
+.. code-block:: bash
+
+   quayHostname="mirror.lab.local"
+   quayRoot="/mirror/ocp4"
+   quayStorage="/mirror/ocp4"
+   pgStorage="/mirror/ocp4"
+   initPassword="password"
 
 #. Run the following command to install the registry pods as root.
 
    .. code-block:: bash
 
-      sudo ./mirror-registry install --quayHostname mirror.lab.local --quayRoot /mirror/ocp4 --quayStorage /mirror/ocp4 --pgStorage /mirror/ocp4 --initPassword password
+      sudo ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
 
    If ran correctly should see a similar ansible recap.
 
@@ -63,7 +65,7 @@ I'm using:
 
        podman login -u init -p password mirror.lab.local:8443
 
-   .. hint:: Use the "--tls-verify=false" if not adding the rootCA to the trust.
+   .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
 
 #. Access mirror via browser at `<https://mirror.lab.local:8443>`_
 
@@ -92,9 +94,9 @@ Mirror Images to Local Registry
 
 #. Copy pull-secret.json to ~/.docker and rename config.json
 
-   .. attention:: You man need to create ~/.docker directory.
-
    .. code-block:: bash
+
+      mkdir ~/.docker
 
       cp ./pull-secret.json ~/.docker/config.json
 
