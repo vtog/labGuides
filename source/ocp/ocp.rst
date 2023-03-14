@@ -14,6 +14,6 @@ OpenShift Lab Guides
    lso-odf-quick-start
    image-registry-quick-start
    ocp-cert-expiry
-   self-contained-cluster.rst
+   node-mirror-registry
    starting-the-cluster
 
