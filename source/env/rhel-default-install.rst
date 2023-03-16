@@ -1,12 +1,11 @@
 Setup Fedora/RHEL
 =================
 
-These instruction configure RHEL8 with my preferred settings.
+These instruction configure RHEL9 or Fedora with my preferred settings.
 
-.. warning:: This is a work in progress. I need to walk through this a couple more times to ensure I captured
-   everything.
+#. If needed setup fusion free and non-free
 
-#. Setup fusion free and non-free
+   .. attention:: Optional, these repo's may not be needed.
 
    .. code-block:: bash
 
@@ -19,42 +18,44 @@ These instruction configure RHEL8 with my preferred settings.
       sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm 
       sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm
 
-#. Default packages
+      sudo dnf install obs-studio
+
+#. Install base packages
 
    .. code-block:: bash
 
-      # Base requirements
-      sudo dnf install zsh neovim neofetch terminator podman gnome-tweaks gnome-extensions-app
-      
-      # Install Dev Tools
+      sudo dnf install zsh neovim neofetch terminator ksnip slack firewall-config zoom
+
+#. Install dev packages
+
+   .. code-block:: bash
+
       sudo dnf group install "Development Tools"
-      sudo dnf install git python3-pip cmake httpd-tools
+      sudo dnf install cmake httpd-tools python3-pip
 
-#. Install brave browser
-
-   .. code-block:: bash
-
-      sudo dnf install dnf-plugins-core
-      sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
-      sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-      sudo dnf install brave-browser
-
-#. Install KVM
+#. Install virtualization
 
    .. code-block:: bash
 
-      sudo dnf install virt-install virt-viewer virt-manager virt-top libvirt
-      
+      sudo dnf group install --with-optional "virtualization"
+
       sudo systemctl enable --now libvirtd
 
-   .. note:: You'll need to configure firewalld to allow external traffic to connect to the
-      virtual network via the host. The following firewall-cmd's allow the virtual network to
-      access port 53 and any external host access to the virtual network.
+   .. attention:: You'll need to configure firewalld to allow external traffic
+      to connect to the virtual network via the host. The following
+      firewall-cmd's allow the virtual network to access port 53 and any
+      external host access to the virtual network.
 
       .. code-block:: bash
 
          sudo firewall-cmd --add-source=192.168.122.0/24 --zone=home --permanent
          sudo firewall-cmd --add-service=dns --zone=home --permanent
+
+#. Insall packages via Sofware store.
+
+   - Brave
+   - Yubico Authenticator
+   - Visual Studio Code
 
 #. Update PIP and install misc packages
 
@@ -63,16 +64,16 @@ These instruction configure RHEL8 with my preferred settings.
       pip install pip -U
       
       # add misc packages
-      pip install ansible awscli Pygments wheel
+      pip install ansible awscli pygments wheel
 
-#. Add Sphinx document build environment
+#. Add Sphinx build environment
 
    .. code-block:: bash
    
-      pip install sphinx sphinx_rtd_theme sphinx-pdj-theme sphinx-copybutton myst-parser
-      
+      pip install sphinx sphinx_rtd_theme sphinx-pdj-theme sphinx-copybutton
+
       # F5 Theme
-      pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag sphinxcontrib.blockdiag sphinxcontrib-websupport
+      pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag s
       sudo dnf install graphviz
 
 #. Modify sshd
@@ -87,7 +88,7 @@ These instruction configure RHEL8 with my preferred settings.
       # reload service
       systemctl restart sshd
 
-#. Add user to wheel group (if needed)
+#. Add user to wheel group **(If Needed)**
 
    .. code-block:: bash
    
@@ -102,24 +103,27 @@ These instruction configure RHEL8 with my preferred settings.
       # to
       %wheel  ALL=(ALL)       NOPASSWD: ALL
 
+#. Modify LDAP shell attribute to change default shell **(IF Needed. Corp
+   laptop required this.)**
+
+   .. code-block:: bash
+
+      getent passwd <user-name>
+      sudo sss_override user-add <user-name> -s <new-shell>
+      sudo systemctl restart sssd
+      getent passwd <user-name>
+      sudo sss_override user-show <user-name>
+
 #. Setup .dotfiles
 
-   .. note:: This assumes my "dotfiles" repo exists
+   .. note:: This assumes my "dotfiles" github repo exists.
 
    .. code-block:: bash
 
       git clone -b rhel --separate-git-dir=$HOME/.dotfiles git@github.com:vtog/.dotfiles.git tmpdotfiles
       rsync --recursive --verbose --exclude '.git' tmpdotfiles/ $HOME/
       rm -rf ~/tmpdotfiles
-      source ~/.zshrc
       dots config --local status.showUntrackedFiles no
-
-#. Use zsh
-
-   .. code-block:: bash
-      
-      chsh /bin/zsh
-      # May need to logout
 
 #. Setup Spaceship-prompt
 
@@ -129,7 +133,31 @@ These instruction configure RHEL8 with my preferred settings.
       sudo ln -sf ~/git/spaceship-prompt/spaceship.zsh /usr/share/zsh/site-functions/prompt_spaceship_setup      
       source ~/.zshrc
 
-#. Insall Terminator from Source (if needed)
+#. Install vim-plug (neovim)
+
+   .. code-block:: bash
+
+      curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+          https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+      # Update vim!
+      vim
+      : PlugInstall
+      : q
+      : q
+
+#. Install NeoVIM from Source **(If Needed)**
+
+   .. code-block:: bash
+
+      sudo dnf install libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip patch g
+      git clone git@github.com:neovim/neovim.git ~/git/neovim
+      cd ~/git/neovim
+      make distclean
+      make CMAKE_BUILD_TYPE=Release
+      sudo make install
+
+#. Insall Terminator from Source **(If Needed)**
 
    .. code-block:: bash
 
@@ -140,7 +168,7 @@ These instruction configure RHEL8 with my preferred settings.
       python3 setup.py build
       sudo python3 setup.py install --single-version-externally-managed --record=install-files.txt    
 
-#. Install Alacritty from Source (if needed)
+#. Install Alacritty from Source **(If Needed)**
 
    .. code-block:: bash
 
@@ -163,24 +191,26 @@ These instruction configure RHEL8 with my preferred settings.
       # Create Zsh Shell Completion
       sudo cp extra/completions/_alacritty /usr/share/zsh/site-functions
 
-#. Install NeoVIM from Source (if needed)
+#. Install docker-ce **(Not needed... Use Podman)**
 
    .. code-block:: bash
 
-      git clone git@github.com:neovim/neovim.git ~/git/neovim
-      cd ~/git/neovim
-      make CMAKE_BUILD_TYPE=Release
-      sudo make install
+      sudo dnf install dnf-plugins-core
+      sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+      sudo dnf install docker-ce docker-ce-cli containerd.io
+      sudo systemctl start docker
+      sudo systemctl enable docker
+      
+      # Add user to docker group
+      usermod -a -G docker <user>
+      newgrp docker
 
-#. Install vim-plug (neovim)
+#. Install brave **(If Needed)**
 
    .. code-block:: bash
 
-      curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-          https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+      sudo dnf install dnf-plugins-core
+      sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
+      sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+      sudo dnf install brave-browser
 
-      # Update vim!
-      vim
-      : PlugInstall
-      : q
-      : q
