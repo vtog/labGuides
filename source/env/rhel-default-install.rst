@@ -70,13 +70,15 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
    
-      pip install sphinx sphinx_rtd_theme sphinx-pdj-theme sphinx-copybutton
+      pip install sphinx==5.3.0 docutils==0.16 sphinx_rtd_theme sphinx-copybutton
 
       # F5 Theme
-      pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag s
+      pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag sphinxcontrib.blockdiag sphinxcontrib-websupport
       sudo dnf install graphviz
 
 #. Modify sshd
+
+   .. attention:: This assumes you've set up pki.
 
    .. code-block:: bash
    
@@ -150,7 +152,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip patch g
+      sudo dnf install libtool autoconf automake cmake gcc gcc-c++ make pkgconfig unzip patch gettext curl
       git clone git@github.com:neovim/neovim.git ~/git/neovim
       cd ~/git/neovim
       make distclean
