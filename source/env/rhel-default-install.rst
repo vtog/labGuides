@@ -24,7 +24,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install zsh neovim neofetch terminator ksnip slack firewall-config zoom
+      sudo dnf install zsh neovim neofetch terminator ksnip slack firewall-config zoom cockpit cockpit-machines cockpit-composer
 
 #. Install dev packages
 
