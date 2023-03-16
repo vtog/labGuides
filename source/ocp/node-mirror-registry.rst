@@ -47,7 +47,7 @@ I'm using:
 
    .. code-block:: bash
 
-      sudo ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
+      ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
 
    If ran correctly should see a similar ansible recap.
 
@@ -76,7 +76,7 @@ I'm using:
 
    .. code-block:: bash
 
-      sudo ./mirror-registry uninstall --quayRoot /mirror/ocp4 --quayStorage /mirror/ocp4
+      ./mirror-registry uninstall --quayRoot /mirror/ocp4 --quayStorage /mirror/ocp4
 
 Mirror Images to Local Registry
 -------------------------------
@@ -152,7 +152,7 @@ Mirror Images to Local Registry
       storageConfig:
         registry:
           imageURL: localhost:8443/home/core/mirror/ocp4
-          skipTLS: false
+          skipTLS: true
       mirror:
         platform:
           channels:
@@ -254,7 +254,7 @@ Update Cluster for local registry
 
    .. code-block:: bash
 
-      oc create configmap registry-config --from-file=localhost..8443=/var/home/core/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
+      oc create configmap registry-config --from-file=localhost..8443=/home/core/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
 
 #. Add quay-rootCA to cluster
 
