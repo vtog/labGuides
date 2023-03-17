@@ -26,6 +26,10 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       sudo dnf install zsh neovim neofetch terminator ksnip slack firewall-config zoom cockpit cockpit-machines cockpit-composer
 
+      sudo systemctl enable --now cockpit.socket
+      sudo firewall-cmd --add-service=cockpit
+      sudo firewall-cmd --add-service=cockpit --permanent
+
 #. Install dev packages
 
    .. code-block:: bash
@@ -89,6 +93,10 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
                
       # reload service
       systemctl restart sshd
+
+      # Allow port 22
+      sudo firewall-cmd --add-service=ssh
+      sudo firewall-cmd --add-service=ssh --permanent
 
 #. Add user to wheel group **(If Needed)**
 
