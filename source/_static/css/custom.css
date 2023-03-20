@@ -1,16 +1,17 @@
 img {
-  margin-bottom: 20px !important;
+  margin-top: -5px !important;
+  margin-bottom: 5px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 
-#li:first-child {
-#  margin-top: 0px !important;
-#  margin-bottom: 0px !important;
-#}
+ul li:first-child {
+  margin-top: -10px !important;
+}
 
-#li:last-child {
-#  margin-top: 0px !important;
-#  margin-bottom: 0px !important;
-#}
+ul li:last-child {
+  margin-bottom: 5px !important;
+}
 
 #table {
 #  margin-bottom: 10px !important;
@@ -37,7 +38,7 @@ img {
 }
 
 .highlight .hll {
-  background-color: #ffff00 !important;
+  background-color: #ffff95 !important;
   margin: 0px 0px !important;
   padding: 0px 0px !important;
   display: inline !important;
