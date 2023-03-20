@@ -154,6 +154,58 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   next-hop-interface: enp1s0.122
                   table-id: 254
 
+   .. code-block:: yaml
+      :caption: Bond with VLAN Network Example
+      :emphasize-lines: 3, 4, 6, 7, 9-12, 15, 16, 21-24, 26, 28, 29, 33, 41, 45, 46
+
+      apiVersion: v1alpha1
+      metadata:
+        name: ocp1
+      rendezvousIP: 192.168.122.21
+      hosts:
+        - hostname: host21
+          role: master
+          interfaces:
+            - name: enp1s0
+              macAddress: 52:54:00:f4:16:21
+            - name: enp2s0
+              macAddress: 52:54:00:f4:17:21
+          networkConfig:
+            interfaces:
+              - name: bond0
+                type: bond
+                state: up
+                link-aggregation:
+                  mode: active-backup
+                  port:
+                  - enp1s0
+                  - enp2s0
+              - name: bond0.122
+                type: vlan
+                state: up
+                mtu: 9000
+                vlan:
+                  base-iface: bond0
+                  id: 122
+                ipv4:
+                  enabled: true
+                  address:
+                    - ip: 192.168.122.21
+                      prefix-length: 24
+                  dhcp: false
+                ipv6:
+                  enabled: false
+            dns-resolver:
+              config:
+                server:
+                  - 192.168.1.72
+            routes:
+              config:
+                - destination: 0.0.0.0/0
+                  next-hop-address: 192.168.122.1
+                  next-hop-interface: bond0.122
+                  table-id: 254
+
 #. With "openshift-install" downloaded in step 1, run the following command. In
    my case I'm using a "workdir" dir to supply the required yaml files.
 
