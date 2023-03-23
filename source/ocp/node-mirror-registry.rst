@@ -103,16 +103,16 @@ Create Local Mirror Registry
       sudo chmod 644 /etc/resolv.conf
       cd ~/mirror
 
-Identify Mirror Registry hostname and storage directory variables. In my case
-I'm using:
+#. Identify Mirror Registry hostname and storage directory variables. For
+   exmaple my lab uses the following:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   quayHostname="host31.ocp2.lab.local"
-   quayRoot="/home/core/mirror/ocp4"
-   quayStorage="/home/core/mirror/ocp4"
-   pgStorage="/home/core/mirror/ocp4"
-   initPassword="password"
+      quayHostname="host31.ocp2.lab.local"
+      quayRoot="/home/core/mirror/ocp4"
+      quayStorage="/home/core/mirror/ocp4"
+      pgStorage="/home/core/mirror/ocp4"
+      initPassword="password"
 
 #. Run the following command to install the registry.
 
