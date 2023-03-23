@@ -23,7 +23,7 @@ Prerequisites
    mirroring OCP v4.12, more specifically only v4.12.5. I've also added some
    additional operators.
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 6-8
 
       kind: ImageSetConfiguration
@@ -125,7 +125,7 @@ I'm using:
 
    .. image:: ./images/mirror-reg-install.png
 
-#. Copy newly created root CA, update trust, and open firewall port.
+#. Copy newly created root CA and update the trust.
 
    .. code-block:: bash
 
@@ -182,7 +182,7 @@ Mirror Images to Local Registry
 #. Modify ~/.docker/config.json by adding local mirror information. Use the
    previous steps encoded output for "auth".
 
-   .. code-block:: bash
+   .. code-block:: json
       :emphasize-lines: 3-5
 
       {
@@ -226,43 +226,50 @@ Mirror Images to Local Registry
       oc apply -f ./oc-mirror-workspace/results-xxxxxxxxxx/
 
 #. The ability to install operators from the local mirror requires the default
-   operator hub to be disabled.
+   operator hub sources to be disabled.
 
    .. code-block:: bash
 
       oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
 
    .. attention:: Any update to the operator list requires the "CatalogSource"
-      to be updated. 
+      to be updated. Delete and recreate the object.
 
 Update Cluster for local registry
 ---------------------------------
 
-#. Extract pull-secret
+#. Extract pull-secret. A new local file ``.dockerconfigjson`` is created.
 
    .. code-block:: bash
 
       oc extract secret/pull-secret -n openshift-config --confirm --to=.
 
-#. Update pull-secret with local info
+#. Update ``.dockerconfigjson`` with local registry credentials.
 
-   .. code-block:: bash
+   .. code-block:: json
 
-      <add local mirror info to .dockerconfigjson>
+      {
+        "auths": {
+          "host31.ocp2.lab.local:8443": {
+            "auth": "aW5pdDpwYXNzd29yZA=="
+          }
+        }
+      }
+
       
-#. Import new pull-secret
+#. Import the new pull-secret.
 
    .. code-block:: bash
 
       oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=.dockerconfigjson
 
-#. Create configmap of quay-rootCA
+#. Create configmap of quay-rootCA.
 
    .. code-block:: bash
 
       oc create configmap registry-config --from-file=host31.ocp2.lab.local..8443=/home/core/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
 
-#. Add quay-rootCA to cluster
+#. Add quay-rootCA to cluster.
 
    .. code-block:: bash
 
@@ -275,12 +282,12 @@ For redundancy it's possible to run through these steps for each node in the
 cluster. The "trick" is to not over write the previous nodes config but append
 to them.
 
-#. Append updates to "./oc-mirror-workspace/results-xxxxxxxxxx/imageContentSourcePolicy.yaml"
-   before applying them. In the example below I added both mirrors before applying them.
+#. Append updates to ``./oc-mirror-workspace/results-xxxxxxxxxx/imageContentSourcePolicy.yaml``
+   before applying them. In the example below I added both mirrors before
+   applying the policy.
 
-   .. code-block:: bash
+   .. code-block:: yaml
 
-      ---
       apiVersion: operator.openshift.io/v1alpha1
       kind: ImageContentSourcePolicy
       metadata:
@@ -329,11 +336,12 @@ to them.
           - host32.ocp2.lab.local:8443/openshift/release-images
           source: quay.io/openshift-release-dev/ocp-release
 
-#. With "./oc-mirror-workspace/results-xxxxxxxxxx/catalogSource-redhat-operator-index.yaml"
+#. With ``./oc-mirror-workspace/results-xxxxxxxxxx/catalogSource-redhat-operator-index.yaml``
    a new object for each mirror will need to be created. Update the "name" and
    "image" for each mirror.
 
-   .. code-block:: bash
+   .. code-block:: yaml
+      :emphasize-lines: 4, 7
 
       apiVersion: operators.coreos.com/v1alpha1
       kind: CatalogSource
@@ -344,12 +352,35 @@ to them.
         image: host31.ocp2.lab.local:8443/redhat/redhat-operator-index:v4.12
         sourceType: grpc
 
+#. Just like before we'll need to append the new registry to the pull-secret.
+   Use previous instructions to "extract" and "set" the pull-secret.
 
+   .. code-block:: json
+      :emphasize-lines: 3, 6
 
+      {
+        "auths": {
+          "host31.ocp2.lab.local:8443": {
+            "auth": "aW5pdDpwYXNzd29yZA=="
+          },
+          "host32.ocp2.lab.local:8443": {
+            "auth": "aW5pdDpwYXNzd29yZA=="
+          }
+        }
+      }
 
+#. Append the registry-config configmap with the new CA.
 
+   .. code-block:: yaml
+      :emphasize-lines: 2, 6
 
-
-
-
+      data:
+        host31.ocp2.lab.local..8443: |
+          -----BEGIN CERTIFICATE-----
+          MIIDxjCCAq6gAwIBAgIUYmcQxIY2...
+          -----END CERTIFICATE-----
+        host32.ocp2.lab.local..8443: |
+          -----BEGIN CERTIFICATE-----
+          MIIDxjCCAq6gAwIBAgIUVwvE92Vp...
+          -----END CERTIFICATE-----
 

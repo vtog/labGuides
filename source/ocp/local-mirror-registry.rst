@@ -109,7 +109,7 @@ Mirror Images to Local Registry
 #. Modify ~/.docker/config.json by adding local mirror information. Use the
    previous steps encoded output for "auth".
 
-   .. code-block:: bash
+   .. code-block:: json
       :emphasize-lines: 3-5
 
       {
@@ -143,7 +143,7 @@ Mirror Images to Local Registry
       which enables our disconnected clusters to show the visual of what
       versions we can update to.
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 5,11-13
 
       kind: ImageSetConfiguration
