@@ -144,7 +144,7 @@ Mirror Images to Local Registry
       versions we can update to.
 
    .. code-block:: bash
-      :emphasize-lines: 5,10-12
+      :emphasize-lines: 5,11-13
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2

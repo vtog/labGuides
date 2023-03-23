@@ -8,7 +8,7 @@ process of using an OCP node running in the cluster.
 Prerequisites
 -------------
 
-#. Download the following tools:
+#. Download the following tools and copy to destination node.
 
    `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz>`_
 
@@ -16,38 +16,109 @@ Prerequisites
 
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
 
-#. SSH to the target server and run the following commands to place the
+#. On connected host extract and setup "Openshift Client" and "Mirror Plugin".
+
+#. Create the following "imageset-config.yaml" file. In the content below I'm
+   mirroring OCP v4.12, more specifically only v4.12.5. I've also added some
+   additional operators.
+
+   .. code-block:: bash
+      :emphasize-lines: 6-8
+
+      kind: ImageSetConfiguration
+      apiVersion: mirror.openshift.io/v1alpha2
+      mirror:
+        platform:
+          channels:
+            - name: stable-4.12
+              minVersion: 4.12.5
+              maxVersion: 4.12.5
+        operators:
+        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
+          packages:
+          - name: local-storage-operator
+            channels:
+              - name: stable
+          - name: odf-operator
+            channels:
+              - name: stable-4.12
+          - name: sriov-network-operator
+            channels:
+              - name: stable
+          - name: kubernetes-nmstate-operator
+            channels:
+              - name: stable
+          - name: kubevirt-hyperconverged
+            channels:
+              - name: stable
+        additionalImages:
+        helm: {}
+
+   .. tip:: To discover operators by their package name, applicable channels,
+      and versions use the following commands. This information can be used to
+      update the packages list in the "imageset-config.yaml" file.
+
+      .. code-block:: bash
+
+         # List ALL available operators
+         oc mirror list operators --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
+
+         # List package specific inormation for an operator
+         oc mirror list operators --package sriov-network-operator --catalog registry.redhat.io/redhat/redhat-operator-index:v4
+
+#. Mirror "imageset" from external mirror to a local file.
+
+   .. important:: This command needs to be run from a **internet connected
+      workstation.**
+
+   .. code-block:: bash
+
+      oc mirror --config=./imageset-config.yaml file://<path_to_dir>
+
+   .. note:: Be patient this process will take some time to download all the
+      requested images.
+
+#. Successful completion of the previous step should create a new file named,
+   ``mirror_seq1_000000.tar``. Copy this file to the destination node.
+
+Create Local Host Mirror Registry
+---------------------------------
+
+#. SSH to the target node and run the following commands to place the
    binaries in their respective directories.
 
    .. code-block:: bash
 
       mkdir -p ~/.local/bin
-      mkdir ~/mirror/ocp4
+      mkdir -p ~/mirror/ocp4
       tar -xzvf mirror-registry.tar.gz -C ~/mirror/
-      sudo tar -xzvf openshift-client-linux.tar.gz -C ~/.local/bin/
-      sudo tar -xzvf oc-mirror.tar.gz -C ~/.local/bin/
-      sudo chmod +x ~/.local/bin/oc-mirror
-      sudo rm ~/.local/bin/README.md
-
-Create Local Host Mirror Registry
----------------------------------
+      tar -xzvf openshift-client-linux.tar.gz -C ~/.local/bin/
+      tar -xzvf oc-mirror.tar.gz -C ~/.local/bin/
+      chmod +x ~/.local/bin/oc-mirror
+      rm ~/.local/bin/README.md
+      mkdir -p ~/.kube
+      sudo cp /etc/kubernetes/static-pod-resources/kube-apiserver-certs/secrets/node-kubeconfigs/localhost.kubeconfig ~/.kube/config
+      sudo chown core:core ~/.kube/config
+      sudo chmod 644 /etc/resolv.conf
+      cd ~/mirror
 
 Identify Mirror Registry hostname and storage directory variables. In my case
 I'm using:
 
 .. code-block:: bash
 
-   quayHostname="localhost"
+   quayHostname="host31.ocp2.lab.local"
    quayRoot="/home/core/mirror/ocp4"
-   quayStorage="home/core/mirror/ocp4"
-   pgStorage="home/core/mirror/ocp4"
+   quayStorage="/home/core/mirror/ocp4"
+   pgStorage="/home/core/mirror/ocp4"
    initPassword="password"
 
-#. Run the following command to install the registry pods as root.
+#. Run the following command to install the registry.
 
    .. code-block:: bash
 
-      ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
+      ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot \
+        --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
 
    If ran correctly should see a similar ansible recap.
 
@@ -64,7 +135,7 @@ I'm using:
 
    .. code-block:: bash
 
-       podman login -u init -p localhost:8443
+       podman login -u init -p password host31.ocp2.lab.local:8443
 
    .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
 
@@ -76,7 +147,7 @@ I'm using:
 
    .. code-block:: bash
 
-      ./mirror-registry uninstall --quayRoot /mirror/ocp4 --quayStorage /mirror/ocp4
+      ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage
 
 Mirror Images to Local Registry
 -------------------------------
@@ -115,7 +186,7 @@ Mirror Images to Local Registry
 
       {
         "auths": {
-          "localhost:8443": {
+          "host31.ocp2.lab.local:8443": {
             "auth": "aW5pdDpwYXNzd29yZA=="
           },
           "quay.io": {
@@ -133,83 +204,17 @@ Mirror Images to Local Registry
         }
       }
             
-#. Create the following "imageset-config.yaml" file. In the file below I'm
-   mirroring OCP v4.12, more specifically only v4.12.2. I've also added some
-   additional operators and images.
-
-   .. important:: Be sure path in imageURL (line 5) matches the path assigned
-      earlier for "quayRoot".
-   
-   .. note:: "graph: true" mirror's the graph data to our disconnected registry
-      which enables our disconnected clusters to show the visual of what
-      versions we can update to.
-
-   .. code-block:: bash
-      :emphasize-lines: 5,10-12
-
-      kind: ImageSetConfiguration
-      apiVersion: mirror.openshift.io/v1alpha2
-      storageConfig:
-        registry:
-          imageURL: localhost:8443/home/core/mirror/ocp4
-          skipTLS: true
-      mirror:
-        platform:
-          channels:
-            - name: stable-4.12
-              minVersion: 4.12.5
-              maxVersion: 4.12.5
-        operators:
-        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
-          packages:
-          - name: local-storage-operator
-            channels:
-              - name: stable
-          - name: odf-operator
-            channels:
-              - name: stable-4.12
-          - name: sriov-network-operator
-            channels:
-              - name: stable
-          - name: kubernetes-nmstate-operator
-            channels:
-              - name: stable
-          - name: kubevirt-hyperconverged
-            channels:
-              - name: stable
-        additionalImages:
-        helm: {}
-
-   .. tip:: To discover operators by their package name, applicable channels,
-      and versions use the following commands.
-
-      .. code-block:: bash
-
-         # List ALL available operators
-         oc mirror list operators --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
-
-         # List package specific inormation for an operator
-         oc mirror list operators --package sriov-network-operator --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
-
-#. Mirror the registry.
-
-   .. attention:: oc-mirror requires OpenShift v4.9.x and later.
+#. Mirror the local file to local mirror.
 
    .. code-block:: bash
 
-      oc mirror --config=./imageset-config.yaml docker://localhost:8443
+      oc mirror --from=./mirror_seq1_000000.tar docker://host31.ocp2.lab.local:8443
 
-   .. note:: Be patient this process will take some time to download all the
-      requested images.
-
-#. Make note of the following information upon completion. A new directory
-   "./oc-mirror-workspace/results-xxxxxxxxxx" with results and yaml files on 
-   how to apply mirror to cluster are created.
-
-   .. image:: ./images/mirror-results.png
-
-#. Connect and login to your mirror: `<https://mirror.lab.local:8443>`_
+#. Connect and login to your mirror: `<https://host31.ocp2.lab.local:8443>`_
    You should see something similar to the following:
+
+   .. note:: If local DNS doesn't have a record for host31, the IP can be used
+      to test the registry.
 
    .. image:: ./images/mirror-images.png
 
@@ -226,8 +231,8 @@ Mirror Images to Local Registry
 
       oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
 
-.. attention:: Any update to the operator list requires the "CatalogSource" to
-   be updated. 
+   .. attention:: Any update to the operator list requires the "CatalogSource"
+      to be updated. 
 
 Update Cluster for local registry
 ---------------------------------
@@ -254,11 +259,96 @@ Update Cluster for local registry
 
    .. code-block:: bash
 
-      oc create configmap registry-config --from-file=localhost..8443=/home/core/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
+      oc create configmap registry-config --from-file=host31.ocp2.lab.local..8443=/home/core/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
 
 #. Add quay-rootCA to cluster
 
    .. code-block:: bash
 
       oc patch image.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}' --type=merge
+
+Adding Registry & Mirror Redundancy
+-----------------------------------
+
+For redundancy it's possible to run through these steps for each node in the
+cluster. The "trick" is to not over write the previous nodes config but append
+to them.
+
+#. Append updates to "./oc-mirror-workspace/results-xxxxxxxxxx/imageContentSourcePolicy.yaml"
+   before applying them. In the example below I added both mirrors before applying them.
+
+   .. code-block:: bash
+
+      ---
+      apiVersion: operator.openshift.io/v1alpha1
+      kind: ImageContentSourcePolicy
+      metadata:
+        labels:
+          operators.openshift.org/catalog: "true"
+        name: operator-0
+      spec:
+        repositoryDigestMirrors:
+        - mirrors:
+          - host31.ocp2.lab.local:8443/rhel8
+          - host32.ocp2.lab.local:8443/rhel8
+          source: registry.redhat.io/rhel8
+        - mirrors:
+          - host31.ocp2.lab.local:8443/redhat
+          - host32.ocp2.lab.local:8443/redhat
+          source: registry.redhat.io/redhat
+        - mirrors:
+          - host31.ocp2.lab.local:8443/container-native-virtualization
+          - host32.ocp2.lab.local:8443/container-native-virtualization
+          source: registry.redhat.io/container-native-virtualization
+        - mirrors:
+          - host31.ocp2.lab.local:8443/odf4
+          - host32.ocp2.lab.local:8443/odf4
+          source: registry.redhat.io/odf4
+        - mirrors:
+          - host31.ocp2.lab.local:8443/rhceph
+          - host32.ocp2.lab.local:8443/rhceph
+          source: registry.redhat.io/rhceph
+        - mirrors:
+          - host31.ocp2.lab.local:8443/openshift4
+          - host32.ocp2.lab.local:8443/openshift4
+          source: registry.redhat.io/openshift4
+      ---
+      apiVersion: operator.openshift.io/v1alpha1
+      kind: ImageContentSourcePolicy
+      metadata:
+        name: release-0
+      spec:
+        repositoryDigestMirrors:
+        - mirrors:
+          - host31.ocp2.lab.local:8443/openshift/release
+          - host32.ocp2.lab.local:8443/openshift/release
+          source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+        - mirrors:
+          - host31.ocp2.lab.local:8443/openshift/release-images
+          - host32.ocp2.lab.local:8443/openshift/release-images
+          source: quay.io/openshift-release-dev/ocp-release
+
+#. With "./oc-mirror-workspace/results-xxxxxxxxxx/catalogSource-redhat-operator-index.yaml"
+   a new object for each mirror will need to be created. Update the "name" and
+   "image" for each mirror.
+
+   .. code-block:: bash
+
+      apiVersion: operators.coreos.com/v1alpha1
+      kind: CatalogSource
+      metadata:
+        name: redhat-operator-host31
+        namespace: openshift-marketplace
+      spec:
+        image: host31.ocp2.lab.local:8443/redhat/redhat-operator-index:v4.12
+        sourceType: grpc
+
+
+
+
+
+
+
+
+
 
