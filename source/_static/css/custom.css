@@ -5,6 +5,10 @@ img {
   padding-bottom: 0px !important;
 }
 
+ul li p {
+  padding: 5px 0px 5px 0px !important;
+}
+
 ul li p:first-child {
   margin-top: -10px !important;
 }
