@@ -5,11 +5,11 @@ img {
   padding-bottom: 0px !important;
 }
 
-ul li:first-child {
+ul li p:first-child {
   margin-top: -10px !important;
 }
 
-ul li:last-child {
+ul li p:last-child {
   margin-bottom: 5px !important;
 }
 
