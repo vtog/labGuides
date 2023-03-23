@@ -16,7 +16,8 @@ Prerequisites
 
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
 
-#. On connected host extract and setup "Openshift Client" and "Mirror Plugin".
+#. On connected workstation extract and setup "Openshift Client" and "Mirror
+   Plugin".
 
 #. Create the following "imageset-config.yaml" file. In the content below I'm
    mirroring OCP v4.12, more specifically only v4.12.5. I've also added some
@@ -81,8 +82,8 @@ Prerequisites
 #. Successful completion of the previous step should create a new file named,
    ``mirror_seq1_000000.tar``. Copy this file to the destination node.
 
-Create Local Host Mirror Registry
----------------------------------
+Create Local Mirror Registry
+----------------------------
 
 #. SSH to the target node and run the following commands to place the
    binaries in their respective directories.
