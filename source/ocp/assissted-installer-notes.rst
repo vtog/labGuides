@@ -82,7 +82,7 @@ The following are notes on deploying OCP with the console AI.
         state: up
         type: bond
         mtu: 9000
-      - name: bond0.302
+      - name: bond0.122
         ipv4:
           address:
           - ip: 192.168.122.21
@@ -95,12 +95,12 @@ The following are notes on deploying OCP with the console AI.
         type: vlan
         vlan:
           base-iface: bond0
-          id: 302
+          id: 122
       routes:
         config:
         - destination: 0.0.0.0/0
           next-hop-address: 192.168.122.1
-          next-hop-interface: bond0.302
+          next-hop-interface: bond0.122
           table-id: 254
 
 #. KVM MAC/IP mappings
