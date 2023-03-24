@@ -53,8 +53,8 @@ resolves the error from the initial creation.
      .. code-block:: yaml
 
         spec:
-        providerID: >-
-          baremetalhost:///openshift-machine-api/<name>/<uid>
+          providerID: >-
+            baremetalhost:///openshift-machine-api/<name>/<uid>
 
    - Click Save
 
