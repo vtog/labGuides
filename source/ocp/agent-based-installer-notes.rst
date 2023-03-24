@@ -75,7 +75,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: yaml
       :caption: Ethernet Network Example
-      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 20, 28, 32, 33
+      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 21, 28, 32, 33
 
       apiVersion: v1alpha1
       metadata:
@@ -95,10 +95,10 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                 mtu: 9000
                 ipv4:
                   enabled: true
+                  dhcp: false
                   address:
                     - ip: 192.168.122.21
                       prefix-length: 24
-                  dhcp: false
                 ipv6:
                   enabled: false
             dns-resolver:
@@ -113,8 +113,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   table-id: 254
 
    .. code-block:: yaml
-      :caption: VLAN Network Example
-      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 18, 19, 23, 31, 35, 36
+      :caption: VLAN-TAG Network Example
+      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 17, 18, 21, 22, 27, 34, 38, 39
 
       apiVersion: v1alpha1
       metadata:
@@ -128,19 +128,22 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
               macAddress: 52:54:00:f4:16:21
           networkConfig:
             interfaces:
+              - name: enp1s0
+                type: ethernet
+                state: up
+                mtu: 9000
               - name: enp1s0.122
                 type: vlan
                 state: up
-                mtu: 9000
                 vlan:
                   base-iface: enp1s0
                   id: 122
                 ipv4:
                   enabled: true
+                  dhcp: false
                   address:
                     - ip: 192.168.122.21
                       prefix-length: 24
-                  dhcp: false
                 ipv6:
                   enabled: false
             dns-resolver:
@@ -155,8 +158,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   table-id: 254
 
    .. code-block:: yaml
-      :caption: Bond with VLAN Network Example
-      :emphasize-lines: 3, 4, 6, 7, 9-12, 15, 16, 21-24, 26, 28, 29, 33, 41, 45, 46
+      :caption: Bond with VLAN-TAG Network Example
+      :emphasize-lines: 3, 4, 6, 7, 9-12, 15, 16, 18-20, 22-24, 29-32, 35, 36, 41, 48, 52, 53
 
       apiVersion: v1alpha1
       metadata:
@@ -168,10 +171,18 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
           interfaces:
             - name: enp1s0
               macAddress: 52:54:00:f4:16:21
-            - name: enp2s0
+            - name: enp1s1
               macAddress: 52:54:00:f4:17:21
           networkConfig:
             interfaces:
+              - name: enp1s0
+                type: ethernet
+                state: up
+                mtu: 9000
+              - name: enp1s1
+                type: ethernet
+                state: up
+                mtu: 9000
               - name: bond0
                 type: bond
                 state: up
@@ -179,20 +190,19 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   mode: active-backup
                   port:
                   - enp1s0
-                  - enp2s0
+                  - enp1s1
               - name: bond0.122
                 type: vlan
                 state: up
-                mtu: 9000
                 vlan:
                   base-iface: bond0
                   id: 122
                 ipv4:
                   enabled: true
+                  dhcp: false
                   address:
                     - ip: 192.168.122.21
                       prefix-length: 24
-                  dhcp: false
                 ipv6:
                   enabled: false
             dns-resolver:
