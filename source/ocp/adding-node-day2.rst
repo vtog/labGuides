@@ -9,7 +9,7 @@ After adding the new Node via AI, login in to the local OCP console. The
 following creates and associates the required objects for the new Node and
 resolves the error from the initial creation.
 
-#. Make note of the MAC address of the newly created Node
+#. Copy the MAC address of the newly created Node to notepad.
 
 #. Go to :menuselection:`Compute --> MachineSets`
 
@@ -18,25 +18,51 @@ resolves the error from the initial creation.
 
 #. Go To :menuselection:`Compute --> Machines`
 
-   - Copy & paste the Name of newly created machine to notepad
+   - Copy the Name of newly created machine to notepad.
 
 #. Go to :menuselection:`Compute --> Bare Metal Hosts`
 
    - Click :menuselection:`Add Host --> New from Dialog`
    - Add Name (ex. worker3)
-   - Add Boot MAC Address (saved earlier when creating Node)
+   - Add Boot MAC Address (saved earlier when creating Node step 1)
    - Disable "Enable power management"
    - Click Create
 
 #. Modify newly created Bare Metal Hosts
    
-   - Before editing new object, copy "spec" section from an older BMH object
+   - Before editing new object, copy "spec" section from an older BMH object.
+
+     .. code-block:: yaml
+        :emphasize-lines: 9, 19
+
+        spec:
+          hardwareProfile: unknown
+          automatedCleaningMode: metadata
+          online: true
+          userData:
+            name: master-user-data-managed
+            namespace: openshift-machine-api
+          bootMode: legacy
+          bootMACAddress: '52:54:00:f4:16:24'
+          bmc:
+            address: ''
+            credentialsName: ''
+          customDeploy:
+            method: install_coreos
+          externallyProvisioned: true
+          consumerRef:
+            apiVersion: machine.openshift.io/v1beta1
+            kind: Machine
+            name: mtu1-29n7r-master-2
+            namespace: openshift-machine-api
+
    - Edit new BMH object
    - Click YAML tab
-   - Replace "spec" section with older BMH "spec"
-   - Be sure to use the new Node bootMACAddress and consumerRef/name
+   - Replace "spec" section with older BMH "spec" previously copied.
+   - Be sure to use the new "Node bootMACAddress" saved in step 1 and
+     "consumerRef/name" saved in step 3.
    - Click Save
-   - Copy & paste uid to be used in next step
+   - Before exiting copy the "uid" to notepad.
 
 #. Go to :menuselection:`Compute --> Nodes`
 
@@ -46,7 +72,7 @@ resolves the error from the initial creation.
 
      .. code-block:: yaml
 
-        machine.openshift.io/machine: openshift-machine-api/<Name of new machine created in step2>
+        machine.openshift.io/machine: openshift-machine-api/<new machine name created in step 3>
 
    - Replace "spec" section with following "spec"
 
@@ -54,7 +80,7 @@ resolves the error from the initial creation.
 
         spec:
           providerID: >-
-            baremetalhost:///openshift-machine-api/<name>/<uid>
+            baremetalhost:///openshift-machine-api/<node_name>/<uid>
 
    - Click Save
 
