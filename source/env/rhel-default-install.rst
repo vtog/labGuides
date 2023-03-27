@@ -29,13 +29,14 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       sudo systemctl enable --now cockpit.socket
       sudo firewall-cmd --add-service=cockpit
       sudo firewall-cmd --add-service=cockpit --permanent
+      firewall-cmd --get-default-zone
+      firewall-cmd --zone=<zone-name> --list-all
 
 #. Install dev packages
 
    .. code-block:: bash
 
       sudo dnf group install "Development Tools"
-      sudo dnf install cmake httpd-tools python3-pip
 
 #. Install virtualization
 
@@ -61,10 +62,24 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
    - Yubico Authenticator
    - Visual Studio Code
 
-#. Update PIP and install misc packages
+#. Install extensions https://extensions.gnome.org/
+
+   - Dash to Dock
+   - User Themes
+   - Caffeine
+   - Tactile
+
+#. Install themes & icons https://www.gnome-look.org/browse/
+
+   - Nordic
+   - Tango2
+
+#. Install and update PIP. Install misc packages
 
    .. code-block:: bash
-      
+
+      sudo dnf install python3-pip
+
       pip install pip -U
       
       # add misc packages
@@ -223,4 +238,11 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
       sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
       sudo dnf install brave-browser
+
+   .. code-block:: bash
+
+      # Add chromium corp policy to brave
+
+      sudo mkdir -p /etc/brave/policies/managed
+      sudo ln -s ../../../../usr/share/chromium/policies/recommended/00_gssapi.json 00_gssapi.json
 
