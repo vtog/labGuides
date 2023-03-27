@@ -171,6 +171,12 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       : q
       : q
 
+#. Configure OpenShift client tab complete
+
+   .. code-block:: bash
+
+      oc completion zsh | sudo tee /usr/share/zsh/site-functions/_oc
+
 #. Install NeoVIM from Source **(If Needed)**
 
    .. code-block:: bash
