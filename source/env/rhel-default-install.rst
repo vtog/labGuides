@@ -222,20 +222,6 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       # Create Zsh Shell Completion
       sudo cp extra/completions/_alacritty /usr/share/zsh/site-functions
 
-#. Install docker-ce **(Not needed... Use Podman)**
-
-   .. code-block:: bash
-
-      sudo dnf install dnf-plugins-core
-      sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-      sudo dnf install docker-ce docker-ce-cli containerd.io
-      sudo systemctl start docker
-      sudo systemctl enable docker
-      
-      # Add user to docker group
-      usermod -a -G docker <user>
-      newgrp docker
-
 #. Install brave **(If Needed)**
 
    .. code-block:: bash

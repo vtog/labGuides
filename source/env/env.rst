@@ -11,3 +11,4 @@ Platform/Environment Lab Guides
    sriov
    create-key-cert-pair
    intel-i350
+   docker
