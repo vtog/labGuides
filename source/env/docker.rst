@@ -70,7 +70,7 @@ installing on workstation in disconnected environment.
       sudo systemctl enable --now docker
 
       # Add user to docker group
-      usermod -a -G docker $USER
+      sudo usermod -a -G docker $USER
       newgrp docker
 
 #. Test install... hello-world
