@@ -6,6 +6,8 @@ Some notes on installing Docker.
 Install Docker
 --------------
 
+Simple install of docker-ce on Fedora/RHEL
+
 #. Install docker-ce
 
    .. code-block:: bash
@@ -17,7 +19,7 @@ Install Docker
       sudo systemctl enable --now docker
       
       # Add user to docker group
-      usermod -a -G docker <user>
+      usermod -a -G docker $USER
       newgrp docker
 
 #. Test install... hello-world
@@ -29,7 +31,10 @@ Install Docker
 Create Docker tarball
 ---------------------
 
-.. note:: These instructions assume you haven't isntalled docker-ce.
+Option to download docker-ce and dependencies in order to create a tarball for
+installing on workstation in disconnected environment.
+
+.. note:: These instructions assume you haven't isntalled docker-ce or any of the dependencies.
 
 #. Add docker-ce repo
 
@@ -50,18 +55,22 @@ Create Docker tarball
 
    .. code-block:: bash
 
+      cd ~/docker
+
       sudo tar -cvzf docker-deps-rpms.tar.gz *.rpm
 
 #. Install docker
 
    .. code-block:: bash
 
+      cd ~/docker
+
       sudo dnf localinstall *.rpm
 
       sudo systemctl enable --now docker
 
       # Add user to docker group
-      usermod -a -G docker <user>
+      usermod -a -G docker $USER
       newgrp docker
 
 #. Test install... hello-world
