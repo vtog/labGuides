@@ -18,7 +18,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm 
       sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm
 
-      sudo dnf install obs-studio
+      sudo dnf install obs-studio v4l2loopback
 
 #. Install base packages
 
@@ -58,7 +58,6 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
 #. Insall packages via Sofware store.
 
-   - Brave
    - Yubico Authenticator
    - Visual Studio Code
 
@@ -177,6 +176,22 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       oc completion zsh | sudo tee /usr/share/zsh/site-functions/_oc
 
+#. Install brave (I prefer this to the "Software" store)
+
+   .. code-block:: bash
+
+      sudo dnf install dnf-plugins-core
+      sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
+      sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
+      sudo dnf install brave-browser
+
+   .. code-block:: bash
+
+      # Add chromium corp policy to brave
+
+      sudo mkdir -p /etc/brave/policies/managed
+      sudo ln -s ../../../../usr/share/chromium/policies/recommended/00_gssapi.json 00_gssapi.json
+
 #. Install NeoVIM from Source **(If Needed)**
 
    .. code-block:: bash
@@ -221,20 +236,4 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       # Create Zsh Shell Completion
       sudo cp extra/completions/_alacritty /usr/share/zsh/site-functions
-
-#. Install brave **(If Needed)**
-
-   .. code-block:: bash
-
-      sudo dnf install dnf-plugins-core
-      sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
-      sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-      sudo dnf install brave-browser
-
-   .. code-block:: bash
-
-      # Add chromium corp policy to brave
-
-      sudo mkdir -p /etc/brave/policies/managed
-      sudo ln -s ../../../../usr/share/chromium/policies/recommended/00_gssapi.json 00_gssapi.json
 
