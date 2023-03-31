@@ -65,7 +65,7 @@ Prerequisites
          oc mirror list operators --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
 
          # List package specific inormation for an operator
-         oc mirror list operators --package sriov-network-operator --catalog registry.redhat.io/redhat/redhat-operator-index:v4
+         oc mirror list operators --package sriov-network-operator --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
 
 #. Mirror "imageset" from external mirror to a local file.
 
