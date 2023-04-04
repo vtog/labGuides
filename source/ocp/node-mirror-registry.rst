@@ -3,12 +3,15 @@ Node Mirror & Registry
 
 In a disconnected environment you might not always have the option to deploy a
 registry and mirror on dedicated server. This guide will walk through the
-process of using an OCP node running in the cluster.
+process of using one or more nodes running in an OpenShift cluster.
 
 Prerequisites
 -------------
 
-#. Download the following tools and copy to destination node.
+#. Download the following tools and copy to destination cluster node.
+
+   .. attention:: These links download the most recent versions. In some cases
+      you may want a specific version.
 
    `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz>`_
 
@@ -16,12 +19,17 @@ Prerequisites
 
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
 
-#. On connected workstation extract and setup "Openshift Client" and "Mirror
-   Plugin".
+   `Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
+
+#. On the "connected" workstation extract and setup "Openshift Client" and
+   "Mirror Plugin".
 
 #. Create the following "imageset-config.yaml" file. In the content below I'm
    mirroring OCP v4.12, more specifically only v4.12.5. I've also added some
    additional operators.
+
+   .. attention:: Be sure to update the mirror-platform-channel and operators
+      to your specific version and package requirements.
 
    .. code-block:: yaml
       :emphasize-lines: 6-8
@@ -104,7 +112,10 @@ Create Local Mirror Registry
       cd ~/mirror
 
 #. Identify Mirror Registry hostname and storage directory variables. For
-   exmaple my lab uses the following:
+   example my lab uses the following:
+
+   .. tip:: For "quayHostname" be sure to use a name that can be resolved via
+      DNS.
 
    .. code-block:: bash
 
@@ -136,7 +147,7 @@ Create Local Mirror Registry
 
    .. code-block:: bash
 
-       podman login -u init -p password host31.ocp2.lab.local:8443
+       podman login -u init -p password $quayHostname:8443
 
    .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
 
@@ -144,7 +155,7 @@ Create Local Mirror Registry
 
    .. hint:: Username = "init" / Password = "password"
 
-#. If needed the following command will uninstall the registry.
+.. tip:: If needed, the following command will uninstall the registry.
 
    .. code-block:: bash
 
@@ -163,6 +174,7 @@ Mirror Images to Local Registry
 
    .. code-block:: bash
 
+      cd ~
       cat ./pull-secret.txt | jq . > ./pull-secret.json
 
 #. Copy pull-secret.json to ~/.docker and rename config.json
@@ -170,7 +182,6 @@ Mirror Images to Local Registry
    .. code-block:: bash
 
       mkdir ~/.docker
-
       cp ./pull-secret.json ~/.docker/config.json
 
 #. Generate the base64-encoded user name and password for mirror registry.
@@ -209,7 +220,7 @@ Mirror Images to Local Registry
 
    .. code-block:: bash
 
-      oc mirror --from=./mirror_seq1_000000.tar docker://host31.ocp2.lab.local:8443
+      oc mirror --from=./mirror_seq1_000000.tar docker://$quayHostname:8443
 
 #. Connect and login to your mirror: `<https://host31.ocp2.lab.local:8443>`_
    You should see something similar to the following:
@@ -220,6 +231,10 @@ Mirror Images to Local Registry
    .. image:: ./images/mirror-images.png
 
 #. Apply the YAML files from the results directory to the cluster.
+
+   .. important:: Only do this for first Node hosting registry/mirror. If
+      adding additional Node redundancy, skip to "Adding Registry & Mirror
+      Redundancy" section.
 
    .. code-block:: bash
 
@@ -238,13 +253,14 @@ Mirror Images to Local Registry
 Update Cluster for local registry
 ---------------------------------
 
-#. Extract pull-secret. A new local file ``.dockerconfigjson`` is created.
+#. Extract OCP pull-secret. A new local file ``.dockerconfigjson`` is created.
 
    .. code-block:: bash
 
       oc extract secret/pull-secret -n openshift-config --confirm --to=.
+      cat ./.dockerconfigjson | jq . > ./.dockerconfig.json
 
-#. Update ``.dockerconfigjson`` with local registry credentials.
+#. Update ``.dockerconfig.json`` with local registry credentials.
 
    .. code-block:: json
 
@@ -261,13 +277,13 @@ Update Cluster for local registry
 
    .. code-block:: bash
 
-      oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=.dockerconfigjson
+      oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=.dockerconfig.json
 
 #. Create configmap of quay-rootCA.
 
    .. code-block:: bash
 
-      oc create configmap registry-config --from-file=host31.ocp2.lab.local..8443=/home/core/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
+      oc create configmap registry-config --from-file=$quayHostname..8443=/home/core/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
 
 #. Add quay-rootCA to cluster.
 
@@ -279,15 +295,15 @@ Adding Registry & Mirror Redundancy
 -----------------------------------
 
 For redundancy it's possible to run through these steps for each node in the
-cluster. The "trick" is to not over write the previous nodes config but append
-to them.
+cluster. The "trick" is to not over write the previous "mirror" config but
+append to them.
 
 #. Append updates to ``./oc-mirror-workspace/results-xxxxxxxxxx/imageContentSourcePolicy.yaml``
    before applying them. In the example below I added both mirrors before
-   applying the policy.
+   re-applying the policy.
 
    .. code-block:: yaml
-
+      
       apiVersion: operator.openshift.io/v1alpha1
       kind: ImageContentSourcePolicy
       metadata:
@@ -337,19 +353,20 @@ to them.
           source: quay.io/openshift-release-dev/ocp-release
 
 #. With ``./oc-mirror-workspace/results-xxxxxxxxxx/catalogSource-redhat-operator-index.yaml``
-   a new object for each mirror will need to be created. Update the "name" and
-   "image" for each mirror.
+   a new object for each mirror will need to be created. Update the "name" by
+   appending the node-name to the end of the string for each mirror before
+   creating the object.
 
    .. code-block:: yaml
-      :emphasize-lines: 4, 7
-
+      :emphasize-lines: 4
+      
       apiVersion: operators.coreos.com/v1alpha1
       kind: CatalogSource
       metadata:
-        name: redhat-operator-host31
+        name: redhat-operator-index-host32
         namespace: openshift-marketplace
       spec:
-        image: host31.ocp2.lab.local:8443/redhat/redhat-operator-index:v4.12
+        image: host32.ocp2.lab.local:8443/redhat/redhat-operator-index:v4.12
         sourceType: grpc
 
 #. Just like before we'll need to append the new registry to the pull-secret.
@@ -373,6 +390,8 @@ to them.
 
    .. code-block:: yaml
       :emphasize-lines: 2, 6
+
+      oc edit configmap registry-config -n openshift-config
 
       data:
         host31.ocp2.lab.local..8443: |

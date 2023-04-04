@@ -9,11 +9,11 @@ OpenShift Lab Guides
    agent-based-installer-notes
    adding-node-day2
    local-mirror-registry
+   node-mirror-registry
    sriov
    lso-lr-quick-start
    lso-odf-quick-start
    image-registry-quick-start
    ocp-cert-expiry
-   node-mirror-registry
    starting-the-cluster
 
