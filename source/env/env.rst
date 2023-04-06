@@ -8,6 +8,7 @@ Platform/Environment Lab Guides
    rhel-default-install
    kvm
    simple-bind-config
+   sushy
    sriov
    create-key-cert-pair
    intel-i350
