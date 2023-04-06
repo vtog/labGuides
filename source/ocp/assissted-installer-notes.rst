@@ -23,6 +23,8 @@ The following are static network configurations when manually configuring
        enabled: false
    dns-resolver:
      config:
+       search:
+       - lab.local
        server:
        - 192.168.1.72
    routes:
@@ -57,6 +59,8 @@ The following are static network configurations when manually configuring
        enabled: false
    dns-resolver:
      config:
+       search:
+       - lab.local
        server:
        - 192.168.1.72
    routes:
@@ -103,6 +107,8 @@ The following are static network configurations when manually configuring
        enabled: false
    dns-resolver:
      config:
+       search:
+       - lab.local
        server:
        - 192.168.1.72
    routes:

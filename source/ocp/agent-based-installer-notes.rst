@@ -103,6 +103,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   enabled: false
             dns-resolver:
               config:
+                search:
+                  - lab.local
                 server:
                   - 192.168.1.72
             routes:
@@ -148,6 +150,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   enabled: false
             dns-resolver:
               config:
+                search:
+                  - lab.local
                 server:
                   - 192.168.1.72
             routes:
@@ -207,6 +211,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   enabled: false
             dns-resolver:
               config:
+                search:
+                  - lab.local
                 server:
                   - 192.168.1.72
             routes:
@@ -229,5 +235,4 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    .. code-block:: bash
 
       ./openshift-install agent wait-for install-complete --dir workdir
-
 
