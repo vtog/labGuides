@@ -114,6 +114,27 @@ Simple BIND Config
 
    .. code-block:: bash
 
+      cat << EOF | sudo tee /etc/named/zones/db.1.168.192
+      \$TTL    604800
+      @       IN      SOA     ns1.lab.local. admin.lab.local. (
+                                    3         ; Serial
+                               604800         ; Refresh
+                                86400         ; Retry
+                              2419200         ; Expire
+                               604800 )       ; Negative Cache TTL
+
+      ; name servers - NS records
+              IN      NS      ns1.lab.local.
+
+      ; PTR Records
+      72      IN      PTR     ns1.lab.local.            ; 192.168.1.72
+      72      IN      PTR     bfg.lab.local.            ; 192.168.1.72
+      72      IN      PTR     mirror.lab.local.         ; 192.168.1.72
+
+      EOF
+
+   .. code-block:: bash
+
       cat << EOF | sudo tee /etc/named/zones/db.122.168.192
       \$TTL    604800
       @       IN      SOA     ns1.lab.local. admin.lab.local. (
@@ -140,6 +161,24 @@ Simple BIND Config
       140     IN      PTR     api.ocp4.lab.local.       ; 192.168.122.140
       140     IN      PTR     api-int.ocp4.lab.local.   ; 192.168.122.140
       
+      EOF
+
+   .. code-block:: bash
+
+      cat << EOF | sudo tee /etc/named/zones/db.132.168.192
+      \$TTL    604800
+      @       IN      SOA     ns1.lab.local. admin.lab.local. (
+                                    3         ; Serial
+                               604800         ; Refresh
+                                86400         ; Retry
+                              2419200         ; Expire
+                               604800 )       ; Negative Cache TTL
+
+      ; name servers - NS records
+              IN      NS      ns1.lab.local.
+
+      ; PTR Records
+
       EOF
 
 #. Start named
