@@ -16,6 +16,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    .. code-block:: bash
 
       sudo dnf install /usr/bin/nmstatectl -y
+
 #. Create a work subdir
 
    .. code-block:: bash

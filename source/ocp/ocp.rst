@@ -1,4 +1,4 @@
-OpenShift Lab Guides
+/OpenShift Lab Guides
 ====================
 
 .. toctree::
@@ -7,6 +7,7 @@ OpenShift Lab Guides
 
    assissted-installer-notes
    agent-based-installer-notes
+   ipi-notes
    adding-node-day2
    local-mirror-registry
    node-mirror-registry
