@@ -13,3 +13,4 @@ Platform/Environment Lab Guides
    create-key-cert-pair
    intel-i350
    docker
+   er4
