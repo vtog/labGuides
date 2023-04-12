@@ -18,12 +18,16 @@ Simple BIND Config
       acl "trusted" {
           127.0.0.1;
           192.168.1.72;
-          192.168.122.1;
+          192.168.1.0/24;
           192.168.122.0/24;
+          192.168.132.0/24;
+          2600:1702:4c73:f110::/64;
+          2600:1702:4c73:f111::/64;
+
       };
        
       # Under "options" change the following
-      listen-on port 53 { 127.0.0.1; 192.168.1.72; 192.168.122.1; };
+      listen-on port 53 { any; };
       allow-query     { trusted; };
        
       # Add the following "include" to the end of the file
@@ -40,14 +44,22 @@ Simple BIND Config
    .. code-block:: bash
 
       cat << EOF | sudo tee /etc/named/named.conf.local
+
       zone "lab.local" {
           type master;
           file "/etc/named/zones/db.lab.local";
       };
-      
+      zone "1.168.192.in-addr.arpa" {
+          type master;
+          file "/etc/named/zones/db.1.168.192";
+      };
       zone "122.168.192.in-addr.arpa" {
           type master;
           file "/etc/named/zones/db.122.168.192";
+      };
+      zone "132.168.192.in-addr.arpa" {
+          type master;
+          file "/etc/named/zones/db.132.168.192";
       };
       
       EOF
@@ -69,19 +81,33 @@ Simple BIND Config
               IN      NS      ns1.lab.local.
       
       ; name servers - A records
-      ns1.lab.local.              IN      A      192.168.122.1
+      ns1.lab.local.              IN      A      192.168.1.72
       
-      ; 10.128.128.0/24 - A records
-      host1.lab.local.            IN      A      192.168.122.101
-      host2.lab.local.            IN      A      192.168.122.102
-      mirror.lab.local.           IN      A      192.168.122.1
-      
-      api.acm.lab.local.          IN      A      192.168.122.245
-      *.apps.acm.lab.local.       IN      A      192.168.122.220
-      
-      api.vtog1.lab.local.        IN      A      192.168.122.132
-      *.apps.vtog1.lab.local.     IN      A      192.168.122.189
-      
+      ; 192.168.1.0/24 - A records
+      bfg.lab.local.              IN      A      192.168.1.72
+      mirror.lab.local.           IN      A      192.168.1.72
+
+      ; 192.168.122.0/24 - A records
+      rhel7-bastion.lab.local.    IN      A      192.168.122.7
+      rhel8-bastion.lab.local.    IN      A      192.168.122.8
+      rhel9-bastion.lab.local.    IN      A      192.168.122.9
+
+      api.ocp1.lab.local.         IN      A      192.168.122.110
+      api-int.ocp1.lab.local.     IN      A      192.168.122.110
+      *.apps.ocp1.lab.local.      IN      A      192.168.122.111
+
+      api.ocp2.lab.local.         IN      A      192.168.122.120
+      api-int.ocp2.lab.local.     IN      A      192.168.122.120
+      *.apps.ocp2.lab.local.      IN      A      192.168.122.121
+
+      api.ocp3.lab.local.         IN      A      192.168.122.130
+      api-int.ocp3.lab.local.     IN      A      192.168.122.130
+      *.apps.ocp3.lab.local.      IN      A      192.168.122.131
+
+      api.ocp4.lab.local.         IN      A      192.168.122.140
+      api-int.ocp4.lab.local.     IN      A      192.168.122.140    
+      *.apps.ocp4.lab.local.      IN      A      192.168.122.141
+
       EOF
 
 #. Create reverse zone file
@@ -101,9 +127,18 @@ Simple BIND Config
               IN      NS      ns1.lab.local.
       
       ; PTR Records
-      1       IN      PTR     ns1.lab.local.    ; 192.168.122.1
-      101     IN      PTR     host1.lab.local.  ; 192.168.122.101
-      102     IN      PTR     host2.lab.local.  ; 192.168.122.102
+      7       IN      PTR     rhel7-bastion.lab.local.  ; 192.168.122.7
+      8       IN      PTR     rhel8-bastion.lab.local.  ; 192.168.122.8
+      9       IN      PTR     rhel9-bastion.lab.local.  ; 192.168.122.9
+
+      110     IN      PTR     api.ocp1.lab.local.       ; 192.168.122.110
+      110     IN      PTR     api-int.ocp1.lab.local.   ; 192.168.122.110
+      120     IN      PTR     api.ocp2.lab.local.       ; 192.168.122.120
+      120     IN      PTR     api-int.ocp2.lab.local.   ; 192.168.122.120
+      130     IN      PTR     api.ocp3.lab.local.       ; 192.168.122.130
+      130     IN      PTR     api-int.ocp3.lab.local.   ; 192.168.122.130
+      140     IN      PTR     api.ocp4.lab.local.       ; 192.168.122.140
+      140     IN      PTR     api-int.ocp4.lab.local.   ; 192.168.122.140
       
       EOF
 
