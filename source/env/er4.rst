@@ -9,7 +9,7 @@ this with an EdgeRouter 4 from Ubiquiti.
 IPv6
 ----
 
-#. Configure IPv6 for vlan 1 (cli)
+#. Configure IPv6 for WAN int eth0.0 and eth1 (cli)
 
    .. code-block:: bash
 
@@ -27,7 +27,7 @@ IPv6
       commit
       save
 
-#. Configure IPv6 for vlan 122 (cli)
+#. Configure IPv6 for WAN int eth0.0 and eth1 vlan 122 (cli)
 
    .. code-block:: bash
 
