@@ -1,4 +1,4 @@
-/OpenShift Lab Guides
+OpenShift Lab Guides
 ====================
 
 .. toctree::
