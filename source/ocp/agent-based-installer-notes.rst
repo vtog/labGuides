@@ -237,3 +237,97 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
       ./openshift-install agent wait-for install-complete --dir workdir
 
+#. Example of IPv6 only.
+
+   .. code-block:: yaml
+      :caption: install-config.yaml
+
+      apiVersion: v1
+      baseDomain: lab.local
+      compute:
+      - architecture: amd64
+        hyperthreading: Enabled
+        name: worker
+        replicas: 2
+      controlPlane:
+        architecture: amd64
+        hyperthreading: Enabled
+        name: master
+        replicas: 3
+      metadata:
+        name: ocp3
+      networking:
+        clusterNetwork:
+        - cidr: fd02::/48
+          hostPrefix: 64
+        machineNetwork:
+        - cidr: 2600:1702:4c73:f111::0/64
+        networkType: OVNKubernetes
+        serviceNetwork:
+        - fd03::/112
+      platform:
+        baremetal:
+          apiVIPs:
+            - 2600:1702:4c73:f111::130
+          ingressVIPs:
+            - 2600:1702:4c73:f111::131
+      pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
+      sshKey: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
+      imageContentSources:
+      - mirrors:
+        - mirror.lab.local:8443/openshift/release
+        source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+      - mirrors:
+        - mirror.lab.local:8443/openshift/release-images
+        source: quay.io/openshift-release-dev/ocp-release
+      additionalTrustBundle: |
+        -----BEGIN CERTIFICATE-----
+        <Use rootCA.pem for mirror registry here>
+        -----END CERTIFICATE-----
+
+   .. code-block:: yaml
+      :caption: agent-config.yaml
+
+      apiVersion: v1alpha1
+      metadata:
+        name: ocp3
+      rendezvousIP: 2600:1702:4c73:f111::31
+      hosts:
+        - hostname: host31
+          role: master
+          interfaces:
+            - name: enp1s0
+              macAddress: 52:54:00:f4:16:31
+          networkConfig:
+            interfaces:
+              - name: enp1s0
+                type: ethernet
+                state: up
+                mtu: 9000
+              - name: enp1s0.122
+                type: vlan
+                state: up
+                vlan:
+                  base-iface: enp1s0
+                  id: 122
+                ipv4:
+                  enabled: false
+                  dhcp: false
+                ipv6:
+                  enabled: true
+                  address:
+                    - ip: 2600:1702:4c73:f111::31
+                      prefix-length: 64
+            dns-resolver:
+              config:
+                search:
+                  - lab.local
+                server:
+                  - 2600:1702:4c73:f110::72
+            routes:
+              config:
+                - destination: '::/0'
+                  next-hop-address: '2600:1702:4c73:f111::1'
+                  next-hop-interface: enp1s0.122
+
