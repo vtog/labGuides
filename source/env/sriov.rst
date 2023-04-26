@@ -4,6 +4,12 @@ Enable SR-IOV on RHEL/KVM
 For lab purposed I purchased an old Intel I350 SRIOV capable card. The steps
 will guide you through configuring the VF's and passing them to KVM.
 
+#. Discover "Ethernet Controller"
+
+   .. code-block:: bash
+
+      sudo lspci -nn | grep -i 'Ethernet Controller'
+
 #. Discover hardware capabilities and confirm SRIOV support
 
    .. code-block:: bash
