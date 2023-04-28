@@ -24,6 +24,31 @@ Prerequisites
 #. On the "connected" workstation extract and setup "Openshift Client" and
    "Mirror Plugin".
 
+   .. code-block:: bash
+
+      mkdir -p ~/.local/bin
+      tar -xzvf openshift-client-linux.tar.gz -C ~/.local/bin/
+      tar -xzvf oc-mirror.tar.gz -C ~/.local/bin/
+      chmod +x ~/.local/bin/oc-mirror
+      rm ~/.local/bin/README.md
+
+#. In order to download the OpenShift images copy and convert "pull secret" to
+   json format on the "connected" workstation.
+   
+   .. attention:: You may need to install "jq" for this step.
+
+   .. code-block:: bash
+
+      cd ~
+      cat ./pull-secret.txt | jq . > ./pull-secret.json
+
+#. Copy pull-secret.json to ~/.docker and rename config.json
+
+   .. code-block:: bash
+   
+      mkdir ~/.docker   
+      cp ./pull-secret.json ~/.docker/config.json
+
 #. Create the following "imageset-config.yaml" file. In the content below I'm
    mirroring OCP v4.12, more specifically only v4.12.5. I've also added some
    additional operators.
