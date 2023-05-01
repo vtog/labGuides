@@ -32,8 +32,7 @@ Prerequisites
       chmod +x ~/.local/bin/oc-mirror
       rm ~/.local/bin/README.md
 
-#. In order to download the OpenShift images copy and convert "pull secret" to
-   json format on the "connected" workstation.
+#. Convert your "pull-secret.txt" to json format.
    
    .. attention:: You may need to install "jq" for this step.
 
@@ -42,7 +41,7 @@ Prerequisites
       cd ~
       cat ./pull-secret.txt | jq . > ./pull-secret.json
 
-#. Copy pull-secret.json to ~/.docker and rename config.json
+#. Copy "pull-secret.json" to ~/.docker and rename "config.json".
 
    .. code-block:: bash
    
