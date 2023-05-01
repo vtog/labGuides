@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'labGuides'
+project = 'My Unofficial Lab Guides'
 copyright = '2023, Vince Tognaci'
 author = 'Vince Tognaci'
 release = 'main'

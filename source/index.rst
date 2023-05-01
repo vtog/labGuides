@@ -1,5 +1,7 @@
-Welcome to vtog's Lab Guides!
-=============================
+Welcome to My Unoffocial Lab Guides!
+====================================
+These guides are my personal documentation on how to complete verious tasks
+for RHEL, OpenShift, etc.
 
 .. toctree::
    :maxdepth: 1
