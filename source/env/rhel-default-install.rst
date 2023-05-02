@@ -3,6 +3,13 @@ Setup Fedora/RHEL
 
 These instruction configure RHEL9 or Fedora with my preferred settings.
 
+#. My default install of RHEL9 had ipv6 disabled. Here's how to enable it.
+
+   .. code-block:: bash
+
+      sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
+      sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0
+
 #. If needed setup fusion free and non-free
 
    .. attention:: Optional, these repo's may not be needed.
