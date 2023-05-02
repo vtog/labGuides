@@ -242,7 +242,6 @@ Example of IPv6 only
 --------------------
 
 .. code-block:: yaml
- 
    :caption: install-config.yaml
 
    apiVersion: v1
