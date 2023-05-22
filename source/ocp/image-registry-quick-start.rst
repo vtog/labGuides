@@ -65,7 +65,7 @@ Set the Image Registry's default route
                                                                                                                                
    .. code-block:: bash                                                                                                     
                                                                                                                                
-      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee
+      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${HOST}.crt  > /dev/null
                                                                                                                                
 #. Update the clients local ca-trust                                                                                           
                                                                                                                                
