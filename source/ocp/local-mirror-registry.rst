@@ -7,13 +7,15 @@ and registry for deploying OpenShift on a disconnected network.
 Prerequisites
 -------------
 
-#. Download the following tools:
+#. Download the following files and copy to the destination server.
 
    `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz>`_
 
    `Mirror Registry for OpenShift <https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/mirror-registry/latest/mirror-registry.tar.gz>`_
 
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
+
+   `Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
 #. SSH to the target server and run the following commands to place the
    binaries in their respective directories.
@@ -26,6 +28,13 @@ Prerequisites
       sudo tar -xzvf oc-mirror.tar.gz -C /usr/local/bin/
       sudo chmod +x /usr/local/bin/oc-mirror
       sudo rm /usr/local/bin/README.md
+
+#. Create the target directory for the new registry. In my lab we're using
+   "/mirror"
+
+   .. code-block:: bash
+
+      sudo mkdir /mirror
 
 Create Local Host Mirror Registry
 ---------------------------------
@@ -41,9 +50,14 @@ I'm using:
    pgStorage="/mirror/ocp4"
    initPassword="password"
 
+.. important:: Be sure to set "quayHostname" to a name with a DNS record. The
+   installer will use that name to validate the service.
+
 #. Run the following command to install the registry pods as root.
 
    .. code-block:: bash
+
+      cd ~/mirror-registry
 
       sudo ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
 
@@ -75,13 +89,13 @@ I'm using:
 
    .. code-block:: bash
 
-      sudo ./mirror-registry uninstall --quayRoot /mirror/ocp4 --quayStorage /mirror/ocp4
+      sudo ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage
 
 Mirror Images to Local Registry
 -------------------------------
 
 #. Before mirroring images we need a copy of your Red Hat "Pull Secret" and update
-   it with the local mirror information. If you haven't done so download
+   it with the local mirror information. If you haven't done so download it here:
    `pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
 #. Convert "pull secret" to json format.

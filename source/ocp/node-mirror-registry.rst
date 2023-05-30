@@ -8,7 +8,7 @@ process of using one or more nodes running in an OpenShift cluster.
 Prerequisites
 -------------
 
-#. Download the following tools and copy to destination cluster node.
+#. Download the following files and copy to the destination cluster node.
 
    .. attention:: These links download the most recent versions. In some cases
       you may want a specific version.
