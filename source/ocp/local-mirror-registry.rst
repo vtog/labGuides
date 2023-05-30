@@ -15,7 +15,7 @@ Prerequisites
 
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
 
-   `Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
+   `Your Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
 #. SSH to the target server and run the following commands to place the
    binaries in their respective directories.
@@ -96,7 +96,7 @@ Mirror Images to Local Registry
 
 #. Before mirroring images we need a copy of your Red Hat "Pull Secret" and update
    it with the local mirror information. If you haven't done so download it here:
-   `pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
+   `your pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
 #. Convert "pull secret" to json format.
 
