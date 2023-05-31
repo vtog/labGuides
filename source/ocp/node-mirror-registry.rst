@@ -19,9 +19,9 @@ Prerequisites
 
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
 
-   `Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
+   `Your Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
-#. On the "connected" workstation extract and setup "Openshift Client" and
+#. On a "connected" workstation extract and setup "Openshift Client" and
    "Mirror Plugin".
 
    .. code-block:: bash
@@ -114,8 +114,8 @@ Prerequisites
 #. Successful completion of the previous step should create a new file named,
    ``mirror_seq1_000000.tar``. Copy this file to the destination node.
 
-Create Local Mirror Registry
-----------------------------
+Create Local Host Mirror Registry
+---------------------------------
 
 #. SSH to the target node and run the following commands to place the
    binaries in their respective directories.
@@ -135,11 +135,12 @@ Create Local Mirror Registry
       sudo chmod 644 /etc/resolv.conf
       cd ~/mirror
 
-#. Identify Mirror Registry hostname and storage directory variables. For
-   example my lab uses the following:
+#. Identify and create the **Hostname** and **Directory** session variables.
+   For example my lab uses the following:
 
-   .. tip:: For "quayHostname" be sure to use a name that can be resolved via
-      DNS.
+   .. important:: For "quayHostname" be sure to use a name that can be resolved
+      via DNS or the local hosts file. The installer will use that name to
+      validate the service.
 
    .. code-block:: bash
 
@@ -189,8 +190,8 @@ Mirror Images to Local Registry
 -------------------------------
 
 #. Before mirroring images we need a copy of your Red Hat "Pull Secret" and update
-   it with the local mirror information. If you haven't done so download
-   `pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
+   it with the local mirror information. If you haven't done so download it here:
+   `your pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
 #. Convert "pull secret" to json format.
 
@@ -240,7 +241,10 @@ Mirror Images to Local Registry
         }
       }
             
-#. Mirror the local file to local mirror.
+#. Mirror the "local image tar ball" to the "local mirror"
+
+   .. note:: This file was created and copied to this node in the pre-req
+      section.
 
    .. code-block:: bash
 

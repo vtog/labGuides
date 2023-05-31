@@ -9,6 +9,9 @@ Prerequisites
 
 #. Download the following files and copy to the destination server.
 
+   .. attention:: These links download the most recent versions. In some cases
+      you may want a specific version.
+
    `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz>`_
 
    `Mirror Registry for OpenShift <https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/mirror-registry/latest/mirror-registry.tar.gz>`_
@@ -36,22 +39,23 @@ Prerequisites
 
       sudo mkdir /mirror
 
+#. Identify and create the **Hostname** and **Directory** session variables. In
+   my case I'm using the following for my lab:
+
+   .. important:: For "quayHostname" be sure to use a name that can be resolved
+      via DNS or the local hosts file. The installer will use that name to
+      validate the service.
+
+   .. code-block:: bash
+
+      quayHostname="mirror.lab.local"
+      quayRoot="/mirror/ocp4"
+      quayStorage="/mirror/ocp4"
+      pgStorage="/mirror/ocp4"
+      initPassword="password"
+
 Create Local Host Mirror Registry
 ---------------------------------
-
-Identify Mirror Registry hostname and storage directory variables. In my case
-I'm using:
-
-.. code-block:: bash
-
-   quayHostname="mirror.lab.local"
-   quayRoot="/mirror/ocp4"
-   quayStorage="/mirror/ocp4"
-   pgStorage="/mirror/ocp4"
-   initPassword="password"
-
-.. important:: Be sure to set "quayHostname" to a name with a DNS record. The
-   installer will use that name to validate the service.
 
 #. Run the following command to install the registry pods as root.
 
@@ -104,6 +108,7 @@ Mirror Images to Local Registry
 
    .. code-block:: bash
 
+      cd ~
       cat ./pull-secret.txt | jq . > ./pull-secret.json
 
 #. Copy pull-secret.json to ~/.docker and rename config.json
@@ -111,7 +116,6 @@ Mirror Images to Local Registry
    .. code-block:: bash
 
       mkdir ~/.docker
-
       cp ./pull-secret.json ~/.docker/config.json
 
 #. Generate the base64-encoded user name and password for mirror registry.
