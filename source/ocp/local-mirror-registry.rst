@@ -173,10 +173,10 @@ Mirror Images to Local Registry
       mirror:
         platform:
           channels:
-          graph: true
             - name: stable-4.12
               minVersion: 4.12.2
               maxVersion: 4.12.4
+          graph: true
         operators:
         - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
           packages:
