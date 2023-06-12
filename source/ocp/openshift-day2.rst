@@ -1,5 +1,23 @@
-Adding Node to Cluster (day2)
-=============================
+OpenShift Day 2
+===============
+
+Schedule Control Nodes
+----------------------
+
+#. Enable
+
+   .. code-block:: bash
+
+      oc patch schedulers.config.openshift.io/cluster --type merge -p '{"spec":{"mastersSchedulable":true}}'
+
+#. Disable
+
+   .. code-block:: bash
+
+      oc patch schedulers.config.openshift.io/cluster --type merge -p '{"spec":{"mastersSchedulable":false}}'
+
+Adding Node to Cluster
+----------------------
 
 The Assisted Installer has the ability to add Nodes to the cluster but the new
 Node is not created in the same way as the original Nodes. The original Nodes
