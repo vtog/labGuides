@@ -26,11 +26,11 @@ Prerequisites
    .. code-block:: bash
 
       mkdir ~/mirror-registry
-      tar -xzvf mirror-registry.tar.gz -C ~/mirror-registry/
-      sudo tar -xzvf openshift-client-linux.tar.gz -C /usr/local/bin/
-      sudo tar -xzvf oc-mirror.tar.gz -C /usr/local/bin/
-      sudo chmod +x /usr/local/bin/oc-mirror
-      sudo rm /usr/local/bin/README.md
+      tar -xzvf mirror-registry-1.3.6.tar.gz -C ~/mirror-registry/
+      tar -xzvf oc-4.13.1-linux.tar.gz -C ~/.local/bin
+      tar -xzvf oc-mirror.tar.gz -C ~/.local/bin
+      chmod +x ~/.local/bin/oc-mirror
+      rm ~/.local/bin/README.md
 
 #. Create the target directory for the new registry. In my lab we're using
    "/mirror"
@@ -46,6 +46,8 @@ Prerequisites
       via DNS or the local hosts file. The installer will use that name to
       validate the service.
 
+   .. note:: The "ocp4" directory in "/mirror" will be created by the installer.
+
    .. code-block:: bash
 
       quayHostname="mirror.lab.local"
@@ -58,6 +60,11 @@ Create Local Host Mirror Registry
 ---------------------------------
 
 #. Run the following command to install the registry pods as root.
+
+   .. important:: The registry services will be run as root. You can see the
+      pods with ``sudo podman ps``
+
+   .. warning:: Installing as "root" will force IPv4 only listener.
 
    .. code-block:: bash
 
@@ -135,21 +142,29 @@ Mirror Images to Local Registry
           "mirror.lab.local:8443": {
             "auth": "aW5pdDpwYXNzd29yZA=="
           },
+          "cloud.openshift.com": {
+            "auth": "b3BlbnNo...",
+            "email": "you@example.com"
+          },
           "quay.io": {
             "auth": "b3BlbnNo...",
             "email": "you@example.com"
           },
           "registry.connect.redhat.com": {
-            "auth": "NTE3Njg5Nj...",
+            "auth": "fHVoYy1w...",
             "email": "you@example.com"
           },
           "registry.redhat.io": {
-            "auth": "NTE3Njg5Nj...",
+            "auth": "fHVoYy1w...",
+            "email": "you@example.com"
+          },
+          "registry6.redhat.io": {
+            "auth": "fHVoYy1w...",
             "email": "you@example.com"
           }
         }
       }
-            
+
 #. Create the following "imageset-config.yaml" file. In the file below I'm
    mirroring OCP v4.12, more specifically only v4.12.2. I've also added some
    additional operators and images.
@@ -161,8 +176,11 @@ Mirror Images to Local Registry
       which enables our disconnected clusters to show the visual of what
       versions we can update to.
 
+   .. note:: "shortestPath: true" instructs the mirror to only pull the
+      required version to upgrade from one version to the next.
+
    .. code-block:: yaml
-      :emphasize-lines: 5,11-13
+      :emphasize-lines: 5,10-13,16
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
@@ -173,9 +191,10 @@ Mirror Images to Local Registry
       mirror:
         platform:
           channels:
-            - name: stable-4.12
-              minVersion: 4.12.2
-              maxVersion: 4.12.4
+          - name: stable-4.12
+            minVersion: 4.11.42
+            maxVersion: 4.12.19
+          shortestPath: true
           graph: true
         operators:
         - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
@@ -183,40 +202,34 @@ Mirror Images to Local Registry
           - name: local-storage-operator
             channels:
               - name: stable
-                minVersion: '4.12.0-202302061702'
           - name: odf-operator
             channels:
               - name: stable-4.12
-                minVersion: '4.12.0'
+          - name: lvms-operator   
+            channels:
+              - name: stable-4.12
           - name: sriov-network-operator
             channels:
               - name: stable
-                minVersion: '4.12.0-202302072142'
-          - name: lvms-operator
-            channels:
-              - name: stable-4.12
-                minVersion: '4.12.0'
           - name: metallb-operator
             channels:
               - name: stable
-                minVersion: '4.12.0-202302141816'
           - name: kubernetes-nmstate-operator
             channels:
               - name: stable
-              minVersion: '4.12.0-202302171855'
           - name: kubevirt-hyperconverged
             channels:
               - name: stable
-              minVersion: '4.12.1'
           - name: cincinnati-operator
             channels:
               - name: v1
         additionalImages:
         - name: registry.redhat.io/ubi8/ubi:latest
         - name: registry.redhat.io/ubi9/ubi:latest
-        - name: quay.io/openshift/origin-sriov-network-device-plugin:4.12
-        - name: registry.redhat.io/openshift4/dpdk-base-rhel8  
-        - name: docker.io/centos/tools
+        - name: registry.redhat.io/rhel9/support-tools:latest
+        - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
+        - name: quay.io/openshift/origin-sriov-network-device-plugin:latest
+        - name: docker.io/centos/tools:latest
         helm: {}
 
    .. tip:: To discover operators by their package name, applicable channels,
@@ -252,7 +265,17 @@ Mirror Images to Local Registry
 
    .. image:: ./images/mirror-images.png
 
+Update Running Cluster
+----------------------
+
+A running cluster needs to be updated to use the new registry/mirror.
+To create a new cluster using the local mirror & registry see:
+`Agent-Based Install Notes <./agent-based-installer-notes.html>`_
+
 #. Apply the YAML files from the results directory to the cluster.
+
+   .. note:: Everytime you successfully run "oc mirror" a "results" dir is
+      created.
 
    .. code-block:: bash
 
@@ -265,6 +288,7 @@ Mirror Images to Local Registry
 
       oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
 
-.. attention:: Any update to the operator list requires the "CatalogSource" to
-   be updated. 
+   .. attention:: Any change to the operator list requires the "CatalogSource"
+      to be updated. To do so run "oc remove" and "oc create" of the
+      "CatalogSource".
 

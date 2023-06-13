@@ -1,8 +1,8 @@
 Local Storage Operator + Image Registry Quick Start
 ===================================================
 
-This document will describe the installation of the Local Storage Operator
-(LSO). LSO is a good way to allocate local storage for the image registry.
+This document describes the installation of the Local Storage Operator(LSO).
+This is a simple way to allocate local storage for the image registry.
 
 Install and Configure the Local Storage Operator
 ------------------------------------------------
