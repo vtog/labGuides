@@ -80,7 +80,7 @@ Create Local Host Mirror Registry
 
    .. code-block:: bash
 
-      sudo cp /mirror/ocp4/quay-rootCA/rootCA.pem /etc/pki/ca-trust/source/anchors/quayCA.pem
+      sudo cp $quayRoot/quay-rootCA/rootCA.pem /etc/pki/ca-trust/source/anchors/quayCA.pem
       sudo update-ca-trust extract
       sudo firewall-cmd --add-port=8443/tcp --permanent
 
@@ -88,11 +88,11 @@ Create Local Host Mirror Registry
 
    .. code-block:: bash
 
-       podman login -u init -p password mirror.lab.local:8443
+       podman login -u init -p password $quayHostname:8443
 
    .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
 
-#. Access mirror via browser at `<https://mirror.lab.local:8443>`_
+#. Access mirror via browser at `<https://$quayHostname:8443>`_
 
    .. hint:: Username = "init" / Password = "password"
 
@@ -139,7 +139,7 @@ Mirror Images to Local Registry
 
       {
         "auths": {
-          "mirror.lab.local:8443": {
+          "$quayHostname:8443": {
             "auth": "aW5pdDpwYXNzd29yZA=="
           },
           "cloud.openshift.com": {
@@ -186,7 +186,7 @@ Mirror Images to Local Registry
       apiVersion: mirror.openshift.io/v1alpha2
       storageConfig:
         registry:
-          imageURL: mirror.lab.local:8443/mirror/ocp4
+          imageURL: $quayHostname:8443$quayStorage
           skipTLS: false
       mirror:
         platform:
@@ -249,7 +249,7 @@ Mirror Images to Local Registry
 
    .. code-block:: bash
 
-      oc mirror --config=./imageset-config.yaml docker://mirror.lab.local:8443
+      oc mirror --config=./imageset-config.yaml docker://$quayHostname:8443
 
    .. note:: Be patient this process will take some time to download all the
       requested images.
@@ -260,7 +260,7 @@ Mirror Images to Local Registry
 
    .. image:: ./images/mirror-results.png
 
-#. Connect and login to your mirror: `<https://mirror.lab.local:8443>`_
+#. Connect and login to your mirror: `<https://$quayHostname:8443>`_
    You should see something similar to the following:
 
    .. image:: ./images/mirror-images.png
