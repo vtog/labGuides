@@ -10,9 +10,6 @@ Prerequisites
 
 #. Download the following files and copy to the destination cluster node.
 
-   .. attention:: These links download the most recent versions. In some cases
-      you may want a specific version.
-
    `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz>`_
 
    `Mirror Registry for OpenShift <https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/mirror-registry/latest/mirror-registry.tar.gz>`_
@@ -20,6 +17,11 @@ Prerequisites
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
 
    `Your Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
+
+   .. attention:: These links point to the most recent versions. Typically
+      you'll want a specific version. You can find those here:
+
+      `<https://access.redhat.com/downloads/content/290/>`_
 
 #. On a "connected" workstation extract and setup "Openshift Client" and
    "Mirror Plugin".

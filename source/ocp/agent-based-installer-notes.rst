@@ -8,8 +8,14 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 .. seealso:: For more detail: `Preparing to install with the Agent-based installer
    <https://docs.openshift.com/container-platform/4.12/installing/installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.html>`_
 
-#. Download the latest v4.12.x openshift-install utility found here:
-   `OpenShift mirror site <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest>`_
+#. Download the latest openshift-install utility found here:
+
+   `OpenShift for x86_64 Installer <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-install-linux.tar.gz>`_
+
+   .. attention:: The link points to the most recent version. Typically you'll
+      want a specific version. You can find that here:
+
+      `<https://access.redhat.com/downloads/content/290/>`_
 
 #. Install nmstate
 
@@ -34,7 +40,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       - architecture: amd64
         hyperthreading: Enabled
         name: worker
-        replicas: 3
+        replicas: 2
       controlPlane:
         architecture: amd64
         hyperthreading: Enabled
@@ -53,8 +59,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
         - 172.30.0.0/16
       platform:
         baremetal:
-          apiVIP: "192.168.122.120"
-          ingressVIP: "192.168.122.121"
+          apiVIP: "192.168.122.110"
+          ingressVIP: "192.168.122.111"
       pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
       sshKey: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
@@ -67,12 +73,12 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
         source: quay.io/openshift-release-dev/ocp-release
       additionalTrustBundle: |
         -----BEGIN CERTIFICATE-----
-        <Use rootCA.pem for mirror registry here>
+        <Use rootCA.pem from your mirror registry here>
         -----END CERTIFICATE-----
 
 #. Create agent-config.yaml and save in ~/workdir
 
-   .. important:: Repeat "-hostname" block for each host of your config.
+   .. important:: Repeat "-hostname" block for each host in your config.
 
    .. code-block:: yaml
       :caption: Ethernet Network Example
@@ -81,13 +87,15 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       apiVersion: v1alpha1
       metadata:
         name: ocp1
-      rendezvousIP: 192.168.122.21
+      rendezvousIP: 192.168.122.11
+      additionalNTPSources:
+      - 192.168.1.72
       hosts:
-        - hostname: host21
+        - hostname: host11
           role: master
           interfaces:
             - name: enp1s0
-              macAddress: 52:54:00:f4:16:21
+              macAddress: 52:54:00:f4:16:11
           networkConfig:
             interfaces:
               - name: enp1s0
@@ -98,7 +106,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   enabled: true
                   dhcp: false
                   address:
-                    - ip: 192.168.122.21
+                    - ip: 192.168.122.11
                       prefix-length: 24
                 ipv6:
                   enabled: false
@@ -122,13 +130,15 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       apiVersion: v1alpha1
       metadata:
         name: ocp1
-      rendezvousIP: 192.168.122.21
+      rendezvousIP: 192.168.122.11
+      additionalNTPSources:            
+      - 192.168.1.72
       hosts:
-        - hostname: host21
+        - hostname: host11
           role: master
           interfaces:
             - name: enp1s0
-              macAddress: 52:54:00:f4:16:21
+              macAddress: 52:54:00:f4:16:11
           networkConfig:
             interfaces:
               - name: enp1s0
@@ -145,7 +155,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   enabled: true
                   dhcp: false
                   address:
-                    - ip: 192.168.122.21
+                    - ip: 192.168.122.11
                       prefix-length: 24
                 ipv6:
                   enabled: false
@@ -169,15 +179,17 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       apiVersion: v1alpha1
       metadata:
         name: ocp1
-      rendezvousIP: 192.168.122.21
+      rendezvousIP: 192.168.122.11
+      additionalNTPSources:            
+      - 192.168.1.72
       hosts:
-        - hostname: host21
+        - hostname: host11
           role: master
           interfaces:
             - name: enp1s0
-              macAddress: 52:54:00:f4:16:21
+              macAddress: 52:54:00:f4:16:11
             - name: enp1s1
-              macAddress: 52:54:00:f4:17:21
+              macAddress: 52:54:00:f4:17:11
           networkConfig:
             interfaces:
               - name: enp1s0
@@ -206,7 +218,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   enabled: true
                   dhcp: false
                   address:
-                    - ip: 192.168.122.21
+                    - ip: 192.168.122.11
                       prefix-length: 24
                 ipv6:
                   enabled: false
@@ -228,14 +240,14 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: bash
 
-      ./openshift-install agent create image --dir workdir
+      openshift-install agent create image --dir workdir
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
    with the following command:
 
    .. code-block:: bash
 
-      ./openshift-install agent wait-for install-complete --dir workdir
+      openshift-install agent wait-for install-complete --dir workdir
 
 
 Example of IPv6 only

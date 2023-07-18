@@ -9,9 +9,6 @@ Prerequisites
 
 #. Download the following files and copy to the destination server.
 
-   .. attention:: These links download the most recent versions. In some cases
-      you may want a specific version.
-
    `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz>`_
 
    `Mirror Registry for OpenShift <https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/mirror-registry/latest/mirror-registry.tar.gz>`_
@@ -19,6 +16,11 @@ Prerequisites
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
 
    `Your Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
+
+   .. attention:: These links point to the most recent versions. Typically
+      you'll want a specific version. You can find those here:
+ 
+      `<https://access.redhat.com/downloads/content/290/>`_
 
 #. SSH to the target server and run the following commands to place the
    binaries in their respective directories.
@@ -84,7 +86,8 @@ Create Local Host Mirror Registry
       sudo update-ca-trust extract
       sudo firewall-cmd --add-port=8443/tcp --permanent
 
-#. Test mirror availability via cli.
+#. Test mirror availability via cli. The following command should return
+   "Login Succeeded!" if everything is working.
 
    .. code-block:: bash
 
@@ -96,7 +99,8 @@ Create Local Host Mirror Registry
 
    .. hint:: Username = "init" / Password = "password"
 
-#. If needed the following command will uninstall the registry.
+#. If something went wrong, the following command will **UNINSTALL** the
+   registry.
 
    .. code-block:: bash
 
@@ -192,8 +196,8 @@ Mirror Images to Local Registry
         platform:
           channels:
           - name: stable-4.12
-            minVersion: 4.11.42
-            maxVersion: 4.12.19
+            minVersion: 4.12.18
+            maxVersion: 4.12.24
           shortestPath: true
           graph: true
         operators:
@@ -230,6 +234,8 @@ Mirror Images to Local Registry
         - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
         - name: quay.io/openshift/origin-sriov-network-device-plugin:latest
         - name: docker.io/centos/tools:latest
+        - name: docker.io/f5devcentral/f5-hello-world:latest
+        - name: docker.io/library/nginx:latest
         helm: {}
 
    .. tip:: To discover operators by their package name, applicable channels,
