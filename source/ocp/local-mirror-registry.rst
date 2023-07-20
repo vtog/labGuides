@@ -278,6 +278,44 @@ A running cluster needs to be updated to use the new registry/mirror.
 To create a new cluster using the local mirror & registry see:
 `Agent-Based Install Notes <./agent-based-installer-notes.html>`_
 
+#. Extract OCP pull-secret. A new local file ``.dockerconfigjson`` is created.
+ 
+   .. code-block:: bash
+ 
+      oc extract secret/pull-secret -n openshift-config --confirm --to=.
+      cat ./.dockerconfigjson | jq . > ./.dockerconfig.json
+ 
+#. Update ``.dockerconfig.json`` with local registry credentials.
+ 
+   .. code-block:: json
+ 
+      {
+        "auths": {
+          "mirror.lab.local:8443": {
+            "auth": "aW5pdDpwYXNzd29yZA=="
+          }
+        }
+      }
+ 
+      
+#. Import the new pull-secret.
+
+   .. code-block:: bash
+
+      oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=.dockerconfig.json
+
+#. Create configmap of quay-rootCA.
+
+   .. code-block:: bash
+
+      oc create configmap registry-config --from-file=$quayHostname..8443=/mirror/ocp4/quay-rootCA/rootCA.pem
+
+#. Add quay-rootCA to cluster.
+
+   .. code-block:: bash
+
+      oc patch image.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}' 
+
 #. Apply the YAML files from the results directory to the cluster.
 
    .. note:: Everytime you successfully run "oc mirror" a "results" dir is
