@@ -11,10 +11,6 @@ OpenShift Lab Guides
    openshift-day2
    local-mirror-registry
    node-mirror-registry
-   sriov
-   lso-lr-quick-start
+   lso-quick-start
    lso-odf-quick-start
-   image-registry-quick-start
-   ocp-cert-expiry
-   starting-the-cluster
-
+   sriov

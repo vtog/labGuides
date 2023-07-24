@@ -1,5 +1,5 @@
-Local Storage Operator + Image Registry Quick Start
-===================================================
+Local Storage Operator Quick Start
+==================================
 
 This document describes the installation of the Local Storage Operator(LSO).
 This is a simple way to allocate local storage for the image registry.
