@@ -105,39 +105,29 @@ Install and Configure OpenShift Data Foundation (ODF)
 Optional: Disable Noobaa
 ------------------------
 
-1. Create and the following CRD. "vi disableNoobaa.yaml"
+1. Edit storagecluster ocs-storagecluster and add strategy
 
    .. code-block:: yaml
 
-      apiVersion: ocs.openshift.io/v1
-      kind: StorageCluster
-      metadata:
-        name: ocs-storagecluster
-        namespace: openshift-storage
-      spec:
-        multiCloudGateway:
-          reconcileStrategy: ignore
+      oc edit storagecluster ocs-storagecluster
+       
+      # spec:                                              
+      #   multiCloudGateway:                               
+      #     reconcileStrategy: ignore          
 
-#. Apply CRD
+#. Edit NooBaa and add allow deletion
 
    .. code-block:: bash
 
-      oc apply -f disableNoobaa.yaml
+      oc edit noobaa noobaa
+       
+      # spec:
+      #   cleanupPolicy:
+      #     allowNoobaaDeletion: true
 
-
-#. Remove Noobaa objects
+#. Remove NooBaa objects
 
    .. code-block:: bash
 
       oc delete noobaas.noobaa.io  --all
-
-Notes
------
-
-I've noticed deleting PVC sometimes doesn't work and they'll be stuck in the
-"Terminating" phase.  The following command will remove them:
-
-.. code-block:: bash
-
-   oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
 

@@ -16,6 +16,16 @@ Schedule Control Nodes
 
       oc patch schedulers.config.openshift.io/cluster --type merge -p '{"spec":{"mastersSchedulable":false}}'
 
+Can't Remove Object
+-------------------
+   
+I've noticed deleting PVC sometimes doesn't work and they'll be stuck in the
+"Terminating" phase.  The following command will remove them:
+ 
+.. code-block:: bash
+ 
+   oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
+
 Adding Node to Cluster
 ----------------------
 
