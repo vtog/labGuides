@@ -196,7 +196,7 @@ following commands you can confirm expired certs and resolve the issue.
  
    .. code-block:: bash
  
-      export KUBECONFIG=/etc/kubernetes/static-pod-resources/kube-apiserver-certs/secrets/node-kubeconfigs/localhost-recovery.k
+      export KUBECONFIG=/etc/kubernetes/static-pod-resources/kube-apiserver-certs/secrets/node-kubeconfigs/localhost-recovery.kubeconfig
  
 #. View pending CSR's (should see several in the pending state).
  
