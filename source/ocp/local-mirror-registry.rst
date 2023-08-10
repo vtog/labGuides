@@ -230,11 +230,15 @@ Mirror Images to Local Registry
         additionalImages:
         - name: registry.redhat.io/ubi8/ubi:latest
         - name: registry.redhat.io/ubi9/ubi:latest
+        - name: registry.redhat.io/ubi9/httpd-24:latest
+        - name: registry.redhat.io/ubi9/nginx-122:latest
+        - name: registry.redhat.io/rhel8/support-tools:latest
         - name: registry.redhat.io/rhel9/support-tools:latest
         - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
         - name: quay.io/openshift/origin-sriov-network-device-plugin:latest
         - name: docker.io/centos/tools:latest
         - name: docker.io/f5devcentral/f5-hello-world:latest
+        - name: docker.io/library/httpd:latest
         - name: docker.io/library/nginx:latest
         helm: {}
 
