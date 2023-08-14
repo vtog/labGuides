@@ -5,6 +5,10 @@ This document will describe the installation of the Local Storage Operator
 (LSO) and OpenShift Data Foundations (ODF). LSO is a pre-requisite for
 installing ODF on OpenShift nodes that will use local block devices.
 
+.. important:: With 4.11+ ODF will walk you through most these steps making the
+   install much easier. The notes can still be used but I recommend using the
+   ODF config wizard.
+
 .. warning::
    We’ve found that hugepages needs to be disabled before installing ODF
    otherwise noobaa pods won’t start correctly. This can be re-enabled
