@@ -26,6 +26,27 @@ I've noticed deleting PVC sometimes doesn't work and they'll be stuck in the
  
    oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
 
+Start toolbox (node)
+--------------------
+There's a script to start "toolbox" on each node. Toolbox is a container which
+has several network tools to help troubleshoot the cluster/node.
+
+#. To start, SSH to node and run the following cmd:
+
+   .. code-block:: bash
+
+      toolbox
+
+#. To start an alternative toolbox image, create file "~/.toolboxrc" on the
+   target node with the following content. In this example I'm using my local
+   registry.
+
+   .. code-block:: bash
+
+      REGISTRY=mirror.lab.local:8443
+      IMAGE=rhel9/support-tools
+      #IMAGE=centos/tools:latest
+
 Configure an htpasswd Identitiy Provider
 ----------------------------------------
  
