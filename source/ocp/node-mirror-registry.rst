@@ -58,7 +58,7 @@ Prerequisites
       to your specific version and package requirements.
 
    .. code-block:: yaml
-      :emphasize-lines: 6-8
+      :emphasize-lines: 6-8,10
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
@@ -69,24 +69,19 @@ Prerequisites
               minVersion: 4.12.5
               maxVersion: 4.12.5
         operators:
-        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
-          packages:
-          - name: local-storage-operator
-            channels:
-              - name: stable
-          - name: odf-operator
-            channels:
-              - name: stable-4.12
-          - name: sriov-network-operator
-            channels:
-              - name: stable
-          - name: kubernetes-nmstate-operator
-            channels:
-              - name: stable
-          - name: kubevirt-hyperconverged
-            channels:
-              - name: stable
+          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
+            packages:
+              - name: cincinnati-operator
+              - name: kubernetes-nmstate-operator
+              - name: kubevirt-hyperconverged
+              - name: local-storage-operator
+              - name: lvms-operator
+              - name: metallb-operator
+              - name: odf-operator
+              - name: sriov-network-operator
         additionalImages:
+          - name: registry.redhat.io/rhel8/support-tools:latest
+          - name: registry.redhat.io/rhel9/support-tools:latest
         helm: {}
 
    .. tip:: To discover operators by their package name, applicable channels,
