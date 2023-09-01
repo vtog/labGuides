@@ -183,8 +183,11 @@ Mirror Images to Local Registry
    .. note:: "shortestPath: true" instructs the mirror to only pull the
       required version to upgrade from one version to the next.
 
+   .. attention:: The example here shows an ImageSet that includes both 4.12.x
+      and 4.13.x images and operators.
+
    .. code-block:: yaml
-      :emphasize-lines: 5,10-13,16
+      :emphasize-lines: 5,10-13,15,25
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
@@ -195,51 +198,46 @@ Mirror Images to Local Registry
       mirror:
         platform:
           channels:
-          - name: stable-4.12
-            minVersion: 4.12.18
-            maxVersion: 4.12.24
-          shortestPath: true
+            - name: stable-4.13
+              minVersion: 4.12.18
+              shortestPath: true
           graph: true
         operators:
-        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
-          packages:
-          - name: local-storage-operator
-            channels:
-              - name: stable
-          - name: odf-operator
-            channels:
-              - name: stable-4.12
-          - name: lvms-operator   
-            channels:
-              - name: stable-4.12
-          - name: sriov-network-operator
-            channels:
-              - name: stable
-          - name: metallb-operator
-            channels:
-              - name: stable
-          - name: kubernetes-nmstate-operator
-            channels:
-              - name: stable
-          - name: kubevirt-hyperconverged
-            channels:
-              - name: stable
-          - name: cincinnati-operator
-            channels:
-              - name: v1
+          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
+            packages:
+              - name: cincinnati-operator
+              - name: kubernetes-nmstate-operator
+              - name: kubevirt-hyperconverged
+              - name: local-storage-operator
+              - name: lvms-operator
+              - name: metallb-operator
+              - name: odf-operator
+              - name: sriov-network-operator
+          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.13
+            packages:
+              - name: cincinnati-operator
+              - name: kubernetes-nmstate-operator
+              - name: kubevirt-hyperconverged
+              - name: local-storage-operator
+              - name: lvms-operator
+              - name: metallb-operator
+              - name: odf-operator
+              - name: sriov-network-operator
         additionalImages:
-        - name: registry.redhat.io/ubi8/ubi:latest
-        - name: registry.redhat.io/ubi9/ubi:latest
-        - name: registry.redhat.io/ubi9/httpd-24:latest
-        - name: registry.redhat.io/ubi9/nginx-122:latest
-        - name: registry.redhat.io/rhel8/support-tools:latest
-        - name: registry.redhat.io/rhel9/support-tools:latest
-        - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
-        - name: quay.io/openshift/origin-sriov-network-device-plugin:latest
-        - name: docker.io/centos/tools:latest
-        - name: docker.io/f5devcentral/f5-hello-world:latest
-        - name: docker.io/library/httpd:latest
-        - name: docker.io/library/nginx:latest
+          - name: registry.redhat.io/ubi8/ubi:latest
+          - name: registry.redhat.io/ubi9/ubi:latest
+          - name: registry.redhat.io/ubi9/httpd-24:latest
+          - name: registry.redhat.io/ubi9/nginx-122:latest
+          - name: registry.redhat.io/rhel8/support-tools:latest
+          - name: registry.redhat.io/rhel9/support-tools:latest
+          - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.12
+          - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.13
+          - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
+          - name: quay.io/openshift/origin-sriov-network-device-plugin:latest
+          - name: docker.io/centos/tools:latest
+          - name: docker.io/f5devcentral/f5-hello-world:latest
+          - name: docker.io/library/httpd:latest
+          - name: docker.io/library/nginx:latest
         helm: {}
 
    .. tip:: To discover operators by their package name, applicable channels,
