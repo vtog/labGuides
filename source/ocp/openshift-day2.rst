@@ -229,7 +229,7 @@ following commands you can confirm expired certs and resolve the issue.
  
    .. code-block:: yaml
  
-      oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs --no-run-i
+      oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
  
 #. Repeat steps 3 and 4 until all pending CSR's are approved.
  
