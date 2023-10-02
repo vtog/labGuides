@@ -212,6 +212,7 @@ Mirror Images to Local Registry
               - name: lvms-operator
               - name: metallb-operator
               - name: odf-operator
+              - name: skupper-operator
               - name: sriov-network-operator
           - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.13
             packages:
@@ -222,6 +223,7 @@ Mirror Images to Local Registry
               - name: lvms-operator
               - name: metallb-operator
               - name: odf-operator
+              - name: skupper-operator
               - name: sriov-network-operator
         additionalImages:
           - name: registry.redhat.io/ubi8/ubi:latest
