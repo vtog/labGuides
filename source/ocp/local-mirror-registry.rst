@@ -187,7 +187,7 @@ Mirror Images to Local Registry
       and 4.13.x images and operators.
 
    .. code-block:: yaml
-      :emphasize-lines: 5,10-13,15,25
+      :emphasize-lines: 5,10-13,15,26
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
@@ -300,7 +300,6 @@ To create a new cluster using the local mirror & registry see:
           }
         }
       }
- 
       
 #. Import the new pull-secret.
 
@@ -312,13 +311,13 @@ To create a new cluster using the local mirror & registry see:
 
    .. code-block:: bash
 
-      oc create configmap registry-config --from-file=$quayHostname..8443=/mirror/ocp4/quay-rootCA/rootCA.pem
+      oc create configmap registry-config --from-file=$quayHostname..8443=/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
 
 #. Add quay-rootCA to cluster.
 
    .. code-block:: bash
 
-      oc patch image.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}' 
+      oc patch --type merge images.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}'
 
 #. Apply the YAML files from the results directory to the cluster.
 
@@ -339,4 +338,102 @@ To create a new cluster using the local mirror & registry see:
    .. attention:: Any change to the operator list requires the "CatalogSource"
       to be updated. To do so run "oc remove" and "oc create" of the
       "CatalogSource".
+
+Configure Openshift Update Service
+----------------------------------
+
+The following steps walk through configuring the Openshift Update Service. This
+process is required to update a disconnected cluster, using your local
+registry.
+
+#. The OpenShift Update Service Operator needs the config map key name
+   "updateservice-registry" in the registry CA cert. Edit the ConfigMap
+   "registry-config" and add the new section using the cert.
+ 
+   .. note:: This ConfigMap was created in the previous section.
+ 
+   .. code-block:: bash
+ 
+      oc edit cm registry-config -n openshift-config
+ 
+   Add the following highlighted section.
+ 
+   .. code-block:: yaml
+      :emphasize-lines: 7-10
+ 
+      apiVersion: v1
+      data:
+        mirror.lab.local..8443: |
+          -----BEGIN CERTIFICATE-----
+          <Use rootCA.pem from your mirror registry here>
+          -----END CERTIFICATE-----
+        updateservice-registry: |
+          -----BEGIN CERTIFICATE-----
+          <Use rootCA.pem from your mirror registry here>
+          -----END CERTIFICATE-----
+      kind: ConfigMap
+      metadata:
+        name: registry-config
+        namespace: openshift-config
+
+#. Install the Openshift Update Service Operator from the Web Console. Go to
+   :menuselection:`Operators --> OperatorHub` and search for "update".
+
+   .. image:: images/operatorhubupdatesvc.png
+
+#. Select "Openshift Update Service" operator and click install.
+
+#. By default, the “openshift-update-service” namespace will be used. Accept
+   the defaults and click “Install”.
+
+#. After install completes click “View Operator”.
+
+#. Select the “Update Service” tab.
+
+#. Click "Create UpdateService".
+
+#. Select "YAML view"
+
+#. Replace the sample yaml with the results from your mirror. The
+   "updateService.yaml" can be found at
+   "./oc-mirror-workspace/results-xxxxxxxxxx” and should look like the
+   following example:
+
+   .. code-block:: yaml
+
+      apiVersion: updateservice.operator.openshift.io/v1
+      kind: UpdateService
+      metadata:
+        name: update-service-oc-mirror
+      spec:
+        graphDataImage: mirror.lab.local:8443/openshift/graph-image@sha256:2af43ff6160363bec6ab2567738b1a9ed9f3a8129f8b9fd1f09e6f6b675f2e69
+        releases: mirror.lab.local:8443/openshift/release-images
+        replicas: 2
+
+#. Patch the Cluster Version Operator
+
+   .. code-block:: bash
+
+      NAMESPACE=openshift-update-service
+      NAME=update-service-oc-mirror
+      POLICY_ENGINE_GRAPH_URI="$(oc -n "${NAMESPACE}" get -o jsonpath='{.status.policyEngineURI}/api/upgrades_info/v1/graph{"\n"}' updateservice "${NAME}")"
+      PATCH="{\"spec\":{\"upstream\":\"${POLICY_ENGINE_GRAPH_URI}\"}}"
+
+      oc patch --type merge clusterversion version --patch $PATCH
+
+#. Check :menuselection:`Administration --> Cluster Settings"`. Details should
+   display Current version and Update status
+
+   .. image:: images/updatesvcclustersettings.png
+
+
+
+
+
+
+
+
+
+
+
 
