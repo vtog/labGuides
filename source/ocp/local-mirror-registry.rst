@@ -342,15 +342,14 @@ To create a new cluster using the local mirror & registry see:
 Configure Openshift Update Service
 ----------------------------------
 
-The following steps walk through configuring the Openshift Update Service. This
-process is required to update a disconnected cluster, using your local
-registry.
+This process is required to update a disconnected cluster using your local
+disconnected registry.
 
-#. The OpenShift Update Service Operator needs the config map key name
+#. The Update Service Operator needs the config map to include the key name
    "updateservice-registry" in the registry CA cert. Edit the ConfigMap
-   "registry-config" and add the new section using the cert.
+   "registry-config" and add the new section using the same local mirror cert.
  
-   .. note:: This ConfigMap was created in the previous section.
+   .. attention:: This ConfigMap was created in the previous section.
  
    .. code-block:: bash
  
@@ -375,6 +374,28 @@ registry.
       metadata:
         name: registry-config
         namespace: openshift-config
+
+#. Add router-ca to "Proxy" object as a trustedCA.
+
+   .. code-block:: bash
+      :emphasize-lines: 15
+
+      oc get -n openshift-ingress-operator secret router-ca -o jsonpath="{.data.tls\.crt}" | base64 -d > ca-bundle.crt
+      oc create cm router-bundle --from-file=ca-bundle.crt -n openshift-config
+      oc edit proxy cluster
+
+      apiVersion: config.openshift.io/v1
+      kind: Proxy
+      metadata:
+        creationTimestamp: "2021-12-21T05:36:05Z"
+        generation: 1
+        name: cluster
+        resourceVersion: "665"
+        uid: d2d476ba-c98c-46dd-8130-b85d40d009fb
+      spec:
+        trustedCA:
+          name: "router-bundle"                                     # <=== set the configmap created with the router-ca
+      status: {}
 
 #. Install the Openshift Update Service Operator from the Web Console. Go to
    :menuselection:`Operators --> OperatorHub` and search for "update".
@@ -425,15 +446,4 @@ registry.
    display Current version and Update status
 
    .. image:: images/updatesvcclustersettings.png
-
-
-
-
-
-
-
-
-
-
-
 
