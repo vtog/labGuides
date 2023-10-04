@@ -183,6 +183,25 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       oc completion zsh | sudo tee /usr/share/zsh/site-functions/_oc
 
+#. Prefer IPv4. By default IPv6 addresses are preferred. Create /etc/gai.conf
+   and change default priorities.
+
+   .. code-block:: bash
+      :emphasize-lines: 12
+
+      sudo vim /etc/gai.conf
+
+      label  ::1/128       0
+      label  ::/0          1
+      label  2002::/16     2
+      label ::/96          3
+      label ::ffff:0:0/96  4
+      precedence  ::1/128       50
+      precedence  ::/0          40
+      precedence  2002::/16     30
+      precedence ::/96          20
+      precedence ::ffff:0:0/96  60      # <=== Change this from 10 to 60 or higher
+
 #. Install brave (I prefer this to the "Software" store)
 
    .. code-block:: bash
