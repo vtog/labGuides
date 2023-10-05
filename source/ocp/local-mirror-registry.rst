@@ -104,7 +104,7 @@ Create Local Host Mirror Registry
 
    .. code-block:: bash
 
-      sudo ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage
+      sudo ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage --pgStorage $pgStorage
 
 Mirror Images to Local Registry
 -------------------------------
@@ -193,7 +193,7 @@ Mirror Images to Local Registry
       apiVersion: mirror.openshift.io/v1alpha2
       storageConfig:
         registry:
-          imageURL: $quayHostname:8443$quayStorage
+          imageURL: $quayHostname:8443$quayRoot
           skipTLS: false
       mirror:
         platform:
