@@ -78,6 +78,7 @@ Prerequisites
               - name: lvms-operator
               - name: metallb-operator
               - name: odf-operator
+              - name: skupper-operator
               - name: sriov-network-operator
         additionalImages:
           - name: registry.redhat.io/rhel8/support-tools:latest
