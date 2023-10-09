@@ -83,6 +83,7 @@ Prerequisites
         additionalImages:
           - name: registry.redhat.io/rhel8/support-tools:latest
           - name: registry.redhat.io/rhel9/support-tools:latest
+          - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.12
         helm: {}
 
    .. tip:: To discover operators by their package name, applicable channels,
