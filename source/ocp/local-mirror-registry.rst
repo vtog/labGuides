@@ -349,7 +349,7 @@ disconnected registry.
    "updateservice-registry" in the registry CA cert. Edit the ConfigMap
    "registry-config" and add the new section using the same local mirror cert.
  
-   .. attention:: This ConfigMap was created in the previous section.
+   .. attention:: This ConfigMap was created in the previous section, steps 4-5.
  
    .. code-block:: bash
  
@@ -378,11 +378,15 @@ disconnected registry.
 #. Add router-ca to "Proxy" object as a trustedCA.
 
    .. code-block:: bash
-      :emphasize-lines: 15
 
       oc get -n openshift-ingress-operator secret router-ca -o jsonpath="{.data.tls\.crt}" | base64 -d > ca-bundle.crt
       oc create cm router-bundle --from-file=ca-bundle.crt -n openshift-config
       oc edit proxy cluster
+
+   Update the highlighted line.
+
+   .. code-block:: yaml
+      :emphasize-lines: 11
 
       apiVersion: config.openshift.io/v1
       kind: Proxy
@@ -394,8 +398,12 @@ disconnected registry.
         uid: d2d476ba-c98c-46dd-8130-b85d40d009fb
       spec:
         trustedCA:
-          name: "router-bundle"                                     # <=== set the configmap created with the router-ca
+          name: "router-bundle"
       status: {}
+
+  .. important:: This change will cause the nodes to cycle through a reboot.
+     Before moving to next step wait for the change to apply to all nodes.
+     Monitor via "oc get nodes" and/or "oc get mcp"
 
 #. Install the Openshift Update Service Operator from the Web Console. Go to
    :menuselection:`Operators --> OperatorHub` and search for "update".
