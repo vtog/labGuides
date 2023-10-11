@@ -401,9 +401,9 @@ disconnected registry.
           name: "router-bundle"
       status: {}
 
-  .. important:: This change will cause the nodes to cycle through a reboot.
-     Before moving to next step wait for the change to apply to all nodes.
-     Monitor via "oc get nodes" and/or "oc get mcp"
+   .. important:: This change will cause the nodes to cycle through a reboot.
+      Before moving to next step wait for the change to apply to all nodes.
+      Monitor via "oc get nodes" and/or "oc get mcp"
 
 #. Install the Openshift Update Service Operator from the Web Console. Go to
    :menuselection:`Operators --> OperatorHub` and search for "update".
