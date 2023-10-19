@@ -231,21 +231,17 @@ following commands you can confirm expired certs and resolve the issue.
  
       oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
  
-#. Repeat steps 3 and 4 until all pending CSR's are approved.
+   .. important:: **Repeat this step until all pending CSR's are approved!**
  
-NOTES
+#. To view the certs expiry date, extract the secret/csr-signer cert and key.
+ 
+   .. code-block:: bash
+ 
+      oc extract secret/csr-signer -n openshift-kube-controller-manager --to ./ --confirm
+ 
+      openssl x509 -text -noout -in ./tls.crt
 
-#. Download for review csr-signer cert and key.
- 
-   .. code-block:: bash
- 
-      oc extract secret/csr-signer -n openshift-kube-controller-manager --to /home/user/ --confirm
- 
-#. View csr-signer cert (this shows the 30d expiry)
- 
-   .. code-block:: bash
- 
-      openssl x509 -text -noout -in /home/user/tls.crt
+   .. image:: ./images/certexpiry.png
 
 Starting the Cluster
 --------------------
