@@ -94,8 +94,8 @@ Configure the Image Registry storage claim
 #. The previous steps will automatically create a pvc that needs to be
    replaced.
 
-   .. important:: The pvc needs to match the pv's "storage", "accessModes",
-      and "storageClassName".
+   .. important:: The pvc needs to match the pv's "storageClassName",
+      "accessModes", and "storage".
 
    First delete the pvc:
 
@@ -107,6 +107,7 @@ Configure the Image Registry storage claim
    following yaml:
 
    .. code-block:: yaml
+      :emphasize-lines: 11, 13, 16
 
       apiVersion: v1
       kind: PersistentVolumeClaim
