@@ -328,6 +328,15 @@ To create a new cluster using the local mirror & registry see:
 
       oc apply -f ./oc-mirror-workspace/results-xxxxxxxxxx/
 
+#. For disconnected upgrades via the "Openshift Update Service" (next section)
+   the "release-signatures" will need to be applied to the cluster.
+
+   .. important:: Disconnected upgrades will NOT work without this step.
+
+   .. code-block:: bash
+
+      oc apply -f ./oc-mirror-workspace/results-xxxxxxxxx/release-signatures/
+
 #. The ability to install operators from the local mirror requires the default
    operator hub to be disabled.
 
