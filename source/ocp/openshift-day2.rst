@@ -19,12 +19,12 @@ Schedule Control Nodes
 Pause MCP
 ---------
 When making several changes via MCP it's beneficial to "pause" MCP from
-restarting nodes with each change. This way all changes are applied with a
-single reboot.
+restarting the nodes with each change. This way all changes are applied with a
+single reboot. Set "paused" to "true", when finished set back to "false".
 
    .. code-block:: bash
 
-      oc patch mcp master --type=merge -p '{"spec": {"paused": false}}'
+      oc patch mcp master --type=merge -p '{"spec": {"paused": true}}'
 
 Can't Remove Object
 -------------------
