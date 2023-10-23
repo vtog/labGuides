@@ -130,9 +130,11 @@ will guide you through configuring the VF's and passing them to KVM.
 Notes
 -----
 
-#. If you are not seeing VFs be created, you may need to add "ixgbe.max_vfs=8"
-   (or some other number based on how many you need) to the kernel command
-   line options following this process:
+#. If the VF's are NOT created, you may need to add "ixgbe.max_vfs=7" to the
+   kernel command line options. (This could igb or ixgbe depending on your
+   interface.)
+
+   The follow process walks through updating the kernel:
 
    `Adding kernel arguments to nodes
    <https://docs.openshift.com/container-platform/4.12/post_installation_configuration/machine-configuration-tasks.html#nodes-nodes-kernel-arguments_post-install-machine-configuration-tasks>`_
