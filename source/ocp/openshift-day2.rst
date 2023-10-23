@@ -16,6 +16,16 @@ Schedule Control Nodes
 
       oc patch schedulers.config.openshift.io/cluster --type merge -p '{"spec":{"mastersSchedulable":false}}'
 
+Pause MCP
+---------
+When making several changes via MCP it's beneficial to "pause" MCP from
+restarting nodes with each change. This way all changes are applied with a
+single reboot.
+
+   .. code-block:: bash
+
+      oc patch mcp master --type=merge -p '{"spec": {"paused": false}}'
+
 Can't Remove Object
 -------------------
    
