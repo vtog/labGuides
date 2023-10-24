@@ -22,9 +22,40 @@ When making several changes via MCP it's beneficial to "pause" MCP from
 restarting the nodes with each change. This way all changes are applied with a
 single reboot. Set "paused" to "true", when finished set back to "false".
 
+.. code-block:: bash
+
+   oc patch mcp master --type=merge -p '{"spec": {"paused": true}}'
+
+Force MCP to Update
+-------------------
+If MCP gets stuck try forcing the update to unstuck it.
+
+#. Create file called "machine-config-daemon-force" in "/run"
+
    .. code-block:: bash
 
-      oc patch mcp master --type=merge -p '{"spec": {"paused": true}}'
+      ssh core@host11.lab.local sudo touch /run/machine-config-daemon-force
+   
+#. Edit node annotations
+
+   .. code-block:: bash
+
+      oc edit node host11
+
+   Should look something like the following. Make change and ":wq".
+
+   .. code-block:: yaml
+
+      machineconfiguration.openshift.io/currentConfig: rendered-master-ed7befb1b258658c68e892964bbcf9e1
+      machineconfiguration.openshift.io/desiredConfig: rendered-master-ed7befb1b258658c68e892964bbcf9e1
+      machineconfiguration.openshift.io/reason: ""
+      machineconfiguration.openshift.io/state: Done
+
+#. Reboot node
+
+   .. code-block:: yaml
+
+      ssh core@host11.lab.local sudo reboot
 
 Can't Remove Object
 -------------------
