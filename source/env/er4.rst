@@ -9,7 +9,9 @@ this with an EdgeRouter 4 from Ubiquiti.
 IPv6
 ----
 
-#. Configure IPv6 for WAN int eth0.0 and eth1 (cli)
+The following uses the CLI; SSH to ER4.
+
+#. Configure IPv6 for WAN int eth0.0 and eth1
 
    .. code-block:: bash
 
@@ -24,10 +26,9 @@ IPv6
       set dhcpv6-pd pd 0 interface eth1 prefix-id :0
       set dhcpv6-pd pd 0 interface eth1 service slaac
 
-      commit
-      save
+      commit ; save ; exit
 
-#. Configure IPv6 for WAN int eth0.0 and eth1 vlan 122 (cli)
+#. Configure IPv6 for WAN int eth0.0 and eth1 vlan 122
 
    .. code-block:: bash
 
@@ -41,6 +42,38 @@ IPv6
       set dhcpv6-pd pd 0 interface eth1.122 prefix-id :1
       set dhcpv6-pd pd 0 interface eth1.122 service slaac
 
-      commit
-      save
+      commit ; save ; exit
 
+BGP
+---
+
+The following uses the CLI; SSH to ER4.
+
+#. Configure BGP for use with OCP MetalLB
+
+   .. code-block:: bash
+
+      ssh vince@192.168.1.1                                  
+                                                             
+      configure
+
+      set protocols bgp 64512
+      set protocols bgp 64512 peer-group ovn-ocp
+      set protocols bgp 64512 peer-group ovn-ocp remote-as 64512
+      set protocols bgp 64512 peer-group ovn-ocp soft-reconfiguration
+      set protocols bgp 64512 neighbor 192.168.132.11 peer-group ovn-ocp
+      set protocols bgp 64512 neighbor 192.168.132.12 peer-group ovn-ocp
+      set protocols bgp 64512 neighbor 192.168.132.13 peer-group ovn-ocp
+
+      commit ; save ; exit
+
+#. Show BGP
+
+   .. code-block:: bash
+
+      ssh vince@192.168.1.1
+
+      show ip bgp
+      show ip bgp summary
+      show ip bgp neighbors 192.168.132.11 advertised-routes
+      show ip bgp neighbors 192.168.132.11 received-routes
