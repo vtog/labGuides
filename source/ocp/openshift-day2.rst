@@ -1,6 +1,71 @@
 OpenShift Day 2
 ===============
 
+Privileged Pod (root)
+---------------------
+By default all deployed application pods run as nonroot. For **LAB/PoC
+testing** the following procedure allows root privileges on a per project and
+deployment basis.
+
+.. attention:: For security reasons it's recommended to run as nonroot
+   (default).
+
+#. Update the "privileged" Security Context Constraints by adding the projects
+   "default" service account.
+
+   .. note:: You can use any service account in use with the deployment. In
+      this example we're using "default".
+
+   .. code-block:: bash
+       
+      oc edit scc privileged
+
+   The following example shows adding the "default" project and "default"
+   service account:
+
+   .. code-block:: yaml
+      :emphasize-lines: 4
+
+      users:
+      - system:admin
+      - system:serviceaccount:openshift-infra:build-controller
+      - system:serviceaccount:default:default
+
+#. Update deployment. The following deployment highlights the required changes.
+
+   .. code-block:: yaml
+      :emphasize-lines: 16, 24-26
+
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: f5-hello-world-web
+        namespace: httpd
+      spec:
+        replicas: 2
+        selector:
+          matchLabels:
+            app: f5-hello-world-web
+        template:
+          metadata:
+            labels:
+              app: f5-hello-world-web
+          spec:
+            serviceAccountName: default
+            containers:
+            - env:
+              - name: service_name
+                value: f5-hello-world-web
+              image: mirror.lab.local:8443/f5devcentral/f5-hello-world:latest
+              imagePullPolicy: IfNotPresent
+              name: f5-hello-world-web
+              securityContext:
+                runAsUser: 0
+                privileged: true
+              ports:
+              - containerPort: 8080
+                protocol: TCP
+
 Schedule Control Nodes
 ----------------------
 
