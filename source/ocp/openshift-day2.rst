@@ -1,8 +1,8 @@
 OpenShift Day 2
 ===============
 
-Privileged Pod (root)
----------------------
+Privileged Deployment (root)
+----------------------------
 By default all deployed application pods run as nonroot. For **LAB/PoC
 testing** the following procedure allows root privileges on a per project and
 deployment basis.
@@ -13,15 +13,13 @@ deployment basis.
 #. Update the "privileged" Security Context Constraints by adding the projects
    "default" service account.
 
-   .. note:: You can use any service account in use with the deployment. In
-      this example we're using "default".
-
    .. code-block:: bash
        
       oc edit scc privileged
 
-   The following example shows adding the "default" project and "default"
-   service account:
+   .. note:: You can apply this to any project and any service account in use 
+      with the deployment. In the following example we're using the "default"
+      project and the "default" service account.
 
    .. code-block:: yaml
       :emphasize-lines: 4
