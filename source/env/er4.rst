@@ -58,12 +58,12 @@ The following uses the CLI; SSH to ER4.
       configure
 
       set protocols bgp 64512
-      set protocols bgp 64512 peer-group ovn-ocp
-      set protocols bgp 64512 peer-group ovn-ocp remote-as 64512
-      set protocols bgp 64512 peer-group ovn-ocp soft-reconfiguration
-      set protocols bgp 64512 neighbor 192.168.132.11 peer-group ovn-ocp
-      set protocols bgp 64512 neighbor 192.168.132.12 peer-group ovn-ocp
-      set protocols bgp 64512 neighbor 192.168.132.13 peer-group ovn-ocp
+      set protocols bgp 64512 peer-group ovn_ocp
+      set protocols bgp 64512 peer-group ovn_ocp remote-as 64512
+      set protocols bgp 64512 peer-group ovn_ocp soft-reconfiguration inbound
+      set protocols bgp 64512 neighbor 192.168.132.11 peer-group ovn_ocp
+      set protocols bgp 64512 neighbor 192.168.132.12 peer-group ovn_ocp
+      set protocols bgp 64512 neighbor 192.168.132.13 peer-group ovn_ocp
 
       commit ; save ; exit
 
