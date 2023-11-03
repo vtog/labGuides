@@ -102,7 +102,7 @@ Install and Configure OpenShift Data Foundation (ODF)
 
    .. code-block:: bash
 
-      oc patch storageclass ocs-storagecluster-cephfs -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
+      oc patch storageclass ocs-storagecluster-cephfs --patch '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
 
    .. image:: images/ocgetscdef.png   
 
@@ -111,10 +111,11 @@ Optional: Disable Noobaa
 
 1. Edit storagecluster ocs-storagecluster and add strategy
 
-   .. code-block:: yaml
+   .. code-block:: bash
 
-      oc edit storagecluster ocs-storagecluster
-       
+      oc patch storagecluster ocs-storagecluster --type merge --patch '{"spec":{"multiCloudGateway":{"reconcileStrategy":"ignore"}}}'
+
+      # oc edit storagecluster ocs-storagecluster     
       # spec:                                              
       #   multiCloudGateway:                               
       #     reconcileStrategy: ignore          
@@ -123,8 +124,9 @@ Optional: Disable Noobaa
 
    .. code-block:: bash
 
-      oc edit noobaa noobaa
-       
+      oc patch noobaa noobaa --type merge --patch '{"spec":{"cleanupPolicy":{"allowNoobaaDeletion":true}}}'
+
+      # oc edit noobaa noobaa
       # spec:
       #   cleanupPolicy:
       #     allowNoobaaDeletion: true
@@ -133,7 +135,7 @@ Optional: Disable Noobaa
 
    .. code-block:: bash
 
-      oc delete noobaas.noobaa.io  --all
+      oc delete noobaas.noobaa.io --all
 
 Configure the Image Registry storage claim
 -------------------------------------------
@@ -154,13 +156,13 @@ Configure the Image Registry storage claim
 
    .. code-block:: bash
 
-      oc edit configs.imageregistry.operator.openshift.io cluster
+      oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{"claim":"image-registry-storage"}}}}'
 
-      # Replace the "storage: {}" line with the following
-      #
-      # storage:
-      #   pvc:
-      #     claim:
+      # oc edit configs.imageregistry.operator.openshift.io cluster
+      # spec:
+      #   storage:
+      #     pvc:
+      #       claim: image-registry-storage
 
 #. Check pvc STATUS = "Bound"
 
@@ -175,7 +177,7 @@ Set the Image Registry's default route
 
    .. code-block:: bash
 
-      oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
+      oc patch configs.imageregistry.operator.openshift.io/cluster --type=merge --patch '{"spec":{"defaultRoute":true}}'
 
 #. Get the default registry route
 
