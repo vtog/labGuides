@@ -257,6 +257,10 @@ Mirror Images to Local Registry
 
    .. attention:: oc-mirror requires OpenShift v4.9.x and later.
 
+   .. note:: Ran into prunning errors. Tried "--skip-pruning" but not sure that
+      was helpful. Last tried "--continue-on-error" and "--ignore-history".
+      Noting here for reference.
+
    .. code-block:: bash
 
       oc mirror --config=./imageset-config.yaml docker://$quayHostname:8443
