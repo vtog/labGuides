@@ -189,7 +189,7 @@ Set the Image Registry's default route
                                                                                                                                
    .. code-block:: bash                                                                                                     
                                                                                                                                
-      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${HOST}.crt  > /dev/null
+ $ sudo podman login -u kubeadmin -p $(oc whoami -t) $HOST     oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${HOST}.crt  > /dev/null
                                                                                                                                
 #. Update the clients local ca-trust                                                                                           
                                                                                                                                
@@ -213,3 +213,79 @@ Set the Image Registry's default route
    .. note:: The error returned from the podman login command is normal. Adding
       an Identity Provider is the fix.
 
+Upload Image to OCP Registry
+----------------------------
+
+#. Log in into OpenShift API with user that has appropriate permissions.
+
+   .. code-block:: bash
+
+      oc login -u kubeadmin
+
+#. Log into registry via external route.
+
+   .. code-block:: bash
+
+      HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
+
+      podman login -u kubeadmin -p $(oc whoami -t) $HOST
+
+#. Upload image to local repo
+
+   .. code-block:: bash
+
+      podman pull mirror.lab.local:8443/f5devcentral/f5-hello-world
+
+#. Tag local image for OCP registry
+
+   .. important:: The path must start with the project name. In this example
+      I'm using project "default".
+
+   .. code-block:: bash
+
+      podman tag mirror.lab.local:8443/f5devcentral/f5-hello-world:latest $HOST/default/f5-hello-world:latest
+
+#. Push local image to OCP registry
+
+   .. important:: The project must exist in order to upload the image. In this
+      example I'm using project "default".
+
+   .. code-block:: bash
+
+      podman push $HOST/default/f5-hello-world:latest
+
+#. View image on OCP registry
+
+   .. code-block:: bash
+
+      oc get is -n default
+
+   .. image:: images/imageuploadexample.png
+
+#. Access the image/registry directly from the cluster
+
+   .. code-block:: bash
+
+      ssh core@host11
+
+      oc login -u kubeadmin https://api-int.ocp1.lab.local:6443
+
+      podman login -u kubeadmin -p $(oc whoami -t) image-registry.openshift-image-registry.svc:5000
+
+      podman pull image-registry.openshift-image-registry.svc:5000/default/f5-hello-world
+
+#. Use the internal name for deployments
+
+   .. code-block:: yaml
+      :emphasize-lines: 8
+
+      spec:
+        containers:
+        - env:
+          - name: service_name
+            value: f5-hello-world-web
+          #image: mirror.lab.local:8443/f5devcentral/f5-hello-world:latest
+          #image: default-route-openshift-image-registry.apps.ocp1.lab.local/default/f5-hello-world:latest
+          image: image-registry.openshift-image-registry.svc:5000/httpd/f5-hello-world:latest
+          imagePullPolicy: Always
+          name: f5-hello-world-web
