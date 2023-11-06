@@ -286,6 +286,6 @@ Upload Image to OCP Registry
             value: f5-hello-world-web
           #image: mirror.lab.local:8443/f5devcentral/f5-hello-world:latest
           #image: default-route-openshift-image-registry.apps.ocp1.lab.local/default/f5-hello-world:latest
-          image: image-registry.openshift-image-registry.svc:5000/httpd/f5-hello-world:latest
+          image: image-registry.openshift-image-registry.svc:5000/default/f5-hello-world:latest
           imagePullPolicy: Always
           name: f5-hello-world-web
