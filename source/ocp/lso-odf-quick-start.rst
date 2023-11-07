@@ -262,7 +262,7 @@ Upload Image to OCP Registry
 
    .. image:: images/imageuploadexample.png
 
-#. Access the image/registry directly from the cluster
+#. Access the image/registry directly from a cluster node
 
    .. code-block:: bash
 
