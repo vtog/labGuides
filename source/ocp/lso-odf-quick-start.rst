@@ -158,6 +158,7 @@ Configure the Image Registry storage claim
 
       oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{"claim":"image-registry-storage"}}}}'
 
+      # Replace the "storage: {}" line with the following
       # oc edit configs.imageregistry.operator.openshift.io cluster
       # spec:
       #   storage:
@@ -189,7 +190,7 @@ Set the Image Registry's default route
                                                                                                                                
    .. code-block:: bash                                                                                                     
                                                                                                                                
- $ sudo podman login -u kubeadmin -p $(oc whoami -t) $HOST     oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${HOST}.crt  > /dev/null
+      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${HOST}.crt  > /dev/null
                                                                                                                                
 #. Update the clients local ca-trust                                                                                           
                                                                                                                                

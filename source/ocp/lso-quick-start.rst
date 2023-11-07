@@ -77,13 +77,14 @@ Configure the Image Registry storage claim
 
    .. code-block:: bash
 
-      oc edit configs.imageregistry.operator.openshift.io cluster
+      oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{"claim":"image-registry-storage"}}}}'
 
       # Replace the "storage: {}" line with the following
-      #
-      # storage:
-      #   pvc:
-      #     claim:
+      # oc edit configs.imageregistry.operator.openshift.io cluster
+      # spec:
+      #   storage:
+      #     pvc:
+      #       claim: image-registry-storage
 
 #. Check pvc STATUS = "Bound"
 
@@ -140,7 +141,7 @@ Set the Image Registry's default route
 
    .. code-block:: bash
 
-      oc patch configs.imageregistry.operator.openshift.io/cluster --patch '{"spec":{"defaultRoute":true}}' --type=merge
+      oc patch configs.imageregistry.operator.openshift.io/cluster --type=merge --patch '{"spec":{"defaultRoute":true}}'
 
 #. Get the default registry route
 
@@ -152,7 +153,7 @@ Set the Image Registry's default route
 
    .. code-block:: bash
 
-      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee
+      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${HOST}.crt  > /dev/null
 
 #. Update the clients local ca-trust
 
@@ -165,4 +166,14 @@ Set the Image Registry's default route
    .. code-block:: bash
 
       podman login -u kubeadmin -p $(oc whoami -t) $HOST
+
+   Should see the following output:
+ 
+   .. code-block:: bash
+ 
+      error: no token is currently in use for this session
+      Login Succeeded!
+
+   .. note:: The error returned from the podman login command is normal. Adding
+      an Identity Provider is the fix.
 
