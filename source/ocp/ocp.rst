@@ -9,6 +9,7 @@ OpenShift Lab Guides
    agent-based-installer-notes
    ipi-notes
    openshift-day2
+   multus
    local-mirror-registry
    node-mirror-registry
    lso-quick-start
