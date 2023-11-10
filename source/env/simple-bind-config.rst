@@ -12,9 +12,9 @@ Simple BIND Config
    .. code-block:: bash
 
       sudo vim /etc/named.conf
-       
+
       # ADD ACL and include local host IP
-      # and subnet for "virbr0"   
+      # and subnet for "virbr0"
       acl "trusted" {
           127.0.0.1;
           192.168.1.72;
@@ -25,11 +25,11 @@ Simple BIND Config
           2600:1702:4c73:f111::/64;
 
       };
-       
+
       # Under "options" change the following
       listen-on port 53 { any; };
       allow-query     { trusted; };
-       
+
       # Add the following "include" to the end of the file
       include "/etc/named/named.conf.local";
 
@@ -178,10 +178,10 @@ Simple BIND Config
                                 86400         ; Retry
                               2419200         ; Expire
                                604800 )       ; Negative Cache TTL
-      
+
       ; name servers - NS records
               IN      NS      ns1.lab.local.
-      
+
       ; PTR Records
       7        IN      PTR      rhel7-bastion.lab.local.  ; 192.168.122.7
       8        IN      PTR      rhel8-bastion.lab.local.  ; 192.168.122.8

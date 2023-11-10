@@ -53,8 +53,8 @@ The following uses the CLI; SSH to ER4.
 
    .. code-block:: bash
 
-      ssh vince@192.168.1.1                                  
-                                                             
+      ssh vince@192.168.1.1
+
       configure
 
       set protocols bgp 64512

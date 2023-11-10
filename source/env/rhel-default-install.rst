@@ -17,12 +17,12 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
    .. code-block:: bash
 
       #Fedora
-      sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm 
+      sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
       sudo dnf install https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
       #RHEL
       sudo dnf install --nogpgcheck https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(rpm -E %rhel).noarch.rpm
-      sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm 
+      sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-$(rpm -E %rhel).noarch.rpm
       sudo dnf install --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-$(rpm -E %rhel).noarch.rpm
 
       sudo dnf install obs-studio v4l2loopback
@@ -87,14 +87,14 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       sudo dnf install python3-pip
 
       pip install pip -U
-      
+
       # add misc packages
       pip install ansible awscli pygments wheel
 
 #. Add Sphinx build environment
 
    .. code-block:: bash
-   
+
       pip install sphinx==5.3.0 docutils==0.16 sphinx_rtd_theme sphinx-copybutton
 
       # F5 Theme
@@ -106,12 +106,12 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
    .. attention:: This assumes you've set up pki.
 
    .. code-block:: bash
-   
-      # modify following settings     
+
+      # modify following settings
       vim /etc/ssh/sshd_config
          PermitRootLogin no
          PasswordAuthentication no
-               
+
       # reload service
       systemctl restart sshd
 
@@ -122,7 +122,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 #. Add user to wheel group **(If Needed)**
 
    .. code-block:: bash
-   
+
       usermod -a -G wheel <user>
 
 #. Modify sudo with NOPASSWD option
@@ -161,7 +161,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
    .. code-block:: bash
 
       git clone https://github.com/spaceship-prompt/spaceship-prompt.git --depth=1 ~/git/spaceship-prompt
-      sudo ln -sf ~/git/spaceship-prompt/spaceship.zsh /usr/share/zsh/site-functions/prompt_spaceship_setup      
+      sudo ln -sf ~/git/spaceship-prompt/spaceship.zsh /usr/share/zsh/site-functions/prompt_spaceship_setup
       source ~/.zshrc
 
 #. Install vim-plug (neovim)
@@ -238,7 +238,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       git clone git@github.com:gnome-terminator/terminator.git ~/git/terminator
       cd ~/git/terminator
       python3 setup.py build
-      sudo python3 setup.py install --single-version-externally-managed --record=install-files.txt    
+      sudo python3 setup.py install --single-version-externally-managed --record=install-files.txt
 
 #. Install Alacritty from Source **(If Needed)**
 

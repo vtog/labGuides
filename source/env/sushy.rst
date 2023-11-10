@@ -48,7 +48,7 @@ Containerize Sushy-Tools
 
       sudo podman generate systemd --name sushy-emulator --files
       sudo cp -Z container-sushy-emulator.service /etc/systemd/system/
-      sudo systemctl daemon-reload 
+      sudo systemctl daemon-reload
       sudo systemctl enable --now container-sushy-emulator.service
 
 #. Allow port 8000 for service connectivity

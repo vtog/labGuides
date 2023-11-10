@@ -14,10 +14,10 @@ deployment basis.
    "default" service account.
 
    .. code-block:: bash
-       
+
       oc edit scc privileged
 
-   .. note:: You can apply this to any project and any service account in use 
+   .. note:: You can apply this to any project and any service account in use
       with the deployment. In the following example we're using the "default"
       project and the "default" service account.
 
@@ -98,7 +98,7 @@ If MCP gets stuck try forcing the update to unstuck it.
    .. code-block:: bash
 
       ssh core@host11.lab.local sudo touch /run/machine-config-daemon-force
-   
+
 #. Edit node annotations
 
    .. code-block:: bash
@@ -122,12 +122,12 @@ If MCP gets stuck try forcing the update to unstuck it.
 
 Can't Remove Object
 -------------------
-   
+
 I've noticed deleting PVC sometimes doesn't work and they'll be stuck in the
 "Terminating" phase.  The following command will remove them:
- 
+
 .. code-block:: bash
- 
+
    oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
 
 Start toolbox (node)
@@ -153,35 +153,35 @@ has several network tools to help troubleshoot the cluster/node.
 
 Configure an htpasswd Identitiy Provider
 ----------------------------------------
- 
+
 After configuring local storage and a PVC for the local registry, you may
 require an Identity Provider. These steps will get you started with htpasswd.
- 
+
 .. attention:: I've noticed without this, access to the local registry doesn't
    work.
- 
+
 #. Create your flat file with a user name and hashed password
- 
+
    .. code-block:: bash
- 
+
       htpasswd -c -B -b </path/to/users.htpasswd> <user_name> <password>
- 
+
 #. Add or delete users as needed
- 
+
    - Add
- 
+
      .. code-block:: bash
- 
+
         htpasswd -B -b </path/to/users.htpasswd> <user_name> <password>
- 
+
    - Delete
- 
+
      .. code-block:: bash
- 
+
         htpasswd -D users.htpasswd <username>
- 
+
 #. From the OCP console create the HTPasswd identity provider
- 
+
    #. Go to :menuselection:`Administration --> Cluster Settings` and click the
       Configuration tab
    #. Filter the list for "oath". Click the "OAuth" resource
@@ -189,30 +189,30 @@ require an Identity Provider. These steps will get you started with htpasswd.
    #. Give the new object a unique name
    #. Click "Browse" and upload the file created earlier
    #. Click "Add"
- 
+
 #. Update the htpasswd identity provider
- 
+
    #. Get secret
- 
+
       .. code-block:: bash
- 
+
          oc get secret htpass-secret -ojsonpath={.data.htpasswd} -n openshift-config | base64 --decode > users.htpasswd
- 
+
    #. Add or delete users (see step 2)
    #. Update secret
- 
+
       .. code-block:: bash
- 
+
          oc create secret generic htpass-secret --from-file=htpasswd=users.htpasswd --dry-run=client -o yaml -n openshift-confi
- 
+
 #. If you remove a user from htpasswd you must manually remove the user resources from OCP
- 
+
    .. code-block:: bash
- 
+
       oc delete user <username>
- 
+
       #AND
- 
+
       oc delete identity <identity_provider>:<username>
 
 Adding Node to Cluster
@@ -246,7 +246,7 @@ resolves the error from the initial creation.
    - Click Create
 
 #. Modify newly created Bare Metal Hosts
-   
+
    - Before editing new object, copy "spec" section from an older BMH object.
 
      .. code-block:: yaml
@@ -303,56 +303,56 @@ resolves the error from the initial creation.
 
 OCP Cert Expiry and Resolution
 ------------------------------
- 
+
 In the event that oauth is down, indicated by "connection refused" running any
 OC command against the API. The issue is most likely caused by an expired
 internal cluster certificate. Internal cluster certs have an expiry of 30d.
 Under normal circumstances these certs are auto renewed. By running the
 following commands you can confirm expired certs and resolve the issue.
- 
+
 #. SSH to any master node.
- 
+
    .. code-block:: bash
- 
+
       ssh core@master1
       sudo -s
- 
+
 #. Export recovery KUBECONFIG for local cluster management.
- 
+
    .. code-block:: bash
- 
+
       export KUBECONFIG=/etc/kubernetes/static-pod-resources/kube-apiserver-certs/secrets/node-kubeconfigs/localhost-recovery.kubeconfig
- 
+
 #. View pending CSR's (should see several in the pending state).
- 
+
    .. code-block:: bash
- 
+
       oc get csr
- 
+
 #. Approve all CSR's.
- 
+
    .. code-block:: yaml
- 
+
       oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
- 
+
    .. important:: **Repeat this step until all pending CSR's are approved!**
- 
+
 #. To view the certs expiry date, extract the secret/csr-signer cert and key.
- 
+
    .. code-block:: bash
- 
+
       oc extract secret/csr-signer -n openshift-kube-controller-manager --to ./ --confirm
- 
+
       openssl x509 -text -noout -in ./tls.crt
 
    .. image:: ./images/certexpiry.png
 
 Starting the Cluster
 --------------------
- 
+
 Bringing the cluster back up is much more simple than the shutdown procedure.
 You just have to start nodes in the right order for the best results.
- 
+
 #. Start your master nodes *"master 1 - 3"*
 
    Once they have booted we can check that they are healthy using
@@ -367,7 +367,7 @@ You just have to start nodes in the right order for the best results.
    in a ready state :code:`oc get nodes`, and that
    :code:`oc get pods --all-namespaces` shows the logging, metrics, router and
    registry pods have started and are healthy.
- 
+
 #. Start your worker nodes *"worker 4 - 6"*
 
    Once your worker nodes have booted you can ensure that all nodes are showing

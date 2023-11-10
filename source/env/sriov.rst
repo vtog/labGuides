@@ -124,7 +124,7 @@ will guide you through configuring the VF's and passing them to KVM.
       ip link set ens6f1 vf 5 mac 52:54:00:a6:12:05
       ip link set ens6f1 vf 6 mac 52:54:00:a6:13:01
 
-.. important:: For OCP VM instructions see 
+.. important:: For OCP VM instructions see
    `Enable SR-IOV on OCP VM <../ocp/sriov.html>`_
 
 Notes

@@ -133,7 +133,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       metadata:
         name: ocp1
       rendezvousIP: 192.168.122.11
-      additionalNTPSources:            
+      additionalNTPSources:
       - 192.168.1.72
       hosts:
         - hostname: host11
@@ -182,7 +182,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       metadata:
         name: ocp1
       rendezvousIP: 192.168.122.11
-      additionalNTPSources:            
+      additionalNTPSources:
       - 192.168.1.72
       hosts:
         - hostname: host11
@@ -304,7 +304,7 @@ Example of IPv6 only
 
 .. code-block:: yaml
    :caption: agent-config.yaml
- 
+
    apiVersion: v1alpha1
    metadata:
      name: ocp3

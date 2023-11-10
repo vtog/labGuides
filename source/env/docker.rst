@@ -17,7 +17,7 @@ Simple install of docker-ce on Fedora/RHEL
       sudo dnf install docker-ce docker-ce-cli containerd.io
 
       sudo systemctl enable --now docker
-      
+
       # Add user to docker group
       usermod -a -G docker $USER
       newgrp docker

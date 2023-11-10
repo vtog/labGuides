@@ -19,7 +19,7 @@ Prerequisites
 
    .. attention:: These links point to the most recent versions. Typically
       you'll want a specific version. You can find those here:
- 
+
       `<https://access.redhat.com/downloads/content/290/>`_
 
 #. SSH to the target server and run the following commands to place the
@@ -175,7 +175,7 @@ Mirror Images to Local Registry
 
    .. important:: Be sure path in imageURL (line 5) matches the path assigned
       earlier for "quayRoot".
-   
+
    .. note:: "graph: true" mirror's the graph data to our disconnected registry
       which enables our disconnected clusters to show the visual of what
       versions we can update to.
@@ -269,7 +269,7 @@ Mirror Images to Local Registry
       requested images.
 
 #. Make note of the following information upon completion. A new directory
-   "./oc-mirror-workspace/results-xxxxxxxxxx" with results and yaml files on 
+   "./oc-mirror-workspace/results-xxxxxxxxxx" with results and yaml files on
    how to apply mirror to cluster are created.
 
    .. image:: ./images/mirror-results.png
@@ -287,16 +287,16 @@ To create a new cluster using the local mirror & registry see:
 `Agent-Based Install Notes <./agent-based-installer-notes.html>`_
 
 #. Extract OCP pull-secret. A new local file ``.dockerconfigjson`` is created.
- 
+
    .. code-block:: bash
- 
+
       oc extract secret/pull-secret -n openshift-config --confirm --to=.
       cat ./.dockerconfigjson | jq . > ./.dockerconfig.json
- 
+
 #. Update ``.dockerconfig.json`` with local registry credentials.
- 
+
    .. code-block:: json
- 
+
       {
         "auths": {
           "mirror.lab.local:8443": {
@@ -304,7 +304,7 @@ To create a new cluster using the local mirror & registry see:
           }
         }
       }
-      
+
 #. Import the new pull-secret.
 
    .. code-block:: bash
@@ -361,18 +361,18 @@ disconnected registry.
 #. The Update Service Operator needs the config map to include the key name
    "updateservice-registry" in the registry CA cert. Edit the ConfigMap
    "registry-config" and add the new section using the same local mirror cert.
- 
+
    .. attention:: This ConfigMap was created in the previous section, steps 4-5.
- 
+
    .. code-block:: bash
- 
+
       oc edit cm registry-config -n openshift-config
- 
+
    Add the following highlighted section.
- 
+
    .. code-block:: yaml
       :emphasize-lines: 7-10
- 
+
       apiVersion: v1
       data:
         mirror.lab.local..8443: |

@@ -118,7 +118,7 @@ additional network without the use of a network DHCP server.
 
 #. Create the following Network Attachment Definition yaml file for the
    project.
- 
+
    .. code-block:: yaml
       :emphasize-lines: 4,5,15
 
@@ -148,12 +148,12 @@ additional network without the use of a network DHCP server.
           }
 
 #. Add the annotation to the deployment.
- 
+
    .. code-block:: yaml
       :emphasize-lines: 5
- 
-      spec: 
-        template:                                                                         
+
+      spec:
+        template:
           metadata:
             annotations:
               k8s.v1.cni.cncf.io/networks: macvlan-whereabouts

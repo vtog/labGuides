@@ -35,7 +35,7 @@ Prerequisites
       rm ~/.local/bin/README.md
 
 #. Convert your "pull-secret.txt" to json format.
-   
+
    .. attention:: You may need to install "jq" for this step.
 
    .. code-block:: bash
@@ -46,8 +46,8 @@ Prerequisites
 #. Copy "pull-secret.json" to ~/.docker and rename "config.json".
 
    .. code-block:: bash
-   
-      mkdir ~/.docker   
+
+      mkdir ~/.docker
       cp ./pull-secret.json ~/.docker/config.json
 
 #. Create the following "imageset-config.yaml" file. In the content below I'm
@@ -239,7 +239,7 @@ Mirror Images to Local Registry
           }
         }
       }
-            
+
 #. Mirror the "local image tar ball" to the "local mirror"
 
    .. note:: This file was created and copied to this node in the pre-req
@@ -299,7 +299,7 @@ Update Cluster for local registry
         }
       }
 
-      
+
 #. Import the new pull-secret.
 
    .. code-block:: bash
@@ -330,7 +330,7 @@ append to them.
    re-applying the policy.
 
    .. code-block:: yaml
-      
+
       apiVersion: operator.openshift.io/v1alpha1
       kind: ImageContentSourcePolicy
       metadata:
@@ -386,7 +386,7 @@ append to them.
 
    .. code-block:: yaml
       :emphasize-lines: 4
-      
+
       apiVersion: operators.coreos.com/v1alpha1
       kind: CatalogSource
       metadata:

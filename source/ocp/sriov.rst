@@ -106,7 +106,7 @@ new MachineConfigPool and label your nodes.
    ``oc create -f sriov_machineConfig_pool.yaml``
 
    .. code-block:: bash
- 
+
       apiVersion: machineconfiguration.openshift.io/v1
       kind: MachineConfigPool
       metadata:
@@ -126,7 +126,7 @@ new MachineConfigPool and label your nodes.
       oc label node/<nodeName> node-role.kubernetes.io/sriov=
 
 #. Then update the ``100-worker-blacklist.yaml`` and ``100-worker-vfiopci.bu``
-   file replacing "machineconfiguration.openshift.io/role: worker" with 
+   file replacing "machineconfiguration.openshift.io/role: worker" with
    "machineconfiguration.openshift.io/role: sriov"
 
 Install SRIOV Network Device Plugin
@@ -295,7 +295,7 @@ Test SRIOV Device Plugin
         }
       }'
 
-#. Create pod ``test-pod1.yaml`` with attached interface, 
+#. Create pod ``test-pod1.yaml`` with attached interface,
    ``oc create -f test-pod1.yaml``
 
    .. code-block:: bash
