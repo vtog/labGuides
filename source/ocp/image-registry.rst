@@ -1,6 +1,10 @@
 Image Registry Operator
 =======================
 
+This operator is installed by default with every OpenShift cluster. For it to
+work you simply need to allocate storage and a PVC. This can be accomplished
+with the local storage operator and or ODF.
+
 Configure the Image Registry storage claim
 -------------------------------------------
 
