@@ -30,7 +30,7 @@ Install and Configure the Local Storage Operator
    .. image:: images/localvolumediscoveryresult.png
 
 #. Click the first instance name, click the YAML tab, and scroll to the bottom
-   of the output. The last device, in this labs case "/dev/vdb" should be the 
+   of the output. The last device, in this labs case "/dev/vdb" should be the
    correct device. Make note of the "deviceID". Also note this device should
    show as "Available".
 
@@ -41,7 +41,7 @@ Install and Configure the Local Storage Operator
 #. Go to :menuselection:`Operators --> Installed Operators` and select "Local Storage" operator
 #. Select the "Local Volume" tab and click "Create Local Volume"
 
-   .. important:: This will automatically create pv's that consume the entire                 
+   .. important:: This will automatically create pv's that consume the entire
       device. If smaller pv's are required, partition the device before
       creating the Local Volumes.
 
@@ -57,123 +57,4 @@ Install and Configure the Local Storage Operator
 #. Click Create
 
    .. image:: images/createlocalvolumeFS.png
-
-Configure the Image Registry storage claim
-------------------------------------------
-
-#. Change project
-
-   .. code-block:: bash
-
-      oc project openshift-image-registry
-
-#. Set image registry to Managed by patching the config
-
-   .. code-block:: bash
-
-      oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"managementState":"Managed"}}'
-
-#. Add the PVC by editing the image registry config
-
-   .. code-block:: bash
-
-      oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{"claim":"image-registry-storage"}}}}'
-
-      # Replace the "storage: {}" line with the following
-      # oc edit configs.imageregistry.operator.openshift.io cluster
-      # spec:
-      #   storage:
-      #     pvc:
-      #       claim: image-registry-storage
-
-#. Check pvc STATUS = "Bound"
-
-   .. code-block:: bash
-
-      oc get pvc
-
-#. The previous steps will automatically create a pvc that needs to be
-   replaced.
-
-   .. important:: The pvc needs to match the pv's "storageClassName",
-      "accessModes", and "storage".
-
-   First delete the pvc:
-
-   .. code-block:: bash
-
-      oc delete pvc image-registry-storage
-
-   With vi create a new file called "imageregpvc.yaml". Copy & paste the
-   following yaml:
-
-   .. code-block:: yaml
-      :emphasize-lines: 11, 13, 16
-
-      apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        annotations:
-          imageregistry.openshift.io: "true"
-        finalizers:
-        - kubernetes.io/pvc-protection
-        name: image-registry-storage
-        namespace: openshift-image-registry
-      spec:
-        storageClassName: lso-fs
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 200Gi
-       volumeMode: Filesystem
-
-   Create the new pvc:
-
-   .. code-block:: bash
-
-      oc create -f imageregpvc.yaml
-
-Set the Image Registry's default route
---------------------------------------
-
-#. Set the defaultRoute to true
-
-   .. code-block:: bash
-
-      oc patch configs.imageregistry.operator.openshift.io/cluster --type=merge --patch '{"spec":{"defaultRoute":true}}'
-
-#. Get the default registry route
-
-   .. code-block:: bash
-
-      HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
-
-#. Get the cluster’s default certificate and add to the clients local ca-trust
-
-   .. code-block:: bash
-
-      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${HOST}.crt  > /dev/null
-
-#. Update the clients local ca-trust
-
-   .. code-block:: bash
-
-      sudo update-ca-trust enable
-
-#. Log in with podman using the default route
-
-   .. code-block:: bash
-
-      podman login -u kubeadmin -p $(oc whoami -t) $HOST
-
-   Should see the following output:
- 
-   .. code-block:: bash
- 
-      error: no token is currently in use for this session
-      Login Succeeded!
-
-   .. note:: The error returned from the podman login command is normal. Adding
-      an Identity Provider is the fix.
 

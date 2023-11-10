@@ -9,9 +9,10 @@ OpenShift Lab Guides
    agent-based-installer-notes
    ipi-notes
    openshift-day2
-   multus
+   lso-quick-start
+   odf-quick-start
+   image-registry
    local-mirror-registry
    node-mirror-registry
-   lso-quick-start
-   lso-odf-quick-start
+   multus
    sriov
