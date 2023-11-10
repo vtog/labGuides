@@ -20,14 +20,12 @@ Configure the Image Registry storage claim
 
    .. code-block:: bash
 
-      oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{"claim":"image-registry-storage"}}}}'
+      oc edit configs.imageregistry.operator.openshift.io cluster
 
       # Replace the "storage: {}" line with the following
-      # oc edit configs.imageregistry.operator.openshift.io cluster
-      # spec:
       #   storage:
       #     pvc:
-      #       claim: image-registry-storage
+      #       claim:
 
 #. Check pvc STATUS = "Bound"
 
@@ -91,13 +89,13 @@ Set the Image Registry's default route
 
    .. code-block:: bash
 
-      HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
+      REGROUTE=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
 
 #. Get the cluster’s default certificate and add to the clients local ca-trust
 
    .. code-block:: bash
 
-      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${HOST}.crt  > /dev/null
+      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${REGROUTE}.crt  > /dev/null
 
 #. Update the clients local ca-trust
 
@@ -105,21 +103,23 @@ Set the Image Registry's default route
 
       sudo update-ca-trust enable
 
-#. Log in with podman using the default route
+#. Log in with podman using the default route. You'll need to login to your
+   cluster with "kubeadmin" first in order to receive a user token.
 
    .. code-block:: bash
 
-      podman login -u kubeadmin -p $(oc whoami -t) $HOST
+      oc login -u kubeadmin
+
+      podman login -u kubeadmin -p $(oc whoami -t) $REGROUTE
 
    Should see the following output:
 
    .. code-block:: bash
 
-      error: no token is currently in use for this session
       Login Succeeded!
 
-   .. note:: The error returned from the podman login command is normal. Adding
-      an Identity Provider is the fix.
+   .. note:: If an error is returned as well, it's because "oc whoami -t" does
+      not have a token. Try logging into the cluster first.
 
 Upload Image to OCP Registry
 ----------------------------
@@ -134,9 +134,9 @@ Upload Image to OCP Registry
 
    .. code-block:: bash
 
-      HOST=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
+      REGROUTE=$(oc get route default-route -n openshift-image-registry --template='{{ .spec.host }}')
 
-      podman login -u kubeadmin -p $(oc whoami -t) $HOST
+      podman login -u kubeadmin -p $(oc whoami -t) $REGROUTE
 
 #. Upload image to local repo
 
@@ -151,7 +151,7 @@ Upload Image to OCP Registry
 
    .. code-block:: bash
 
-      podman tag mirror.lab.local:8443/f5devcentral/f5-hello-world:latest $HOST/default/f5-hello-world:latest
+      podman tag mirror.lab.local:8443/f5devcentral/f5-hello-world:latest $REGROUTE/default/f5-hello-world:latest
 
 #. Push local image to OCP registry
 
@@ -160,7 +160,7 @@ Upload Image to OCP Registry
 
    .. code-block:: bash
 
-      podman push $HOST/default/f5-hello-world:latest
+      podman push $REGROUTE/default/f5-hello-world:latest
 
 #. View image on OCP registry
 
