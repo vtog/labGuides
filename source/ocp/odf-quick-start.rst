@@ -109,7 +109,14 @@ Install and Configure OpenShift Data Foundation (ODF)
 Optional: Disable Noobaa
 ------------------------
 
-1. Edit storagecluster ocs-storagecluster and add strategy
+#. Change to openshift-storage project, or append "-n openshift-storage" to
+   each patch command below
+
+   .. code-block:: bash
+
+      oc project openshift-storage
+
+#. Edit storagecluster ocs-storagecluster and add strategy
 
    .. code-block:: bash
 
