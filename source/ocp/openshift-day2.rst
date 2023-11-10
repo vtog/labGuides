@@ -32,7 +32,7 @@ deployment basis.
 #. Update deployment. The following deployment highlights the required changes.
 
    .. code-block:: yaml
-      :emphasize-lines: 16, 24-26
+      :emphasize-lines: 16, 24-28
 
       apiVersion: apps/v1
       kind: Deployment
@@ -60,6 +60,12 @@ deployment basis.
               securityContext:
                 runAsUser: 0
                 privileged: true
+                allowPrivilegeEscalation: true
+                runAsNonRoot: false
+                seccompProfile:
+                  type: RuntimeDefault
+                capabilities:
+                  drop: ["ALL"]
               ports:
               - containerPort: 8080
                 protocol: TCP
