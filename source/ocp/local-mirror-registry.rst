@@ -235,7 +235,8 @@ Mirror Images to Local Registry
           - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.12
           - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.13
           - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
-          - name: quay.io/openshift/origin-sriov-network-device-plugin:latest
+          - name: quay.io/openshift/origin-sriov-network-device-plugin:v4.12
+          - name: quay.io/openshift/origin-sriov-network-device-plugin:v4.13
           - name: docker.io/centos/tools:latest
           - name: docker.io/f5devcentral/f5-hello-world:latest
           - name: docker.io/library/httpd:latest
