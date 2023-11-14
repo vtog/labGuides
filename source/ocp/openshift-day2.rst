@@ -3,6 +3,7 @@ OpenShift Day 2
 
 Privileged Deployment (root)
 ----------------------------
+
 By default all deployed application pods run as nonroot. For **LAB/PoC
 testing** the following procedure allows root privileges on a per project and
 deployment basis.
@@ -87,6 +88,7 @@ Schedule Control Nodes
 
 Pause MCP
 ---------
+
 When making several changes via MCP it's beneficial to "pause" MCP from
 restarting the nodes with each change. This way all changes are applied with a
 single reboot. Set "paused" to "true", when finished set back to "false".
@@ -97,6 +99,7 @@ single reboot. Set "paused" to "true", when finished set back to "false".
 
 Force MCP to Update
 -------------------
+
 If MCP gets stuck try forcing the update to unstuck it.
 
 #. Create file called "machine-config-daemon-force" in "/run"
@@ -138,6 +141,7 @@ I've noticed deleting PVC sometimes doesn't work and they'll be stuck in the
 
 Start toolbox (node)
 --------------------
+
 There's a script to start "toolbox" on each node. Toolbox is a container which
 has several network tools to help troubleshoot the cluster/node.
 
