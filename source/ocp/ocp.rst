@@ -8,6 +8,7 @@ OpenShift Lab Guides
    assissted-installer-notes
    agent-based-installer-notes
    ipi-notes
+   add-node
    openshift-day2
    lso-quick-start
    odf-quick-start
