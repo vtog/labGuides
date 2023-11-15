@@ -211,8 +211,8 @@ etcd. Before starting be sure to follow the previous section backing up etcd.
 #. Change to the openshift-etcd project
 
    .. code-block:: bash
- 
-      oc project openshift-etcd   
+
+      oc project openshift-etcd
 
 #. RSH into any of the etcd-<node> pods
 
@@ -266,11 +266,11 @@ After adding the new node to the cluster, we need to ensure that the pods are
 running and force a redeployment of this etcd member using the etcd operator.
 
 #. Change to the openshift-etcd project
- 
+
    .. code-block:: bash
- 
-      oc project openshift-etcd   
- 
+
+      oc project openshift-etcd
+
 #. Check all etcd pods have been created
 
    .. code-block:: bash
@@ -286,21 +286,21 @@ running and force a redeployment of this etcd member using the etcd operator.
       oc get co
 
 #. RSH into any of the etcd-<node> pods
- 
+
    .. code-block:: bash
- 
+
       oc rsh etcd-host42.lab.local
 
 #. From within that pod run the following command to list the etcd members.
-  
+
    .. code-block:: bash
-  
+
       etcdctl member list -w table
 
 #. From within that pod run the following command to view the endpoint status.
- 
+
    .. code-block:: bash
- 
+
       etcdctl endpoint status -w table
 
 #. (OPTIONAL) Force redeployment of etcd cluster.

@@ -21,6 +21,25 @@ Prerequisites
       and the **Kernel Module** is "igbvf". This information will be required
       in the next section.
 
+#. Simple script to list devices. Copy and paste the following to a local file.
+   Be sure to "chmod +x <file_name>".
+
+   .. code-block:: bash
+
+      #!/bin/bash
+
+      NET_ROOT="/sys/class/net"
+
+      for i in $(ls $NET_ROOT/) ; do
+          if [ "$i" != "idrac" ] && [ -d $NET_ROOT/$i/device ]; then
+              source $NET_ROOT/$i/device/uevent;
+              SPEED=$(cat $NET_ROOT/$i/speed);
+              STATE=$(cat $NET_ROOT/$i/operstate) ;
+              NIC_NAME=$(lspci |grep  ${PCI_SLOT_NAME#*:} | awk -F ":" '{print $NF}')
+              echo -e "\"$HOSTNAME\", \"$i\", \"$NIC_NAME\", \"$STATE\", \"${PCI_ID%%:*}\", \"${PCI_ID#*:}\", \"$PCI_
+          fi;
+      done
+
 Prepare Hosts
 -------------
 
@@ -337,9 +356,28 @@ Test SRIOV Device Plugin
 
    .. image:: ./images/sriov-verify-interface.png
 
-.. tip:: Create additional test pods and verify network connectivty by
-   connecting to each pod and pinging peer.
+   .. tip:: Create additional test pods and verify network connectivty by
+      connecting to each pod and pinging peer.
+
+      .. code-block:: bash
+
+         oc exec -it pod/testpod2 -- bash
+
+#. Simple script to list devices
 
    .. code-block:: bash
 
-      oc exec -it pod/testpod2 -- bash
+      #!/bin/bash
+
+      NET_ROOT="/sys/class/net"
+
+      for i in $(ls $NET_ROOT/) ; do
+          if [ "$i" != "idrac" ] && [ -d $NET_ROOT/$i/device ]; then
+              source $NET_ROOT/$i/device/uevent;
+              SPEED=$(cat $NET_ROOT/$i/speed);
+              STATE=$(cat $NET_ROOT/$i/operstate) ;
+              NIC_NAME=$(lspci |grep  ${PCI_SLOT_NAME#*:} | awk -F ":" '{print $NF}')
+              echo -e "\"$HOSTNAME\", \"$i\", \"$NIC_NAME\", \"$STATE\", \"${PCI_ID%%:*}\", \"${PCI_ID#*:}\", \"$PCI_SLOT_NAME\", \"$SPEED\"";
+          fi;
+      done
+
