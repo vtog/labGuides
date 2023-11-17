@@ -100,6 +100,16 @@ for the addition of a new master or worker node, depending on how you set the
 #. If not using DHCP or have a custom network config use the RHEL tools to
    configure the network.
 
+#. Check the block devices and "wipe" if needed.
+
+   .. code-block:: bash
+
+      lsblk
+
+   .. code-block:: bash
+
+      sudo wipefs -af /dev/vda
+
 #. Once the network is configured and operational run following command:
 
    .. attention:: Update the command for your ignition url and block device.
