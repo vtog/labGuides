@@ -131,6 +131,8 @@ for the addition of a new master or worker node, depending on how you set the
 
       oc get csr
 
+   .. code-block:: bash
+
       oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs --no-run-if-empty oc adm certificate approve
 
 #. After all the csr's are approved, confirm the node was added.
