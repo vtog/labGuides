@@ -5,6 +5,8 @@ These steps are based on Red Hat documentation. For a deeper understand of each
 step see the following URL:
 `Adding worker nodes to single-node OpenShift clusters manually <https://docs.openshift.com/container-platform/4.12/nodes/nodes/nodes-sno-worker-nodes.html#sno-adding-worker-nodes-to-single-node-clusters-manually_add-workers>`_
 
+.. note:: I tested this on 4.12, 4.13, and 4.14.
+
 .. important:: Exactly three control plane nodes must be used for all
    production deployments.
 
@@ -147,7 +149,7 @@ for the addition of a new master or worker node, depending on how you set the
 
    .. image:: ./images/checknewnode.png
 
-Back-up ETCD
+Back-Up ETCD
 ------------
 
 OpenShift comes with scripts that will backup the etcd state. It's best
@@ -197,12 +199,12 @@ practice to backup etcd before removing and replacing a control node.
 
       sudo /usr/local/bin/cluster-backup.sh /home/core/etcd-backup
 
-#. Verify both snapshot.db and static_kuberesources.tar.gz exist. Move files to
-   a safe location in the event of failure.
+#. Verify both snapshot_<TIME_STAMP>.db and static_kuberesources_<TIME_STAMP>.tar.gz
+   exist. Move files to a safe location in the event of failure.
 
    .. image:: ./images/backupetcd.png
 
-Clean-up ETCD
+Clean-Up ETCD
 -------------
 
 In the event of a control node failure the failed node must be removed from
@@ -225,6 +227,14 @@ etcd. Before starting be sure to follow the previous section backing up etcd.
    .. code-block:: bash
 
       oc project openshift-etcd
+
+#. List the etcd pods
+ 
+   .. code-block:: bash
+ 
+      oc get pods | grep etcd
+ 
+   .. image:: ./images/getetcdpods.png
 
 #. RSH into any of the etcd-<node> pods
 
@@ -269,13 +279,22 @@ etcd. Before starting be sure to follow the previous section backing up etcd.
       oc delete secret etcd-serving-<NODE>
       oc delete secret etcd-serving-metrics-<NODE>
 
-#. Add the replacement Node to the cluster using "Adding a New Node to the
-   Cluster" section.
+#. Add the replacement Node to the cluster using
+   "`Adding a New Node to the Cluster <./add-node.html#control-or-worker-node>`_"
+   above.
 
-Verify ETCD Restoration
------------------------
+Verify ETCD
+-----------
+
 After adding the new node to the cluster, we need to ensure that the pods are
 running and force a redeployment of this etcd member using the etcd operator.
+
+#. Check the etcd operator "AVAILABLE" status is "True". If not you may need to
+   wait or troubleshoot the status.
+ 
+   .. code-block:: bash
+ 
+      oc get co
 
 #. Change to the openshift-etcd project
 
@@ -289,13 +308,7 @@ running and force a redeployment of this etcd member using the etcd operator.
 
       oc get pods | grep etcd
 
-   .. image:: ./images/etcdpods.png
-
-#. Check the etcd operator
-
-   .. code-block:: bash
-
-      oc get co
+   .. image:: ./images/getetcdpods.png
 
 #. RSH into any of the etcd-<node> pods
 
@@ -317,7 +330,9 @@ running and force a redeployment of this etcd member using the etcd operator.
 
 #. (OPTIONAL) Force redeployment of etcd cluster.
 
-   .. note:: Not sure this is necessary.
+   .. attention:: This is from an older doc and is not necesary. I kept the
+      command for reference. It may come in handy if etcd doesn't automagically
+      deploy and needs to be "forced".
 
    .. code-block:: bash
 
@@ -326,9 +341,9 @@ running and force a redeployment of this etcd member using the etcd operator.
 Associate Node with MachineSet
 ------------------------------
 
-After adding the new node you'll notice they dont match the initial nodes in
-the cluster. The original nodes are part of a MachineSet and associated with
-bare metal host objects. The new node shows up as "Ready" and can be used.
+After adding the new node you'll notice the new node is up and "Ready" for use
+but doesn't match the initial nodes in the cluster. The original nodes are part
+of a MachineSet and associated with bare metal host objects.
 
 .. note:: In older version of OCP the Node Overview via the console will show
    errors.
