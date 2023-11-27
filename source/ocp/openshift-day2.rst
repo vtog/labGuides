@@ -33,13 +33,13 @@ deployment basis.
 #. Update deployment. The following deployment highlights the required changes.
 
    .. code-block:: yaml
-      :emphasize-lines: 16, 24-28
+      :emphasize-lines: 5, 16, 24-28
 
       apiVersion: apps/v1
       kind: Deployment
       metadata:
         name: f5-hello-world-web
-        namespace: httpd
+        namespace: default
       spec:
         replicas: 2
         selector:
