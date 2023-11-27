@@ -104,6 +104,9 @@ for the addition of a new master or worker node, depending on how you set the
 
 #. Check the block devices and "wipe" if needed.
 
+   .. note:: With baremetal hardware it may be necesary to "wipe" the previous
+      block device partitions and signatures.
+
    .. code-block:: bash
 
       lsblk
