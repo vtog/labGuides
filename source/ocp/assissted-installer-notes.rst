@@ -107,7 +107,7 @@ Method of Procedure
 
    .. image:: ./images/cluster-install.png
 
-   .. important:: Be sure to save "kubeconfig" and kubeadmin-password"
+   .. important:: Be sure to "Download kubeconfig" and Save "kubeadmin Password"
 
       .. image:: ./images/cluster-access.png
 
