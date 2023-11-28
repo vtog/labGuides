@@ -30,8 +30,8 @@ Containerize Sushy-Tools
       }
       EOF
 
-  .. attention:: Be sure to set "SUSHY_EMULATOR_IGNORE_BOOT_DEVICE" to False
-     for KVM.
+   .. attention:: Be sure to set "SUSHY_EMULATOR_IGNORE_BOOT_DEVICE" to False
+      for KVM.
 
 #. Deploy Sushy container.
 
