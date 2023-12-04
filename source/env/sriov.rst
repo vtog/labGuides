@@ -124,18 +124,28 @@ will guide you through configuring the VF's and passing them to KVM.
       ip link set ens6f1 vf 5 mac 52:54:00:a6:12:05
       ip link set ens6f1 vf 6 mac 52:54:00:a6:13:01
 
+   .. note:: If the VF's are NOT created, you may need to add "ixgbe.max_vfs=7" to the
+      kernel command line options. (This could igb or ixgbe depending on your
+      interface.)
+
+      The follow process walks through updating the host kernel:
+      `Configuring kernel command-line parameters
+      <https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/managing_monitoring_and_updating_the_kernel/configuring-kernel-command-line-parameters_managing-monitoring-and-updating-the-kernel>`_
+
+#. IOMMU "pass-through" may be required for better performance. The following
+   Lenovo article https://lenovopress.lenovo.com/lp1467.pdf which goes into a
+   pretty deep discussion of how IOMMU works in the Linux kernel, specifically
+   there is a good write up on page 11 about pass-through vs translation mode.
+   
+   .. code-block:: bash
+      
+      sudo grubby --update-kernel=ALL --args="iommu=pt"
+
+   Validate change before and after reboot.
+
+   .. code-block:: bash
+
+      dmesg | grep "iommu: Default"
+
 .. important:: For OCP VM instructions see
    `Enable SR-IOV on OCP VM <../ocp/sriov.html>`_
-
-Notes
------
-
-#. If the VF's are NOT created, you may need to add "ixgbe.max_vfs=7" to the
-   kernel command line options. (This could igb or ixgbe depending on your
-   interface.)
-
-   The follow process walks through updating the kernel:
-
-   `Adding kernel arguments to nodes
-   <https://docs.openshift.com/container-platform/4.12/post_installation_configuration/machine-configuration-tasks.html#nodes-nodes-kernel-arguments_post-install-machine-configuration-tasks>`_
-
