@@ -72,7 +72,7 @@ Configure the Image Registry storage claim
            resources:
              requests:
                storage: 200Gi
-          volumeMode: Filesystem
+           volumeMode: Filesystem
 
    #. Create the new pvc:
 
