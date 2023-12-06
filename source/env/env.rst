@@ -8,6 +8,7 @@ Platform/Environment Lab Guides
    rhel-default-install
    kvm
    simple-bind-config
+   nfs
    sushy
    sriov
    create-key-cert-pair
