@@ -225,26 +225,6 @@ require an Identity Provider. These steps will get you started with htpasswd.
 
       oc delete identity <identity_provider>:<username>
 
-#. Go to :menuselection:`Compute --> Nodes`
-
-   - Select/edit new Node
-   - Click YAML tab
-   - Add following annotation
-
-     .. code-block:: yaml
-
-        machine.openshift.io/machine: openshift-machine-api/<new machine name created in step 3>
-
-   - Replace "spec" section with following "spec"
-
-     .. code-block:: yaml
-
-        spec:
-          providerID: >-
-            baremetalhost:///openshift-machine-api/<node_name>/<uid>
-
-   - Click Save
-
 OCP Cert Expiry and Resolution
 ------------------------------
 
