@@ -7,7 +7,7 @@ is "192.168.1.72".
 Server
 ------
 
-#. Instal the nfs utilities.
+#. Install the nfs utilities.
 
    .. code-block:: bash
 
@@ -65,7 +65,7 @@ Server
 Client
 ------
 
-#. Instal the nfs utilities.
+#. Install the nfs utilities.
 
    .. code-block:: bash
 
