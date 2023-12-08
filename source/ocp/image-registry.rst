@@ -2,11 +2,15 @@ Image Registry Operator
 =======================
 
 This operator is installed by default with every OpenShift cluster. For it to
-work you simply need to allocate storage and a PVC. This can be accomplished
+work you simply need to allocate storage (PV) and a PVC. This can be accomplished
 with the local storage operator and or ODF.
 
-Configure the Image Registry storage claim
--------------------------------------------
+.. seealso:: `ODF Operator Quick Start <./odf-quick-start.html>`_
+
+   `Local Storage Operator Quick Start <./lso-quick-start.html>`_
+
+Configure the storage claim
+---------------------------
 
 #. Change project
 
@@ -37,9 +41,9 @@ Configure the Image Registry storage claim
 
       oc get pvc
 
-#. When using the **Local Storage Operator ONLY, NOT ODF**. The following step
-   needs to be taken. The previous steps will automatically create a pvc that
-   needs to be replaced.
+#. When using the **Local Storage Operator NOT ODF**. The following step needs
+   to be taken. The previous steps will automatically create a pvc that needs
+   to be replaced.
 
    .. important:: The pvc needs to match the pv's "storageClassName",
       "accessModes", and "storage".
@@ -87,8 +91,8 @@ Configure the Image Registry storage claim
 
          oc create -f imageregpvc.yaml
 
-Set the Image Registry's default route
---------------------------------------
+Set the default route
+---------------------
 
 #. Set the defaultRoute to true
 
@@ -132,8 +136,8 @@ Set the Image Registry's default route
    .. note:: If an error is returned as well, it's because "oc whoami -t" does
       not have a token. Try logging into the cluster first.
 
-Upload Image to OCP Registry
-----------------------------
+Upload Image
+------------
 
 #. Log in into OpenShift API with user that has appropriate permissions.
 
