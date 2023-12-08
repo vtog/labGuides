@@ -136,9 +136,9 @@ will guide you through configuring the VF's and passing them to KVM.
    Lenovo article https://lenovopress.lenovo.com/lp1467.pdf which goes into a
    pretty deep discussion of how IOMMU works in the Linux kernel, specifically
    there is a good write up on page 11 about pass-through vs translation mode.
-   
+
    .. code-block:: bash
-      
+
       sudo grubby --update-kernel=ALL --args="iommu=pt"
 
    Validate change before and after reboot.

@@ -66,15 +66,15 @@ Client
 ------
 
 #. Instal the nfs utilities.
- 
+
    .. code-block:: bash
- 
+
       sudo dnf insatll nfs-utils -y
 
 #. Create the mount directory.
-    
+
    .. code-block:: bash
-    
+
       sudo mkdir -p /mnt/nfs
 
 #. Mount the remote nfs directory.
