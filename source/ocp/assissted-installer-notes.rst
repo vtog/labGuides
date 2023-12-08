@@ -34,9 +34,9 @@ Method of Procedure
    A. Select "YAML view" and click "Start from scratch".
 
       .. image:: ./images/cluster-network.png
-   
+
    #. For each host add the Network(yaml), MAC address and Interface name.
-      
+
       .. note:: Several examples are included below, "Static Network
          Configurations".
 

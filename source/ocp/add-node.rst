@@ -232,11 +232,11 @@ etcd. Before starting be sure to follow the previous section backing up etcd.
       oc project openshift-etcd
 
 #. List the etcd pods
- 
+
    .. code-block:: bash
- 
+
       oc get pods | grep etcd
- 
+
    .. image:: ./images/getetcdpods.png
 
 #. RSH into any of the etcd-<node> pods
@@ -294,9 +294,9 @@ running and force a redeployment of this etcd member using the etcd operator.
 
 #. Check the etcd operator "AVAILABLE" status is "True". If not you may need to
    wait or troubleshoot the status.
- 
+
    .. code-block:: bash
- 
+
       oc get co
 
 #. Change to the openshift-etcd project

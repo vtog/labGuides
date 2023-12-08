@@ -44,6 +44,13 @@ Configure the Image Registry storage claim
    .. important:: The pvc needs to match the pv's "storageClassName",
       "accessModes", and "storage".
 
+   .. note:: Sometimes when deleting a PVC it can get stuck in the
+      "Terminating" phase. The following command will remove it:
+
+      .. code-block:: bash
+
+         oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
+
    A. First delete the pvc:
 
       .. code-block:: bash
