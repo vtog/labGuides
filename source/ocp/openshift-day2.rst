@@ -129,24 +129,116 @@ If MCP gets stuck try forcing the update to unstuck it.
 
       ssh core@host11.lab.local sudo reboot
 
-Start toolbox (node)
---------------------
+MCP and Performance Profile
+---------------------------
+In a cluster it's typical to see different machine types running. By default
+the cluster has two machine config pools(MCP) , "master" and "worker". When
+applying a performance profile, they are machine specific, and applied to the
+nodes in an MCP. In order to support this a new MCP needs to be created for
+each machine type.
 
-There's a script to start "toolbox" on each node. Toolbox is a container which
-has several network tools to help troubleshoot the cluster/node.
+#. Create new MCP yaml file
 
-#. To start, SSH to node and run the following cmd:
+   .. important:: Be sure to include "worker" in the "matchExpressions" section.
+
+   .. code-block:: yaml
+      :emphasize-lines: 4, 6, 10, 13
+
+      apiVersion: machineconfiguration.openshift.io/v1
+      kind: MachineConfigPool
+      metadata:
+        name: small
+        labels:
+          machineconfiguration.openshift.io/role: small
+      spec:
+        machineConfigSelector:
+          matchExpressions:
+            - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,small]}
+        nodeSelector:
+          matchLabels:
+            node-role.kubernetes.io/small: ""
+        pause: false
+
+#. Create new MCP
 
    .. code-block:: bash
 
-      toolbox
+      oc create -f mcp-small.yaml
 
+#. Verify new MCP
+
+   .. attention:: The new pool will be there with no members (MACHINECOUNT = 0)
+
+   .. code-block:: bash
+
+      oc get mcp
+
+#. Add node to MCP by adding label, in my case "small" as defined in step 1
+
+   .. code-block:: bash
+
+      oc label node host24 node-role.kubernetes.io/small=
+
+#. Verify MCP now includes the node with the proper label
+
+   .. code-block:: bash
+
+      oc get mcp
+
+#. Reference MCP in Performance Profile
+
+   .. code-block:: yaml
+      :emphasize-lines: 10, 12
+
+      apiVersion: performance.openshift.io/v2
+      kind: PerformanceProfile
+      metadata:
+        name: performance-small
+      spec:
+        cpu:
+          isolated: 1-7
+          reserved: 0-0
+        machineConfigPoolSelector:
+          pools.operator.machineconfiguration.openshift.io/small: ""
+        nodeSelector:
+          node-role.kubernetes.io/small: ""
+        numa:
+          topologyPolicy: single-numa-node
+        hugepages:
+          defaultHugepagesSize: "2M"
+          pages:
+            - count: 1024
+              node: 0
+              size: 2M
+        additionalKernelArgs:
+          - "default_hugepagesz=2M"
+          - "hugepagesz=2M"
+          - "hugepages=1024"
+        realTimeKernel:
+          enabled: false
+        workloadHints:
+          highPowerConsumption: true
+          perPodPowerManagement: false
+          realTime: false
+
+Start toolbox (node)
+--------------------
+ 
+There's a script to start "toolbox" on each node. Toolbox is a container which
+has several network tools to help troubleshoot the cluster/node.
+ 
+#. To start, SSH to node and run the following cmd:
+ 
+   .. code-block:: bash
+ 
+      toolbox
+ 
 #. To start an alternative toolbox image, create file "~/.toolboxrc" on the
    target node with the following content. In this example I'm using my local
    registry.
-
+ 
    .. code-block:: bash
-
+ 
       REGISTRY=mirror.lab.local:8443
       IMAGE=rhel9/support-tools
       #IMAGE=centos/tools:latest
