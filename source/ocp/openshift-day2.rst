@@ -221,6 +221,18 @@ each machine type.
           perPodPowerManagement: false
           realTime: false
 
+#. Check allocated huge pages and kernel args
+
+   .. code-block:: bash
+
+      ssh core@host44
+
+      grep -i hugepages /proc/meminfo
+
+      # or
+
+      cat /boot/loader/entries/ostree-1-rhcos.conf
+
 Start toolbox (node)
 --------------------
  
