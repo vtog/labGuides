@@ -225,13 +225,11 @@ each machine type.
 
    .. code-block:: bash
 
-      ssh core@host44
+      ssh core@host44 grep -i hugepages /proc/meminfo
 
-      grep -i hugepages /proc/meminfo
+      # and/or
 
-      # or
-
-      cat /boot/loader/entries/ostree-1-rhcos.conf
+      ssh core@host44 cat /boot/loader/entries/ostree-1-rhcos.conf
 
 Start toolbox (node)
 --------------------
