@@ -198,8 +198,15 @@ Mirror Images to Local Registry
       mirror:
         platform:
           channels:
+            - name: stable-4.12
+              type: ocp
+              minVersion: 4.12.34
             - name: stable-4.13
-              minVersion: 4.12.18
+              type: ocp
+              minVersion: 4.13.14
+            - name: stable-4.14
+              type: ocp
+              minVersion: 4.14.4
               shortestPath: true
           graph: true
         operators:
@@ -211,6 +218,7 @@ Mirror Images to Local Registry
               - name: local-storage-operator
               - name: lvms-operator
               - name: metallb-operator
+              - name: multicluster-engine
               - name: odf-operator
               - name: skupper-operator
               - name: sriov-network-operator
@@ -222,6 +230,19 @@ Mirror Images to Local Registry
               - name: local-storage-operator
               - name: lvms-operator
               - name: metallb-operator
+              - name: multicluster-engine
+              - name: odf-operator
+              - name: skupper-operator
+              - name: sriov-network-operator
+          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.14
+            packages:
+              - name: cincinnati-operator
+              - name: kubernetes-nmstate-operator
+              - name: kubevirt-hyperconverged
+              - name: local-storage-operator
+              - name: lvms-operator
+              - name: metallb-operator
+              - name: multicluster-engine
               - name: odf-operator
               - name: skupper-operator
               - name: sriov-network-operator
@@ -237,6 +258,7 @@ Mirror Images to Local Registry
           - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
           - name: quay.io/openshift/origin-sriov-network-device-plugin:v4.12
           - name: quay.io/openshift/origin-sriov-network-device-plugin:v4.13
+          - name: quay.io/openshift/origin-sriov-network-device-plugin:v4.14
           - name: docker.io/centos/tools:latest
           - name: docker.io/f5devcentral/f5-hello-world:latest
           - name: docker.io/library/httpd:latest
