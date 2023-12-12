@@ -464,6 +464,9 @@ disconnected registry.
    "./oc-mirror-workspace/results-xxxxxxxxxx” and should look like the
    following example:
 
+   .. attention:: Every time the registry is updated, this graph-image sha256
+      hash will change. This object will have to be updated.
+
    .. code-block:: yaml
 
       apiVersion: updateservice.operator.openshift.io/v1
