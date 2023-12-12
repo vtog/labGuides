@@ -1,5 +1,25 @@
-Assissted Install Notes
+Assisted Install Notes
 =======================
+
+Prerequisites
+-------------
+
+Before starting have a naming and IP plan. The following is based on static IP.
+
+- Cluster name; ex. ocp1
+- Base domain; ex. lab.local
+- DNS Records (These records will be a combination of cluster name and base domain.)
+
+  - api.ocp1.lab.local.
+  - api-int.ocp1.lab.local.
+  - \*.apps.ocp1.lab.local.
+
+- Have on hand each Nodes primary interface Name and MAC Address.
+- IP
+
+  - Each node should have a static IP assigned
+  - API VIP (assigned to the DNS Record)
+  - Ingress VIP (assigned to the DNS Record)
 
 Method of Procedure
 -------------------
@@ -37,8 +57,8 @@ Method of Procedure
 
    #. For each host add the Network(yaml), MAC address and Interface name.
 
-      .. note:: Several examples are included below, "Static Network
-         Configurations".
+      .. note:: Several examples are included below, :ref:`Static Network
+         Configurations <netconf>`
 
       .. attention:: Each interface in use should be defined here.
 
@@ -110,6 +130,8 @@ Method of Procedure
    .. important:: Be sure to "Download kubeconfig" and Save "kubeadmin Password"
 
       .. image:: ./images/cluster-access.png
+
+.. _netconf:
 
 Static Network Configurations
 -----------------------------
