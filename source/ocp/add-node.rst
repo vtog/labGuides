@@ -370,7 +370,7 @@ resolves any console errors.
 
    A. Click :menuselection:`Add Host --> New from Dialog`
    #. Add Name (ex. worker3)
-   #. Add Boot MAC Address (saved earlier when creating node step 1)
+   #. Add Boot MAC Address (saved earlier when creating node step 2)
    #. Disable "Enable power management"
    #. Click Create
 
@@ -405,8 +405,8 @@ resolves any console errors.
    #. Edit new BMH object
    #. Click YAML tab
    #. Replace "spec" section with older BMH "spec" previously copied.
-   #. Be sure to use the new "Node bootMACAddress" saved in step 1 and
-      "consumerRef/name" saved in step 3.
+   #. Be sure to use the new nodes "bootMACAddress:" saved in step 2 and
+      "consumerRef/name:" saved in step 4.
    #. Click Save
    #. Before exiting copy the "uid" to notepad.
 
@@ -418,7 +418,7 @@ resolves any console errors.
 
       .. code-block:: yaml
 
-         machine.openshift.io/machine: openshift-machine-api/<new machine name created in step 3>
+         machine.openshift.io/machine: openshift-machine-api/<new machine name created in step 4>
 
    #. Replace "spec" section with following "spec"
 
@@ -426,7 +426,7 @@ resolves any console errors.
 
          spec:
            providerID: >-
-             baremetalhost:///openshift-machine-api/<node_name>/<uid>
+             baremetalhost:///openshift-machine-api/<NODE_NAME>/<UID>
 
    #. Click Save
 
