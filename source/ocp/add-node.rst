@@ -422,6 +422,10 @@ resolves any console errors.
 
    #. Replace "spec" section with following "spec"
 
+      .. danger:: Making a mistake here can be catastrophic. You can't update
+         or change this "spec" once saved. Only option is to remove node and
+         rebuild it.
+
       .. code-block:: yaml
 
          spec:
