@@ -8,18 +8,20 @@ Before starting have a naming and IP plan. The following is based on static IP.
 
 - Cluster name; ex. ocp1
 - Base domain; ex. lab.local
-- DNS Records (These records will be a combination of cluster name and base domain.)
+- Have each Nodes primary interface Name and MAC Address.
+- Static IP
+   
+  - Each node an assigned IP
+  - API VIP (assigned to the DNS Record) 
+  - Ingress VIP (assigned to the DNS Record)
+
+- DNS Records
 
   - api.ocp1.lab.local.
   - api-int.ocp1.lab.local.
   - \*.apps.ocp1.lab.local.
-
-- Have on hand each Nodes primary interface Name and MAC Address.
-- IP
-
-  - Each node should have a static IP assigned
-  - API VIP (assigned to the DNS Record)
-  - Ingress VIP (assigned to the DNS Record)
+  - "A" records for each host/node
+  - "PTR" records for each host/node
 
 Method of Procedure
 -------------------
