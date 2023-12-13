@@ -187,7 +187,7 @@ Mirror Images to Local Registry
       and 4.13.x images and operators.
 
    .. code-block:: yaml
-      :emphasize-lines: 5,10-13,15,26
+      :emphasize-lines: 5,10,13,16,19,20,22,34,46,58
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
