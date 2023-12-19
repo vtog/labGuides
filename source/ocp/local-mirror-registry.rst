@@ -253,9 +253,12 @@ Mirror Images to Local Registry
           - name: registry.redhat.io/ubi9/nginx-122:latest
           - name: registry.redhat.io/rhel8/support-tools:latest
           - name: registry.redhat.io/rhel9/support-tools:latest
+          - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
           - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.12
           - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.13
-          - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
+          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.12
+          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.13
+          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.14
           - name: quay.io/openshift/origin-sriov-network-device-plugin:v4.12
           - name: quay.io/openshift/origin-sriov-network-device-plugin:v4.13
           - name: quay.io/openshift/origin-sriov-network-device-plugin:v4.14
