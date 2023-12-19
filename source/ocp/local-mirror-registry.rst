@@ -183,8 +183,8 @@ Mirror Images to Local Registry
    .. note:: "shortestPath: true" instructs the mirror to only pull the
       required version to upgrade from one version to the next.
 
-   .. attention:: The example here shows an ImageSet that includes both 4.12.x
-      and 4.13.x images and operators.
+   .. attention:: The example here shows an ImageSet that includes 4.12.x,
+      4.13.x and 4.14.x images and operators.
 
    .. code-block:: yaml
       :emphasize-lines: 5,10,13,16,19,20,22,34,46,58
