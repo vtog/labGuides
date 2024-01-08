@@ -112,7 +112,8 @@ Set the default route
 
    .. code-block:: bash
 
-      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${REGROUTE}.crt  > /dev/null
+      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' \
+      | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${REGROUTE}.crt  > /dev/null
 
 #. Update the clients local ca-trust
 
@@ -161,23 +162,52 @@ Upload Image
 
       podman pull mirror.lab.local:8443/f5devcentral/f5-hello-world
 
+   .. tip:: To import a tarball
+
+      .. code-block:: bash
+
+         podman image load -i <tarball>
+
 #. Tag local image for OCP registry
 
-   .. important:: The path must start with the project name. In this example
+   .. attention:: The path must start with the project name. In this example
       I'm using project "default".
 
    .. code-block:: bash
 
       podman tag mirror.lab.local:8443/f5devcentral/f5-hello-world:latest $REGROUTE/default/f5-hello-world:latest
 
+   .. tip::
+
+      Tag multiple images
+
+      .. code-block:: bash
+
+         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep localhost | sed 's/^localhost\///'); \
+         do; podman tag $image $REGROUTE/default/$image; done
+
+      Remove new tags
+
+      .. code-block:: bash
+
+         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v localhost); \
+         do; podman rmi $image; done
+
 #. Push local image to OCP registry
 
-   .. important:: The project must exist in order to upload the image. In this
+   .. attention:: The project must exist in order to upload the image. In this
       example I'm using project "default".
 
    .. code-block:: bash
 
       podman push $REGROUTE/default/f5-hello-world:latest
+
+   .. tip:: Push multiple images
+
+      .. code-block:: bash
+
+         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v localhost); \
+         do; podman push $image; done
 
 #. View image on OCP registry
 
