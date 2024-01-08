@@ -85,6 +85,7 @@ Create Local Host Mirror Registry
       sudo cp $quayRoot/quay-rootCA/rootCA.pem /etc/pki/ca-trust/source/anchors/quayCA.pem
       sudo update-ca-trust extract
       sudo firewall-cmd --add-port=8443/tcp --permanent
+      sudo firewall-cmd --reload
 
 #. Test mirror availability via cli. The following command should return
    "Login Succeeded!" if everything is working.

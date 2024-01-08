@@ -59,7 +59,7 @@ Server
 
    .. code-block:: bash
 
-      sudo firewall-cmd --permanent --add-service=nfs
+      sudo firewall-cmd --add-service=nfs --permanent
       sudo firewall-cmd reload
 
 Client

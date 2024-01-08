@@ -34,10 +34,11 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       sudo dnf install zsh neovim neofetch terminator ksnip slack firewall-config zoom cockpit cockpit-machines cockpit-composer
 
       sudo systemctl enable --now cockpit.socket
-      sudo firewall-cmd --add-service=cockpit
       sudo firewall-cmd --add-service=cockpit --permanent
+      sudo firewall-cmd --reload
+
       firewall-cmd --get-default-zone
-      firewall-cmd --zone=<zone-name> --list-all
+      firewall-cmd --list-all
 
 #. Install dev packages
 
@@ -62,6 +63,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
          sudo firewall-cmd --add-source=192.168.122.0/24 --zone=home --permanent
          sudo firewall-cmd --add-service=dns --zone=home --permanent
+         sudo firewall-cmd --reload
 
 #. Insall packages via Sofware store.
 
@@ -116,8 +118,8 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       systemctl restart sshd
 
       # Allow port 22
-      sudo firewall-cmd --add-service=ssh
       sudo firewall-cmd --add-service=ssh --permanent
+      sudo firewall-cmd --reload
 
 #. Add user to wheel group **(If Needed)**
 
