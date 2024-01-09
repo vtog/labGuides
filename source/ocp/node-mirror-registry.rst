@@ -149,6 +149,14 @@ Create Local Host Mirror Registry
       pgStorage="/home/core/mirror/ocp4"
       initPassword="password"
 
+#. Update /etc/hosts
+
+   .. code-block:: bash
+
+      echo "192.168.122.31 host31.ocp2.lab.local" | sudo tee -a /etc/hosts  > /dev/null
+
+   .. note:: If adding redundant registries add all the hosts entries here.
+
 #. Run the following command to install the registry.
 
    .. code-block:: bash
