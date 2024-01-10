@@ -60,7 +60,7 @@ Method of Procedure
    #. For each host add the Network(yaml), MAC address and Interface name.
 
       .. note:: Several examples are included below, :ref:`Static Network
-         Configurations <netconf>`
+         Examples <netconf>`
 
       .. attention:: Each interface in use should be defined here.
 
@@ -135,8 +135,8 @@ Method of Procedure
 
 .. _netconf:
 
-Static Network Configurations
------------------------------
+Static Network Examples
+-----------------------
 
 The following are static network configurations when manually configuring
 "Static IP, bridges, and bonds".
