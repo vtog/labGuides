@@ -184,14 +184,14 @@ Upload Image
       .. code-block:: bash
 
          for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep localhost | sed 's/^localhost\///'); \
-         do; podman tag $image $REGROUTE/default/$image; done
+         do podman tag $image $REGROUTE/default/$image; done
 
       Remove new tags
 
       .. code-block:: bash
 
          for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v localhost); \
-         do; podman rmi $image; done
+         do podman rmi $image; done
 
 #. Push local image to OCP registry
 
@@ -207,7 +207,7 @@ Upload Image
       .. code-block:: bash
 
          for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v localhost); \
-         do; podman push $image; done
+         do podman push $image; done
 
 #. View image on OCP registry
 
