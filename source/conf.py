@@ -10,6 +10,7 @@ project = "My Unofficial Lab Guides"
 copyright = "2023, Vince Tognaci"
 author = "Vince Tognaci"
 release = "main"
+today_fmt = "%b %d, %Y @ %H:%M"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
