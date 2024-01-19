@@ -12,7 +12,7 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/python/black
-    rev: 21.5b1
+    rev: 23.12.1
     hooks:
       - id: black
         description: python code formatter
@@ -27,5 +27,5 @@ repos:
     hooks:
       - id: doc8
         description: linting for rst files
-        entry: doc8 --ignore-path docs/_build/ -e rst docs/
+        entry: doc8 --max-line-length 79 --ignore-path build/ -e rst source/
         require_serial: true

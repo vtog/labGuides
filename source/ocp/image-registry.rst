@@ -2,8 +2,9 @@ Image Registry Operator
 =======================
 
 This operator is installed by default with every OpenShift cluster. For it to
-work you simply need to allocate storage (PV) and a PVC. This can be accomplished
-with the local storage operator and or ODF or External Storage (NFS).
+work you simply need to allocate storage (PV) and a PVC. This can be
+accomplished with the local storage operator and or ODF or External Storage
+(NFS).
 
 .. seealso:: `ODF Operator Quick Start <./odf-quick-start.html>`_
 

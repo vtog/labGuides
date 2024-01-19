@@ -48,11 +48,14 @@ Install and Configure the Local Storage Operator
       if for some reason the order of the drives change.
 
 #. Repeat step 14 for each discovered instance
-#. Go to :menuselection:`Operators --> Installed Operators` and select "Local Storage" operator
+#. Go to :menuselection:`Operators --> Installed Operators` and select "Local
+   Storage" operator
 #. Select the "Local Volume" tab and click "Create Local Volume"
 #. Name the new volume, example "odf-block"
-#. Expand "StorageClassDevice" by clicking the carrot to the right of the section
-#. Expand "Device Paths" again by clicking the carrot to the right of the section
+#. Expand "StorageClassDevice" by clicking the carrot to the right of the
+   section
+#. Expand "Device Paths" again by clicking the carrot to the right of the
+   section
 #. Add all the deviceID's recording in step 14
 #. Name the Storage Class Name, example "odf-block"
 #. Set "Fs Type" = \<blank\>
@@ -71,7 +74,8 @@ Install and Configure OpenShift Data Foundation (ODF)
 #. Select "OpenShift Data Foundation" operator
 #. Click "Install"
 #. Accept the defaults and click "Install"
-#. After install completes go to :menuselection:`Operators --> Installed Operators`
+#. After install completes go to :menuselection:`Operators --> Installed
+   Operators`
 #. Select "OpenShift Data Foundation"
 #. Click "Create StorageSystem"
 #. Select "Use an existing StorageClass"

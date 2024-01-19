@@ -38,7 +38,8 @@ Install and Configure the Local Storage Operator
       if for some reason the order of the drives change.
 
 #. Repeat step 14 for each discovered instance
-#. Go to :menuselection:`Operators --> Installed Operators` and select "Local Storage" operator
+#. Go to :menuselection:`Operators --> Installed Operators` and select "Local
+   Storage" operator
 #. Select the "Local Volume" tab and click "Create Local Volume"
 
    .. important:: This will automatically create pv's that consume the entire
@@ -46,8 +47,10 @@ Install and Configure the Local Storage Operator
       creating the Local Volumes.
 
 #. Name the new volume, example "lso-fs"
-#. Expand "StorageClassDevice" by clicking the carrot to the right of the section
-#. Expand "Device Paths" again by clicking the carrot to the right of the section
+#. Expand "StorageClassDevice" by clicking the carrot to the right of the
+   section
+#. Expand "Device Paths" again by clicking the carrot to the right of the
+   section
 #. Add all the deviceID's recording in step 14
 #. Name the Storage Class Name, example "lso-fs"
 #. Set "Fs Type" = ext4

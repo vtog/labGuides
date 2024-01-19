@@ -13,8 +13,9 @@ Stop updating build
 
       ansible-builder create
 
-#. Modify the Containerfile file by adding ``RUN sed -i /$PKGMGR update -y $PKGMGR_OPTS/d' /output/install-from-bindep``
-   right before ``RUN /output/install-from-bindep && rm -rf /output/wheels``
+#. Modify the Containerfile file by adding ``RUN sed -i /$PKGMGR update -y
+   $PKGMGR_OPTS/d' /output/install-from-bindep`` right before ``RUN /output/
+   install-from-bindep && rm -rf /output/wheels``
 
    .. code-block:: console
       :emphasize-lines: 30

@@ -6,35 +6,31 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'My Unofficial Lab Guides'
-copyright = '2023, Vince Tognaci'
-author = 'Vince Tognaci'
-release = 'main'
+project = "My Unofficial Lab Guides"
+copyright = "2023, Vince Tognaci"
+author = "Vince Tognaci"
+release = "main"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-import sphinx_rtd_theme
+# import sphinx_rtd_theme
 
-extensions = [
-    'sphinx_rtd_theme',
-    'sphinx_copybutton'
-]
+extensions = ["sphinx_rtd_theme", "sphinx_copybutton"]
 
-templates_path = ['_templates']
+templates_path = ["_templates"]
 exclude_patterns = []
 
-source_suffix = {
-    '.rst': 'restructuredtext',
-    '.md': 'markdown'
-}
+source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sphinx_rtd_theme'
-html_theme_path = ["_themes", ]
-html_logo = '_static/redhat.png'
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [
+    "_themes",
+]
+html_logo = "_static/redhat.png"
 
-html_static_path = ['_static']
-html_css_files = ['css/custom.css']
+html_static_path = ["_static"]
+html_css_files = ["css/custom.css"]

@@ -320,7 +320,8 @@ require an Identity Provider. These steps will get you started with htpasswd.
 
          oc create secret generic htpass-secret --from-file=htpasswd=users.htpasswd --dry-run=client -o yaml -n openshift-confi
 
-#. If you remove a user from htpasswd you must manually remove the user resources from OCP
+#. If you remove a user from htpasswd you must manually remove the user
+   resources from OCP
 
    .. code-block:: bash
 

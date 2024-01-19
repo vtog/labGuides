@@ -333,9 +333,9 @@ For redundancy it's possible to run through these steps for each node in the
 cluster. The "trick" is to not over write the previous "mirror" config but
 append to them.
 
-#. Append updates to ``./oc-mirror-workspace/results-xxxxxxxxxx/imageContentSourcePolicy.yaml``
-   before applying them. In the example below I added both mirrors before
-   re-applying the policy.
+#. Append updates to ``./oc-mirror-workspace/results-xxxxxxxxxx/
+   imageContentSourcePolicy.yaml`` before applying them. In the example below
+   I added both mirrors before re-applying the policy.
 
    .. code-block:: yaml
 
@@ -387,10 +387,10 @@ append to them.
           - host32.ocp2.lab.local:8443/openshift/release-images
           source: quay.io/openshift-release-dev/ocp-release
 
-#. With ``./oc-mirror-workspace/results-xxxxxxxxxx/catalogSource-redhat-operator-index.yaml``
-   a new object for each mirror will need to be created. Update the "name" by
-   appending the node-name to the end of the string for each mirror before
-   creating the object.
+#. With ``./oc-mirror-workspace/results-xxxxxxxxxx/catalogSource-redhat-
+   operator-index.yaml`` a new object for each mirror will need to be created.
+   Update the "name" by appending the node-name to the end of the string for
+   each mirror before creating the object.
 
    .. code-block:: yaml
       :emphasize-lines: 4

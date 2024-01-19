@@ -65,7 +65,11 @@ Prepare Hosts
         kernelArguments:
           - modprobe.blacklist=igbvf
 
-#. Apply "100-worker-sriov-blacklist.yaml" ``oc create -f 100-worker-sriov-blacklist.yaml``
+#. Create "100-worker-sriov-blacklist.yaml"
+
+   .. code-block:: bash
+
+      oc create -f 100-worker-sriov-blacklist.yaml
 
    .. caution:: Wait for "worker" nodes to apply and reboot before next step.
       Verify with ``oc get nodes`` and ``oc get mcp``
@@ -195,7 +199,8 @@ Install SRIOV Network Device Plugin
               ]
           }
 
-#. Create ``sriov-daemonset.yaml`` and deploy ``oc create -f sriov-daemonset.yaml``
+#. Create ``sriov-daemonset.yaml`` and deploy
+   ``oc create -f sriov-daemonset.yaml``
 
    .. code-block:: bash
       :emphasize-lines: 23,26

@@ -1,8 +1,8 @@
 Enable SR-IOV on Intel I350
 ===========================
 
-I bought this card on eBay and it turns out different manufacturer's disable the
-SR-IOV feature. The following procedure will enabled it.
+I bought this card on eBay and it turns out different manufacturer's disable
+the SR-IOV feature. The following procedure will enabled it.
 
 .. warning:: Do this at your own risk! No guarantee it wont brick your NIC.
 

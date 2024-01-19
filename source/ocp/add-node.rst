@@ -35,8 +35,8 @@ for the addition of a new master or worker node, depending on how you set the
 
    .. important:: Place this file on a web server reachable from the control-plane network.
 
-#. Create a new igniton file "new-$NODE_TYPE.ign" that includes a reference to the
-   original "$NODE_TYPE.ign" and an additional instruction that the
+#. Create a new igniton file "new-$NODE_TYPE.ign" that includes a reference to
+   the original "$NODE_TYPE.ign" and an additional instruction that the
    coreos-installer program uses to populate the /etc/hostname file on the new
    master host.
 
@@ -202,8 +202,9 @@ practice to backup etcd before removing and replacing a control node.
 
       sudo /usr/local/bin/cluster-backup.sh /home/core/etcd-backup
 
-#. Verify both snapshot_<TIME_STAMP>.db and static_kuberesources_<TIME_STAMP>.tar.gz
-   exist. Move files to a safe location in the event of failure.
+#. Verify both snapshot_<TIME_STAMP>.db and
+   static_kuberesources_<TIME_STAMP>.tar.gz exist. Move files to a safe
+   location in the event of failure.
 
    .. image:: ./images/backupetcd.png
 
@@ -282,9 +283,8 @@ etcd. Before starting be sure to follow the previous section backing up etcd.
       oc delete secret etcd-serving-<NODE>
       oc delete secret etcd-serving-metrics-<NODE>
 
-#. Add the replacement Node to the cluster using
-   "`Adding a New Node to the Cluster <./add-node.html#control-or-worker-node>`_"
-   above.
+#. Add the replacement Node to the cluster using "`Adding a New Node to the
+   Cluster <./add-node.html#control-or-worker-node>`_" above.
 
 Verify ETCD
 -----------
