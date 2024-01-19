@@ -63,4 +63,3 @@ Containerize Sushy-Tools
    .. code-block:: bash
 
       curl http://192.168.1.72:8000/redfish/v1/Managers
-

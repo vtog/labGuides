@@ -264,4 +264,3 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       # Create Zsh Shell Completion
       sudo cp extra/completions/_alacritty /usr/share/zsh/site-functions
-

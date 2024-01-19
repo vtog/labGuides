@@ -57,4 +57,3 @@ Install and Configure the Local Storage Operator
 #. Click Create
 
    .. image:: images/createlocalvolumeFS.png
-

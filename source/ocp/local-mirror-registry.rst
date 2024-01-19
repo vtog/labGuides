@@ -497,4 +497,3 @@ disconnected registry.
    display Current version and Update status
 
    .. image:: images/updatesvcclustersettings.png
-

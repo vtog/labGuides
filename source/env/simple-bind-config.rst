@@ -276,4 +276,3 @@ Simple BIND Config
    .. code-block:: bash
 
       sudo systemctl enable --now named
-

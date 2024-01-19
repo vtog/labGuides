@@ -127,4 +127,3 @@ install-config.yaml I used with KVM.
    .. code-block:: bash
 
       openshift-install create cluster --dir workdir --log-level debug
-

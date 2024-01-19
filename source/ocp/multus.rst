@@ -209,4 +209,3 @@ Statically allocate an IP for the container.
           metadata:
             annotations:
               k8s.v1.cni.cncf.io/networks: macvlan-static
-

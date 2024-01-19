@@ -10,9 +10,9 @@ Before starting have a naming and IP plan. The following is based on static IP.
 - Base domain; ex. lab.local
 - Have each Nodes primary interface Name and MAC Address.
 - Static IP
-   
+
   - Each node an assigned IP
-  - API VIP (assigned to the DNS Record) 
+  - API VIP (assigned to the DNS Record)
   - Ingress VIP (assigned to the DNS Record)
 
 - DNS Records

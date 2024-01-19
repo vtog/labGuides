@@ -78,4 +78,3 @@ installing on workstation in disconnected environment.
    .. code-block:: bash
 
       docker run hello-world
-

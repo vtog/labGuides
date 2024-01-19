@@ -433,4 +433,3 @@ resolves any console errors.
              baremetalhost:///openshift-machine-api/<NODE_NAME>/<UID>
 
    #. Click Save
-

@@ -29,7 +29,7 @@ ul li p:last-child {
   list-style: upper-alpha !important;
 }
 
-.section ol.loweralpha > li { 
+.section ol.loweralpha > li {
   list-style: lower-alpha !important;
 }
 
@@ -47,4 +47,3 @@ ul li p:last-child {
   padding: 0px 0px !important;
   display: inline !important;
 }
-

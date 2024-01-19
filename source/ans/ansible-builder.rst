@@ -65,4 +65,3 @@ Stop updating build
       podman container run -it localhost/<name_of_image>:latest /bin/bash
 
    .. image:: ./images/ansibleversion.png
-

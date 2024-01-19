@@ -48,4 +48,3 @@ SR-IOV feature. The following procedure will enabled it.
 
       cat /sys/class/net/enp3s0f0/device/sriov_totalvfs
       cat /sys/class/net/enp3s0f1/device/sriov_totalvfs
-

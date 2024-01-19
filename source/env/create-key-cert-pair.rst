@@ -23,4 +23,3 @@ Create key/cert pair with OpenSSL
       -passin file:passphrase.txt \
       -CA training-CA.pem -CAkey training-CA.key -CAcreateserial \
       -out training.crt -days 1825 -sha256 -extfile training.ext
-

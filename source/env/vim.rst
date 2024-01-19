@@ -12,4 +12,3 @@ Remove trailing white space from cli
 .. code-block:: bash
 
    sed -i 's/\s\+$//' <file_name>
-

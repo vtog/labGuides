@@ -236,9 +236,9 @@ Stuck Terminating
 
 Sometimes when deleting a PVC it can get stuck in the "Terminating" phase. The
 following command will remove it:
-                                    
-.. code-block:: bash          
-                                    
+
+.. code-block:: bash
+
    oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
 
 .. note:: This could be true of any object, so check the metadata for
@@ -246,22 +246,22 @@ following command will remove it:
 
 Start toolbox (node)
 --------------------
- 
+
 There's a script to start "toolbox" on each node. Toolbox is a container which
 has several network tools to help troubleshoot the cluster/node.
- 
+
 #. To start, SSH to node and run the following cmd:
- 
+
    .. code-block:: bash
- 
+
       toolbox
- 
+
 #. To start an alternative toolbox image, create file "~/.toolboxrc" on the
    target node with the following content. In this example I'm using my local
    registry.
- 
+
    .. code-block:: bash
- 
+
       REGISTRY=mirror.lab.local:8443
       IMAGE=rhel9/support-tools
       #IMAGE=centos/tools:latest
@@ -417,4 +417,3 @@ You just have to start nodes in the right order for the best results.
    Finally, check that your application pods have started correctly
    :code:`oc get pods --all-namespaces` and perform any checks that may be
    necessary on your application to prove that it is available and healthy.
-

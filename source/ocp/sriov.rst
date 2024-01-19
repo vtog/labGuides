@@ -362,4 +362,3 @@ Test SRIOV Device Plugin
       .. code-block:: bash
 
          oc exec -it pod/testpod2 -- bash
-

@@ -255,7 +255,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    primary interface using the following patterns.
 
    .. code-block:: yaml
-    
+
       <host mac='52:54:00:f4:16:10' ip='192.168.122.10'/>
       <host mac='52:54:00:f4:16:11' ip='192.168.122.11'/>
       <host mac='52:54:00:f4:16:12' ip='192.168.122.12'/>
@@ -363,4 +363,3 @@ Example of IPv6 only
              - destination: '::/0'
                next-hop-address: '2600:1702:4c73:f111::1'
                next-hop-interface: enp1s0.122
-

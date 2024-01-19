@@ -3,7 +3,7 @@ External Storage (NFS)
 
 The following example shows how to apply external storage for the Image
 Registry Operator.
- 
+
 .. seealso:: `Image Registry Operator <./image-registry.html>`_
 
 .. attention:: The following assumes an NFS share is already created on the
@@ -98,4 +98,3 @@ Create the PVC
 
       NAME       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM
       bfg-nfs1   200Gi      RWO            Retain           Bound       openshift-image-registry/image-registry-storage
-
