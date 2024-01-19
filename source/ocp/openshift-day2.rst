@@ -231,6 +231,19 @@ each machine type.
 
       ssh core@host44 cat /boot/loader/entries/ostree-1-rhcos.conf
 
+Stuck Terminating
+-----------------
+
+Sometimes when deleting a PVC it can get stuck in the "Terminating" phase. The
+following command will remove it:
+                                    
+.. code-block:: bash          
+                                    
+   oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
+
+.. note:: This could be true of any object, so check the metadata for
+   finalizers.
+
 Start toolbox (node)
 --------------------
  
