@@ -71,6 +71,90 @@ deployment basis.
               - containerPort: 8080
                 protocol: TCP
 
+Managing CLI Profiles
+---------------------
+
+The ability to manage multiple clusters via the CLI is possible with "oc
+config". Here's an example of my "~/.kube/config" file.
+
+.. note:: All the required certs will be found in the kubeconfig file for each
+   cluster.
+
+#. Use the following template. Copy to "~/.kube/config" on your client.
+
+   .. code-block:: yaml
+      :emphasize-lines: 11-14, 28-31, 36, 48-51
+
+      apiVersion: v1
+      clusters:
+      - cluster:
+          certificate-authority-data: <add_clusterCert>
+          server: https://api.ocp1.lab.local:6443
+        name: ocp1
+      - cluster:
+          certificate-authority-data: <add_clusterCert>
+          server: https://api.ocp2.lab.local:6443
+        name: ocp2
+      - cluster:
+          certificate-authority-data: <add_clusterCert>
+          server: https://api.ocp3.lab.local:6443
+        name: ocp3
+      - cluster:
+          certificate-authority-data: <add_clusterCert>
+          server: https://api.ocp4.lab.local:6443
+        name: ocp4
+      contexts:
+      - context:
+          cluster: ocp1
+          user: admin/ocp1
+        name: ocp1
+      - context:
+          cluster: ocp2
+          user: admin/ocp2
+        name: ocp2
+      - context:
+          cluster: ocp3
+          user: admin/ocp3
+        name: ocp3
+      - context:
+          cluster: ocp4
+          user: admin/ocp4
+        name: ocp4
+      current-context: ocp3
+      kind: Config
+      preferences: {}
+      users:
+      - name: admin/ocp1
+        user:
+          client-certificate-data: <add_clientCert>
+          client-key-data: <add_clientKey>
+      - name: admin/ocp2
+        user:
+          client-certificate-data: <add_clientCert>
+          client-key-data: <add_clientKey>
+      - name: admin/ocp3
+        user:
+          client-certificate-data: <add_clientCert>
+          client-key-data: <add_clientKey>
+      - name: admin/ocp4
+        user:
+          client-certificate-data: <add_clientCert>
+          client-key-data: <add_clientKey>
+
+#. Now we can view the available clusters.
+
+   .. code-block:: bash
+
+      oc config get-contexts
+
+   .. image:: ./images/config-get-context.png
+
+#. Set the cluster context to the cluster you want to manage.
+
+   .. code-block:: bash
+
+      oc config use-context ocp4
+
 Schedule Control Nodes
 ----------------------
 
