@@ -269,8 +269,131 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       <host mac='52:54:00:f4:16:41' ip='192.168.122.41'/>
       <host mac='52:54:00:f4:16:42' ip='192.168.122.42'/>
 
-Example of IPv6 only
---------------------
+Calico Example
+--------------
+This is a continuation of the previous section.  Basically adding a subdir to
+the working directory and copying the Calico CNI yaml files there, the
+installer will consume the new informantion.
+
+.. attention:: In this example I'm not disconnected / using my internal mirror.
+
+#. Create the <assets_directory> and "openshift" subdir.
+
+   .. code-block:: bash
+
+      mkdir -p ./workdir/openshift
+
+#. Create "install-config.yaml" and "agent-config.yaml" files in the
+   <assets_directory>.
+
+   .. code-block:: yaml
+      :caption: install-config.yaml
+      :emphasize-lines: 21
+
+      apiVersion: v1
+      baseDomain: lab.local
+      compute:
+      - architecture: amd64
+        hyperthreading: Enabled
+        name: worker
+        replicas: 2
+      controlPlane:
+        architecture: amd64
+        hyperthreading: Enabled
+        name: master
+        replicas: 3
+      metadata:
+        name: ocp5
+      networking:
+        clusterNetwork:
+        - cidr: 10.128.0.0/14
+          hostPrefix: 23
+        machineNetwork:
+        - cidr: 192.168.122.0/24
+        networkType: Calico
+        serviceNetwork:
+        - 172.30.0.0/16
+      platform:
+        baremetal:
+          apiVIP: "192.168.122.150"
+          ingressVIP: "192.168.122.151"
+      pullSecret: 'ADD_YOUR_PULL_SECRET_HERE'
+      sshKey: |
+        ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
+
+   .. code-block:: yaml
+      :caption: agent-config.yaml
+
+      apiVersion: v1alpha1
+      metadata:
+        name: ocp5
+      rendezvousIP: 192.168.122.51
+      additionalNTPSources:
+      - 192.168.1.72
+      hosts:
+        - hostname: host51
+          role: master
+          interfaces:
+            - name: enp1s0
+              macAddress: 52:54:00:f4:16:51
+          networkConfig:
+            interfaces:
+              - name: enp1s0
+                type: ethernet
+                state: up
+                mtu: 9000
+              - name: enp1s0.122
+                type: vlan
+                state: up
+                vlan:
+                  base-iface: enp1s0
+                  id: 122
+                ipv4:
+                  enabled: true
+                  dhcp: false
+                  address:
+                    - ip: 192.168.122.51
+                      prefix-length: 24
+                ipv6:
+                  enabled: false
+            dns-resolver:
+              config:
+                search:
+                  - lab.local
+                server:
+                  - 192.168.1.72
+            routes:
+              config:
+                - destination: 0.0.0.0/0
+                  next-hop-address: 192.168.122.1
+                  next-hop-interface: enp1s0.122
+                  table-id: 254
+
+   .. important:: Repeat "-hostname" block for each host in your config.
+
+#. Download and extract the Calico yaml to workdir/openshift.
+
+   .. note:: As of this writing v3.27.0 is the latest.
+
+   .. code-block:: bash
+
+      wget -qO- https://github.com/projectcalico/calico/releases/download/v3.27.0/ocp.tgz | \
+      tar xvz --strip-components=1 -C ./workdir/openshift
+
+#. Create the ISO
+
+   .. code-block:: bash
+
+      openshift-install agent create image --dir workdir
+
+#. Monitor the install
+
+   .. code-block:: bash
+
+      openshift-install agent wait-for install-complete --dir workdir
+
+IPv6 Only Example
+-----------------
 
 .. code-block:: yaml
    :caption: install-config.yaml
