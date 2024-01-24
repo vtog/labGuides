@@ -213,6 +213,7 @@ Mirror Images to Local Registry
         operators:
           - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
             packages:
+              - name: advanced-cluster-management
               - name: cincinnati-operator
               - name: kubernetes-nmstate-operator
               - name: kubevirt-hyperconverged
@@ -225,6 +226,7 @@ Mirror Images to Local Registry
               - name: sriov-network-operator
           - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.13
             packages:
+              - name: advanced-cluster-management
               - name: cincinnati-operator
               - name: kubernetes-nmstate-operator
               - name: kubevirt-hyperconverged
@@ -237,6 +239,7 @@ Mirror Images to Local Registry
               - name: sriov-network-operator
           - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.14
             packages:
+              - name: advanced-cluster-management
               - name: cincinnati-operator
               - name: kubernetes-nmstate-operator
               - name: kubevirt-hyperconverged
