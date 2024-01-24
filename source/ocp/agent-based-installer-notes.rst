@@ -392,6 +392,12 @@ installer will consume the new informantion.
 
       openshift-install agent wait-for install-complete --dir workdir
 
+#. Once the cluster is up and running, check the Calico operator status.
+
+   .. code-block:: bash
+
+      oc get tigerastatus
+
 IPv6 Only Example
 -----------------
 
