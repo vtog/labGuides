@@ -11,7 +11,7 @@ Server
 
    .. code-block:: bash
 
-      sudo dnf insatll nfs-utils -y
+      sudo dnf install nfs-utils -y
 
 #. Start the nfs-server daemon.
 
@@ -60,7 +60,16 @@ Server
    .. code-block:: bash
 
       sudo firewall-cmd --add-service=nfs --permanent
-      sudo firewall-cmd reload
+      sudo firewall-cmd --reload
+
+      sudo firewall-cmd --list-all
+
+   .. note:: For older nfs clients you may need to open the following ports
+
+      .. code-block:: bash
+
+         sudo firewall-cmd --add-service={nfs3,mountd,rpc-bind} --permanent
+         sudo firewall-cmd --reload
 
 Client
 ------

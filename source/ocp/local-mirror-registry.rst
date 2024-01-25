@@ -139,6 +139,9 @@ Mirror Images to Local Registry
 #. Modify ~/.docker/config.json by adding local mirror information. Use the
    previous steps encoded output for "auth".
 
+   .. attention:: Be sure to replace "$quayHostname:8443" environment variable
+      with the real name. For example "mirror.lab.local:8443".
+
    .. code-block:: json
       :emphasize-lines: 3-5
 
@@ -170,9 +173,9 @@ Mirror Images to Local Registry
         }
       }
 
-#. Create the following "imageset-config.yaml" file. In the file below I'm
-   mirroring OCP v4.12, more specifically only v4.12.2. I've also added some
-   additional operators and images.
+#. Create the following "imageset-config.yaml" file. In the example ImageSet
+   file below I'm mirroring 4.12.x, 4.13.x and 4.14.x images and operators.
+   Plus some additional images I find useful.
 
    .. important:: Be sure path in imageURL (line 5) matches the path assigned
       earlier for "quayRoot".
@@ -184,11 +187,12 @@ Mirror Images to Local Registry
    .. note:: "shortestPath: true" instructs the mirror to only pull the
       required version to upgrade from one version to the next.
 
-   .. attention:: The example here shows an ImageSet that includes 4.12.x,
-      4.13.x and 4.14.x images and operators.
+   .. attention:: Be sure to replace "$quayHostname:8443$quayRoot" environment
+      variables with the real names. For example imageURL: would be set to
+      "mirror.lab.local:8443/mirror/ocp4".
 
    .. code-block:: yaml
-      :emphasize-lines: 5,10,13,16,19,20,22,34,46,58
+      :emphasize-lines: 5,10,13,16,19,20,22,35,48
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
