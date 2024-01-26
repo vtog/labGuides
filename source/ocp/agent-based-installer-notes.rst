@@ -32,6 +32,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 #. Create "install-config.yaml" and save in ~/workdir
 
    .. code-block:: yaml
+      :caption: install-config.yaml
       :emphasize-lines: 2, 14, 20, 26-30
 
       apiVersion: v1
@@ -83,7 +84,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    .. important:: Repeat "-hostname" block for each host in your config.
 
    .. code-block:: yaml
-      :caption: Ethernet Network Example
+      :caption: agent-config.yaml - Ethernet Network Example
       :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 21, 28, 32, 33
 
       apiVersion: v1alpha1
@@ -95,6 +96,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       hosts:
         - hostname: host11
           role: master
+          rootDeviceHints:
+            deviceName: "/dev/vda"
           interfaces:
             - name: enp1s0
               macAddress: 52:54:00:f4:16:11
@@ -126,7 +129,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   table-id: 254
 
    .. code-block:: yaml
-      :caption: VLAN-TAG Network Example
+      :caption: agent-config.yaml - VLAN-TAG Network Example
       :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 17, 18, 21, 22, 27, 34, 38, 39
 
       apiVersion: v1alpha1
@@ -138,6 +141,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       hosts:
         - hostname: host11
           role: master
+          rootDeviceHints:
+            deviceName: "/dev/vda"
           interfaces:
             - name: enp1s0
               macAddress: 52:54:00:f4:16:11
@@ -175,7 +180,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                   table-id: 254
 
    .. code-block:: yaml
-      :caption: Bond with VLAN-TAG Network Example
+      :caption: agent-config.yaml - Bond with VLAN-TAG Network Example
       :emphasize-lines: 3, 4, 6, 7, 9-12, 15, 16, 18-20, 22-24, 29-32, 35, 36, 41, 48, 52, 53
 
       apiVersion: v1alpha1
@@ -187,6 +192,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       hosts:
         - hostname: host11
           role: master
+          rootDeviceHints:
+            deviceName: "/dev/vda"
           interfaces:
             - name: enp1s0
               macAddress: 52:54:00:f4:16:11
@@ -333,6 +340,8 @@ installer will consume the new informantion.
       hosts:
         - hostname: host51
           role: master
+          rootDeviceHints:
+            deviceName: "/dev/vda"
           interfaces:
             - name: enp1s0
               macAddress: 52:54:00:f4:16:51
@@ -458,6 +467,8 @@ IPv6 Only Example
    hosts:
      - hostname: host31
        role: master
+       rootDeviceHints:
+         deviceName: "/dev/vda"
        interfaces:
          - name: enp1s0
            macAddress: 52:54:00:f4:16:31
