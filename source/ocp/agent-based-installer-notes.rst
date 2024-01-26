@@ -85,7 +85,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: yaml
       :caption: agent-config.yaml - Ethernet Network Example
-      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 21, 28, 32, 33
+      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13, 14, 17, 20, 25, 26, 32, 34, 38, 39
 
       apiVersion: v1alpha1
       metadata:
@@ -130,7 +130,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: yaml
       :caption: agent-config.yaml - VLAN-TAG Network Example
-      :emphasize-lines: 3, 4, 6, 7, 9, 10, 13, 14, 16, 17, 18, 21, 22, 27, 34, 38, 39
+      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13, 14, 17, 18, 21, 22, 25, 26, 31, 32, 38, 40, 44, 45
 
       apiVersion: v1alpha1
       metadata:
@@ -181,7 +181,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: yaml
       :caption: agent-config.yaml - Bond with VLAN-TAG Network Example
-      :emphasize-lines: 3, 4, 6, 7, 9-12, 15, 16, 18-20, 22-24, 29-32, 35, 36, 41, 48, 52, 53
+      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13-16, 19, 20, 23, 24, 27, 28, 30-36, 38-40, 45, 46, 52, 54, 58, 59
 
       apiVersion: v1alpha1
       metadata:
