@@ -351,6 +351,8 @@ To create a new cluster using the local mirror & registry see:
 
       oc create configmap registry-config --from-file=$quayHostname..8443=/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
 
+   .. attention:: This will cause MCP to update all nodes
+
 #. Add quay-rootCA to cluster.
 
    .. code-block:: bash
