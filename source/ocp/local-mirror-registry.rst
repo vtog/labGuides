@@ -345,6 +345,8 @@ To create a new cluster using the local mirror & registry see:
 
       oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=.dockerconfig.json
 
+   .. attention:: This will cause MCP to update all nodes
+
 #. Create configmap of quay-rootCA.
 
    .. code-block:: bash
@@ -358,6 +360,8 @@ To create a new cluster using the local mirror & registry see:
    .. code-block:: bash
 
       oc patch --type merge images.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}'
+
+   .. attention:: This will cause MCP to update all nodes
 
 #. Apply the YAML files from the results directory to the cluster.
 
