@@ -221,6 +221,12 @@ applying a performance profile, they are machine specific, and applied to the
 nodes in an MCP. In order to support this a new MCP needs to be created for
 each machine type.
 
+.. tip:: Simultaneously upgrade multiple nodes. The default is one at a time.
+
+   .. code-block:: bash
+
+      oc patch mcp worker --type merge --patch '{"spec": {"maxUnavailable": 2}}'
+
 #. Create new MCP yaml file
 
    .. important:: Be sure to include "worker" in the "matchExpressions" section.
