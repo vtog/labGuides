@@ -207,7 +207,8 @@ If MCP gets stuck try forcing the update to unstuck it.
       machineconfiguration.openshift.io/reason: ""
       machineconfiguration.openshift.io/state: Done
 
-#. Reboot node
+#. If needed reboot node. Typically node will automatically reboot but if not
+   run following command.
 
    .. code-block:: yaml
 
