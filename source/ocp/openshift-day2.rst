@@ -357,8 +357,8 @@ has several network tools to help troubleshoot the cluster/node.
       IMAGE=rhel9/support-tools
       #IMAGE=centos/tools:latest
 
-Configure an htpasswd Identitiy Provider
-----------------------------------------
+Configure an htpasswd Identity Provider
+---------------------------------------
 
 After configuring local storage and a PVC for the local registry, you may
 require an Identity Provider. These steps will get you started with htpasswd.

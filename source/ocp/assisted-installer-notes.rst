@@ -143,13 +143,13 @@ The following are static network configurations when manually configuring
 
 .. code-block:: yaml
    :caption: Ethernet Network Example
-   :emphasize-lines: 2, 3, 5, 10, 17, 21, 22
+   :emphasize-lines: 2-4, 10, 17, 19, 23, 24
 
    interfaces:
    - name: enp1s0
      type: ethernet
-     state: up
      mtu: 9000
+     state: up
      ipv4:
        enabled: true
        dhcp: false
@@ -173,13 +173,13 @@ The following are static network configurations when manually configuring
 
 .. code-block:: yaml
    :caption: VLAN-TAG Network Example
-   :emphasize-lines: 2, 3, 5, 6, 7, 10, 11, 16, 23, 27, 28
+   :emphasize-lines: 2-4, 6, 7, 10, 11, 16, 23, 25, 29, 30
 
    interfaces:
    - name: enp1s0
      type: ethernet
-     state: up
      mtu: 9000
+     state: up
    - name: enp1s0.122
      type: vlan
      state: up
@@ -209,17 +209,17 @@ The following are static network configurations when manually configuring
 
 .. code-block:: yaml
    :caption: Bond with VLAN-TAG Network Example
-   :emphasize-lines: 2, 3, 5, 6, 7, 9, 10, 11, 16, 17, 18, 19, 22, 23, 28, 35, 39, 40
+   :emphasize-lines: 2-4, 6-8, 10, 11, 16, 17, 18, 19, 22, 23, 28, 35, 37, 41, 42
 
    interfaces:
    - name: enp1s0
      type: ethernet
-     state: up
      mtu: 9000
+     state: up
    - name: enp1s1
      type: ethernet
-     state: up
      mtu: 9000
+     state: up
    - name: bond0
      type: bond
      state: up
