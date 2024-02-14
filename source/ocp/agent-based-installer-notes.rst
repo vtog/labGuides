@@ -85,7 +85,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: yaml
       :caption: agent-config.yaml - Ethernet Network Example
-      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13, 14, 17, 20, 25, 26, 32, 34, 38, 39
+      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13, 14, 17, 19, 25, 26, 32, 34, 38, 39
 
       apiVersion: v1alpha1
       metadata:
@@ -105,8 +105,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
             interfaces:
               - name: enp1s0
                 type: ethernet
-                state: up
                 mtu: 9000
+                state: up
                 ipv4:
                   enabled: true
                   dhcp: false
@@ -130,7 +130,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: yaml
       :caption: agent-config.yaml - VLAN-TAG Network Example
-      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13, 14, 17, 18, 21, 22, 25, 26, 31, 32, 38, 40, 44, 45
+      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13, 14, 17-19, 21, 22, 25, 26, 31, 32, 38, 40, 44, 45
 
       apiVersion: v1alpha1
       metadata:
@@ -150,8 +150,8 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
             interfaces:
               - name: enp1s0
                 type: ethernet
-                state: up
                 mtu: 9000
+                state: up
               - name: enp1s0.122
                 type: vlan
                 state: up
@@ -181,7 +181,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: yaml
       :caption: agent-config.yaml - Bond with VLAN-TAG Network Example
-      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13-16, 19, 20, 23, 24, 27, 28, 30-36, 38-40, 45, 46, 52, 54, 58, 59
+      :emphasize-lines: 3, 4, 6, 8, 9, 11, 13-16, 19-21, 23-25, 27-29, 31-35, 36-37, 39-41, 46, 47, 53, 55, 59, 60
 
       apiVersion: v1alpha1
       metadata:
@@ -197,26 +197,27 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
           interfaces:
             - name: enp1s0
               macAddress: 52:54:00:f4:16:11
-            - name: enp1s1
+            - name: enp2s0
               macAddress: 52:54:00:f4:17:11
           networkConfig:
             interfaces:
               - name: enp1s0
                 type: ethernet
-                state: up
                 mtu: 9000
-              - name: enp1s1
+                state: up
+              - name: enp2s0
                 type: ethernet
-                state: up
                 mtu: 9000
+                state: up
               - name: bond0
                 type: bond
+                mtu: 9000
                 state: up
                 link-aggregation:
                   mode: active-backup
                   port:
                   - enp1s0
-                  - enp1s1
+                  - enp2s0
               - name: bond0.122
                 type: vlan
                 state: up
@@ -349,8 +350,8 @@ installer will consume the new informantion.
             interfaces:
               - name: enp1s0
                 type: ethernet
-                state: up
                 mtu: 9000
+                state: up
               - name: enp1s0.122
                 type: vlan
                 state: up
@@ -476,8 +477,8 @@ IPv6 Only Example
          interfaces:
            - name: enp1s0
              type: ethernet
-             state: up
              mtu: 9000
+             state: up
            - name: enp1s0.122
              type: vlan
              state: up

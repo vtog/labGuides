@@ -209,25 +209,26 @@ The following are static network configurations when manually configuring
 
 .. code-block:: yaml
    :caption: Bond with VLAN-TAG Network Example
-   :emphasize-lines: 2-4, 6-8, 10, 11, 16, 17, 18, 19, 22, 23, 28, 35, 37, 41, 42
+   :emphasize-lines: 2-4, 6-8, 10-12, 17, 18, 19, 20, 23, 24, 29, 36, 38, 42, 43
 
    interfaces:
    - name: enp1s0
      type: ethernet
      mtu: 9000
      state: up
-   - name: enp1s1
+   - name: enp2s0
      type: ethernet
      mtu: 9000
      state: up
    - name: bond0
      type: bond
+     mtu: 9000
      state: up
      link-aggregation:
        mode: active-backup
        port:
        - enp1s0
-       - enp1s1
+       - enp2s0
    - name: bond0.122
      type: vlan
      state: up
