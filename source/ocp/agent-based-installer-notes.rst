@@ -31,6 +31,9 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
 #. Create "install-config.yaml" and save in ~/workdir
 
+   .. tip:: Optional: To enable workload partitioning add "cpuPartitioningMode:
+      AllNodes" line right after "baseDomain:" line.
+
    .. code-block:: yaml
       :caption: install-config.yaml
       :emphasize-lines: 2, 14, 20, 26-30
