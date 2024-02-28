@@ -14,6 +14,9 @@ I found the following helpful as well:
 .. note:: I'm only focusing on MACVLAN, as I think this is the most common use
    case. There are other options and if I run across the need I will add them.
 
+.. attention:: Do not use DHCP with IPVLAN. This will not work as interfaces
+   share the MAC address with the host interface.
+
 MACVLAN w/ Network DHCP
 -----------------------
 

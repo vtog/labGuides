@@ -351,7 +351,7 @@ To create a new cluster using the local mirror & registry see:
 
    .. code-block:: bash
 
-      oc create configmap registry-config --from-file=$quayHostname..8443=/mirror/ocp4/quay-rootCA/rootCA.pem -n openshift-config
+      oc create configmap registry-config --from-file=$quayHostname..8443=$quayRoot/quay-rootCA/rootCA.pem -n openshift-config
 
    .. attention:: This will cause MCP to update all nodes
 
@@ -403,6 +403,12 @@ disconnected registry.
    "registry-config" and add the new section using the same local mirror cert.
 
    .. attention:: This ConfigMap was created in the previous section, steps 4-5.
+
+      .. code-block:: bash
+
+         oc create configmap registry-config --from-file=$quayHostname..8443=$quayRoot/quay-rootCA/rootCA.pem -n openshift-config
+
+         oc patch --type merge images.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}'
 
    .. code-block:: bash
 
