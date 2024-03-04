@@ -17,6 +17,29 @@ I found the following helpful as well:
 .. attention:: Do not use DHCP with IPVLAN. This will not work as interfaces
    share the MAC address with the host interface.
 
+.. tip:: Fun with for loops
+
+   .. code-block:: bash
+
+      # Create vlan interfaces on two different bonds across several nodes
+
+      for i in {07..29}; do for j in {1..2}; do for k in {200..229}; \
+      do ssh core@ims-$i sudo nmcli con add type vlan con-name bond$j.$k dev bond$j id $k \
+      connection.interface-name bond$j.$k flags 1 ipv4.method disabled ipv6.method disabled; \
+      done; done; done;
+
+      # Delete vlan interfaces
+
+      for i in {07..29}; do for j in {1..2}; do for k in {200..229}; \
+      do ssh core@ims-$i sudo nmcli con delete bond$j.$k; \
+      done; done; done;
+
+      # Count vlan interfaces for consistency
+
+      for i in {07..29}; do for j in {1..2}; do echo ims-$i-bond$j && ssh core@ims-$i ip a | \
+      grep bond$j | wc -l; \
+      done; done;
+
 MACVLAN w/ Network DHCP
 -----------------------
 
