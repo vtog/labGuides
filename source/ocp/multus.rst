@@ -184,6 +184,12 @@ additional network without the use of a network DHCP server.
             annotations:
               k8s.v1.cni.cncf.io/networks: macvlan-whereabouts
 
+#. Check all ip reservations
+
+   .. code-block:: bash
+
+      oc get overlappingrangeipreservations.whereabouts.cni.cncf.io -A
+
 MACVLAN w/ Static IP
 --------------------
 
