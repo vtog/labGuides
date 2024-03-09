@@ -49,7 +49,7 @@ Prepare Hosts
 #. Create ``100-worker-sriov-blacklist.yaml``. Replace **Kernel Module**
    identified in the previos section.
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 12
 
       apiVersion: machineconfiguration.openshift.io/v1
@@ -77,7 +77,7 @@ Prepare Hosts
 #. Create ``100-worker-vfiopci.bu``. Replace **PCI Device ID** identified in
    the previous section. Update OCP version as well.
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 2,14
 
       variant: openshift
@@ -128,12 +128,15 @@ new MachineConfigPool and label your nodes.
 #. Create MachineConfigPool ``sriov_machineConfig_pool.yaml`` and run
    ``oc create -f sriov_machineConfig_pool.yaml``
 
-   .. code-block:: bash
+   .. code-block:: yaml
 
       apiVersion: machineconfiguration.openshift.io/v1
       kind: MachineConfigPool
       metadata:
         name: sriov
+        labels:
+          machineconfiguration.openshift.io/role: sriov
+          pools.operator.machineconfiguration.openshift.io/sriov: ""
       spec:
         machineConfigSelector:
           matchExpressions:
@@ -141,6 +144,7 @@ new MachineConfigPool and label your nodes.
         nodeSelector:
           matchLabels:
             node-role.kubernetes.io/sriov: ""
+        pause: false
 
 #. Label your nodes.
 
@@ -161,7 +165,7 @@ Install SRIOV Network Device Plugin
 #. Create ``serviceaccount.yaml`` and deploy
    ``oc create -f serviceaccount.yaml``
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 4
 
       apiVersion: v1
@@ -176,7 +180,7 @@ Install SRIOV Network Device Plugin
 #. Create ``configmap.yaml``, update to match your devices, and deploy
    ``oc create -f configmap.yaml``
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 13,14
 
       apiVersion: v1
@@ -202,7 +206,7 @@ Install SRIOV Network Device Plugin
 #. Create ``sriov-daemonset.yaml`` and deploy
    ``oc create -f sriov-daemonset.yaml``
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 23,26
 
       apiVersion: apps/v1
@@ -295,7 +299,7 @@ Test SRIOV Device Plugin
    .. seealso:: For more information on multiple networks and config types goto:
       `<https://docs.openshift.com/container-platform/4.12/networking/multiple_networks/understanding-multiple-networks.html>`_
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 4,6,9
 
       apiVersion: "k8s.cni.cncf.io/v1"
@@ -322,7 +326,7 @@ Test SRIOV Device Plugin
 #. Create pod ``test-pod1.yaml`` with attached interface,
    ``oc create -f test-pod1.yaml``
 
-   .. code-block:: bash
+   .. code-block:: yaml
       :emphasize-lines: 7,24,26
 
       apiVersion: v1
