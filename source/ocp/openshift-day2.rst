@@ -233,7 +233,7 @@ each machine type.
    .. important:: Be sure to include "worker" in the "matchExpressions" section.
 
    .. code-block:: yaml
-      :emphasize-lines: 4, 6, 10, 13
+      :emphasize-lines: 4, 7, 11, 14
 
       apiVersion: machineconfiguration.openshift.io/v1
       kind: MachineConfigPool
@@ -241,6 +241,7 @@ each machine type.
         name: small
         labels:
           machineconfiguration.openshift.io/role: small
+          pools.operator.machineconfiguration.openshift.io/small: ""
       spec:
         machineConfigSelector:
           matchExpressions:
@@ -308,9 +309,14 @@ each machine type.
         realTimeKernel:
           enabled: false
         workloadHints:
-          highPowerConsumption: true
+          highPowerConsumption: false
           perPodPowerManagement: false
           realTime: false
+        net:
+          userLevelNetworking: true
+          devices:
+            - interfaceName: “enp1s0”
+            - interfaceName: “ens2s0”
 
 #. Check allocated huge pages and kernel args
 
