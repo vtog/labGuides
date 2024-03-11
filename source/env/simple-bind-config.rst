@@ -276,3 +276,38 @@ Simple BIND Config
    .. code-block:: bash
 
       sudo systemctl enable --now named
+
+#. Update firewall for port 53
+
+   .. code-block:: bash
+
+      sudo firewall-cmd --add-service=dns --permanent
+      sudo firewall-cmd --reload
+      sudo firewall-cmd --list-all
+
+#. Add logging. Edit /etc/named.conf and update the "logging" section to look
+   like the following.
+
+   .. code-block:: bash
+
+      logging {
+              channel default_debug {
+                      file "data/named.run";
+                      severity dynamic;
+              };
+              channel queries_log {
+                      file "/var/log/named.query";
+                      print-time yes;
+                      print-category no;
+                      print-severity no;
+                      severity info;
+              };
+              category queries { queries_log; };
+      };
+
+   .. important:: Update fcontext of /var/log/named.query".
+
+      .. code-block:: bash
+
+         sudo semanage fcontext -a -t named_log_t "/var/log/named.query"
+         sudo restorecon -v /var/log/named.query
