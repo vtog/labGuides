@@ -29,6 +29,8 @@ Simple BIND Config
       # Under "options" change the following
       listen-on port 53 { any; };
       allow-query     { trusted; };
+      # Enable/disable logging
+      querylog no;
 
       # Add the following "include" to the end of the file
       include "/etc/named/named.conf.local";
