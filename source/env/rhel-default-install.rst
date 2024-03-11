@@ -31,11 +31,14 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install zsh neovim neofetch terminator ksnip slack firewall-config zoom cockpit cockpit-machines cockpit-composer
+      sudo dnf install zsh neovim terminator firewall-config cockpit cockpit-machines cockpit-composer
 
       sudo systemctl enable --now cockpit.socket
       sudo firewall-cmd --add-service=cockpit --permanent
       sudo firewall-cmd --reload
+
+      firewall-cmd --get-default-zone
+      firewall-cmd --zone=<zone-name> --list-all
 
       firewall-cmd --get-default-zone
       firewall-cmd --list-all
@@ -65,6 +68,12 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
          sudo firewall-cmd --add-service=dns --zone=home --permanent
          sudo firewall-cmd --reload
 
+#. Install various packages
+
+   .. code-block:: bash
+
+      sudo dnf install bat btop neofetch slack
+
 #. Insall packages via Sofware store.
 
    - Yubico Authenticator
@@ -72,14 +81,14 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
 #. Install extensions https://extensions.gnome.org/
 
-   - Dash to Dock
-   - User Themes
    - Caffeine
+   - Dash to Dock
    - Tactile
+   - User Themes
 
 #. Install themes & icons https://www.gnome-look.org/browse/
 
-   - Nordic
+   - Nordic-v40
    - Tango2
 
 #. Install and update PIP. Install misc packages
@@ -97,7 +106,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      pip install sphinx==5.3.0 docutils==0.16 sphinx_rtd_theme sphinx-copybutton
+      pip install sphinx==7.2.6 docutils==0.18 sphinx_rtd_theme==1.3.0 sphinx-copybutton==0.5.2
 
       # F5 Theme
       pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag sphinxcontrib.blockdiag sphinxcontrib-websupport
