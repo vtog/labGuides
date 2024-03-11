@@ -31,17 +31,14 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install zsh neovim terminator firewall-config cockpit cockpit-machines cockpit-composer
+      sudo dnf install zsh git rsync NetworkManager-tui firewall-config cockpit cockpit-machines cockpit-composer
 
       sudo systemctl enable --now cockpit.socket
       sudo firewall-cmd --add-service=cockpit --permanent
       sudo firewall-cmd --reload
 
-      firewall-cmd --get-default-zone
-      firewall-cmd --zone=<zone-name> --list-all
-
-      firewall-cmd --get-default-zone
-      firewall-cmd --list-all
+      sudo firewall-cmd --get-default-zone
+      sudo firewall-cmd --list-all
 
 #. Install dev packages
 
@@ -72,7 +69,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install bat btop neofetch slack
+      sudo dnf install bat btop neofetch neovim terminator slack
 
 #. Insall packages via Sofware store.
 
@@ -145,6 +142,18 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       # to
       %wheel  ALL=(ALL)       NOPASSWD: ALL
 
+#. Set hostname
+
+   .. code-block:: bash
+
+      sudo hostnamectl set-hostname <new_host_name>
+
+#. Use z shell (For corporate account go to next step).
+
+   .. code-block:: bash
+
+      chsh -s /bin/zsh
+
 #. Modify LDAP shell attribute to change default shell **(IF Needed. Corp
    laptop required this.)**
 
@@ -165,7 +174,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       git clone -b rhel --separate-git-dir=$HOME/.dotfiles git@github.com:vtog/.dotfiles.git tmpdotfiles
       rsync --recursive --verbose --exclude '.git' tmpdotfiles/ $HOME/
       rm -rf ~/tmpdotfiles
-      dots config --local status.showUntrackedFiles no
+      git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME config --local status.showUntrackedFiles no
 
 #. Setup Spaceship-prompt
 
