@@ -14,10 +14,9 @@ Simple BIND Config
       sudo vim /etc/named.conf
 
       # ADD ACL and include local host IP
-      # and subnet for "virbr0"
       acl "trusted" {
           127.0.0.1;
-          192.168.1.72;
+          192.168.1.68;
           192.168.1.0/24;
           192.168.122.0/24;
           192.168.132.0/24;
@@ -26,11 +25,21 @@ Simple BIND Config
 
       };
 
-      # Under "options" change the following
-      listen-on port 53 { any; };
-      allow-query     { trusted; };
-      # Enable/disable logging
-      querylog no;
+      # Under "options" change/add the following
+      options {
+        listen-on port 53 { any; };
+        allow-query     { trusted; };
+
+        # Enable/disable logging (see final step below)
+        querylog no;
+
+        recursion yes;
+
+        forwarders {
+              192.168.1.53;
+        };
+
+      }
 
       # Add the following "include" to the end of the file
       include "/etc/named/named.conf.local";
