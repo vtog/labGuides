@@ -33,10 +33,23 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       sudo dnf install zsh git rsync NetworkManager-tui firewall-config cockpit cockpit-machines cockpit-composer
 
+#. Enable/start service and Open firewall
+
+   .. tip:: To see the ports for the firewall service, "cat" the
+      <service_name>.xml
+
+      .. code-block:: bash
+
+         cat /usr/lib/firewalld/services/vnc-server.xml
+
+   .. code-block:: bash
+
       sudo systemctl enable --now cockpit.socket
+
+   .. code-block:: bash
+
       sudo firewall-cmd --add-service=cockpit --permanent
       sudo firewall-cmd --reload
-
       sudo firewall-cmd --get-default-zone
       sudo firewall-cmd --list-all
 
@@ -54,10 +67,12 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       sudo systemctl enable --now libvirtd
 
-   .. attention:: You'll need to configure firewalld to allow external traffic
-      to connect to the virtual network via the host. The following
-      firewall-cmd's allow the virtual network to access port 53 and any
-      external host access to the virtual network.
+   .. attention:: Depending on your network configuration you may need to
+      configure firewalld to allow external traffic to connect to the virtual
+      network via the host. The following firewall-cmd's allow the virtual
+      network to access port 53 and any external host access to the virtual
+      network. I made the necessary changes to my network router and no longer
+      need these changes.
 
       .. code-block:: bash
 
@@ -108,6 +123,82 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       # F5 Theme
       pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag sphinxcontrib.blockdiag sphinxcontrib-websupport
       sudo dnf install graphviz
+
+#. VNC (Server)
+
+   Install vnc-server
+
+   .. code-block:: bash
+
+      sudo dnf install tigervnc-server
+
+   Open Firewall
+
+   .. code-block:: bash
+
+      sudo firewall-cmd --add-service vnc-server --permanent
+      sudo firewall-cmd --reload
+      sudo firewall-cmd --list-all
+
+   Map users to display and port numbers
+
+   .. code-block:: bash
+
+      sudo vim /etc/tigervnc/vncserver.users
+
+      # ADD Newline with following for user vince
+      :1=vince
+
+   If Nvidia Disable Wayland
+
+   .. code-block:: bash
+
+      sudo vim /etc/gdm/custom.conf
+
+      # Set and add following
+      [daemon]
+      WaylandEnable=False
+      DefaultSession=gnome-xorg.desktop
+
+   Enable vnc service
+
+   .. code-block:: bash
+
+       sudo systemctl enable --now vncserver@:1
+       sudo systemctl status vncserver@:1
+
+   Set the passwd for the vncpasswd
+
+   .. code-block:: bash
+
+      vncpasswd
+
+#. VNC (Client - vncviewer/cli and remmina/gui)
+
+   .. code-block:: bash
+
+      sudo dnf install tigervnc remmina
+
+   .. code-block:: bash
+
+      vncviewer --shared bfg.lab.local:1
+
+#. Remote Desktop Protocol (Server)
+
+   .. code-block:: bash
+
+      sudo dnf install xrdp
+
+   .. code-block:: bash
+
+      sudo firewall-cmd --add-service=rdp --permanent
+      sudo firewall-cmd --reload
+      sudo firewall-cmd --list-all
+
+   .. code-block:: bash
+
+      sudo systemctl enable --now xrdp
+      sudo systemctl status xrdp
 
 #. Modify sshd
 
