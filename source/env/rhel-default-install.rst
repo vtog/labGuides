@@ -224,6 +224,18 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       usermod -a -G wheel <user>
 
+#. Use vi with visudo, permanently change editor
+
+   .. code-block:: bash
+
+      sudo EDITOR=vim visudo
+
+   Add Following to visudo file, save and exit
+
+   .. code-block:: bash
+
+      Defaults editor=/usr/bin/vim
+
 #. Modify sudo with NOPASSWD option
 
    .. code-block:: bash
