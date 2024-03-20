@@ -115,6 +115,9 @@ for the addition of a new master or worker node, depending on how you set the
 
       sudo wipefs -af /dev/vda
 
+   .. tip:: Be sure to check that all partitions are "wiped" with lsblk. I've
+      seen LVM partitions not get removed.
+
 #. Once the network is configured and operational run following command:
 
    .. attention:: Update the command for your ignition url and block device.
