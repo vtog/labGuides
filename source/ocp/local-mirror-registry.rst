@@ -177,15 +177,17 @@ Mirror Images to Local Registry
    file below I'm mirroring 4.12.x, 4.13.x and 4.14.x images and operators.
    Plus some additional images I find useful.
 
-   .. important:: Be sure path in imageURL (line 5) matches the path assigned
+   .. attention:: Be sure path in imageURL (line 5) matches the path assigned
       earlier for "quayRoot".
 
-   .. note:: "graph: true" mirror's the graph data to our disconnected registry
-      which enables our disconnected clusters to show the visual of what
-      versions we can update to.
+   .. note:: "graph: true" mirror's the graph data to the disconnected
+      registry. This information enables the disconnected cluster, via the
+      update service operator, to show a visual representation of the available
+      upgrades.
 
-   .. note:: "shortestPath: true" instructs the mirror to only pull the
-      required version to upgrade from one version to the next.
+   .. note:: "shortestPath: true" instructs the oc mirror command to only pull
+      the required version to upgrade from one version to the next. It will
+      prune any unneeded version.
 
    .. attention:: Be sure to replace "$quayHostname:8443$quayRoot" environment
       variables with the real names. For example imageURL: would be set to
@@ -319,6 +321,10 @@ Update Running Cluster
 A running cluster needs to be updated to use the new registry/mirror.
 To create a new cluster using the local mirror & registry see:
 `Agent-Based Install Notes <./agent-based-installer-notes.html>`_
+
+.. attention:: The first 3 steps are only needed when moving a cluster from
+   connected to disconnected. If you built the cluster "disconnected" with this
+   registry skip to step 4.
 
 #. Extract OCP pull-secret. A new local file ``.dockerconfigjson`` is created.
 
