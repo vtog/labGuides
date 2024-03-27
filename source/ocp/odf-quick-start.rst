@@ -91,8 +91,10 @@ Configure ODF
 
    .. image:: images/ocgetscdef.png
 
-Optional: Disable Noobaa
+Optional: Disable NooBaa
 ------------------------
+NooBaa is multicloud object gateway and may not be needed in your environment.
+The following steps walk through disabling the function freeing up resources.
 
 #. Change to openshift-storage project, or append "-n openshift-storage" to
    each patch command below.
