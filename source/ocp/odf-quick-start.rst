@@ -5,93 +5,74 @@ This document will describe the installation of the Local Storage Operator
 (LSO) and OpenShift Data Foundations (ODF). LSO is a pre-requisite for
 installing ODF on OpenShift nodes that will use local block devices.
 
-.. important:: With 4.11+ ODF will walk you through most these steps making the
-   install much easier. The notes can still be used but I recommend using the
-   ODF config wizard.
+.. important:: With 4.11+ ODF added a wizard removing the need to manually
+   create all the required objects. The install and configuration process is
+   much easier. I've removed my old manual notes and replaced them with a
+   wizard walk-through.
 
 .. warning::
    We’ve found that hugepages needs to be disabled before installing ODF
    otherwise noobaa pods won’t start correctly. This can be re-enabled
    afterwards.
 
-Install and Configure the Local Storage Operator
-------------------------------------------------
+Add Local Storage and ODF Operators
+-----------------------------------
 
-1. From the OCP Web Console go to :menuselection:`Operators --> OperatorHub`
+1. From the OCP Web Console go to :menuselection:`Operators --> OperatorHub`.
+#. In the Filter by keyword box type, "local storage".
+#. Select **"Local Storage"** operator.
+#. Click "Install".
+#. By default, the "openshift-local-storage" namespace will be used. Accept the
+   defaults and click "Install".
+#. After install finishes go back to :menuselection:`Operators -->
+   OperatorHub`.
+#. In the Filter by keyword box type, "ODF".
+#. Select **"OpenShift Data Foundation"** operator.
+#. Click "Install".
+#. Accept the defaults and click "Install".
+#. Go to next section to configure ODF.
 
-#. In the Filter by keyword box type, "local storage"
-#. Select "Local Storage" operator
+Configure ODF
+-------------
 
-   .. image:: images/operatorhublocalstorage.png
+#. Frome the web console go to :menuselection:`Operators --> Installed
+   Operators`.
+#. Select "OpenShift Data Foundation".
+#. Enable Console plugin.
 
-#. Click "Install"
-#. By default, the "openshift-local-storage" namespace will be used. Accept
-   the defaults and click "Install"
-#. After install completes click "View Operator"
-#. Select the "Local Volume Discovery" tab
-#. Click "Create Local Volume Discover"
-#. Under "Node Selector" select the option based on your environment
-#. Click "Create"
-#. After this completes go to :menuselection:`Home --> API Explorer`
-#. In the search box search for "LocalVolumeDiscoveryResult" and click on
-   the discovered object "LocalVolumeDiscoveryResult"
-#. Select the "Instances" tab
+   .. tip:: Be sure to wait a couple minutes and refresh browser.
+      The console should prompt you.
 
-   .. image:: images/localvolumediscoveryresult.png
+   .. image:: images/enableodfplugin.png
 
-#. Click the first instance name, click the YAML tab, and scroll to the bottom
-   of the output. The last device, in this labs case "/dev/vdb" should be the
-   correct device. Make note of the "deviceID". Also note this device should
-   show as "Available".
+#. Click "Create StorageSystem".
+#. Select "Create a new StorageClass using local storage devices".
+#. Click Next.
 
-   .. important:: Using the "deviceID" will prevent future issues from happening
-      if for some reason the order of the drives change.
+   .. note:: This may take several minutes to discover the available block
+      devices.
 
-#. Repeat step 14 for each discovered instance
-#. Go to :menuselection:`Operators --> Installed Operators` and select "Local
-   Storage" operator
-#. Select the "Local Volume" tab and click "Create Local Volume"
-#. Name the new volume, example "odf-block"
-#. Expand "StorageClassDevice" by clicking the carrot to the right of the
-   section
-#. Expand "Device Paths" again by clicking the carrot to the right of the
-   section
-#. Add all the deviceID's recording in step 14
-#. Name the Storage Class Name, example "odf-block"
-#. Set "Fs Type" = \<blank\>
-#. Set "Volume Mode" = Block
-#. Set "Requested management state" = Managed
-#. Set "LogLevel" = Normal
-#. Click Create
+#. Name LocalVolumeSet name "odf-block".
 
-   .. image:: images/createlocalvolume.png
+   .. image:: images/createlocalvolumeset.png
 
-Install and Configure OpenShift Data Foundation (ODF)
------------------------------------------------------
+#. Click Next.
+#. Are you sure you want to continue? Select Yes for "Create LocalVolumeSet".
 
-1. From the OCP Web Console go to :menuselection:`Operators --> OperatorHub`
-#. In the Filter by keyword box type, "ODF"
-#. Select "OpenShift Data Foundation" operator
-#. Click "Install"
-#. Accept the defaults and click "Install"
-#. After install completes go to :menuselection:`Operators --> Installed
-   Operators`
-#. Select "OpenShift Data Foundation"
-#. Click "Create StorageSystem"
-#. Select "Use an existing StorageClass"
-#. Under StorageClass dropdown select "odf-block"
+   .. note:: This may take several minutes to create the LocalVolumeSet.
 
-   .. note:: Your name may be different
+#. Confirm Capacity and nodes.
 
-#. Click Next
-#. You should see the total "Available raw capacity" of your selected nodes
-#. Click Next
-#. Leave defaults and click Next
-#. Review the information, if acceptable click "Create StorageSystem"
+   .. note:: You should see the total "Available raw capacity" of your selected
+      nodes.
+
+#. Click Next.
+#. Leave defaults for Security and network and click Next.
+#. Review the information, if acceptable click "Create StorageSystem".
 
    .. note:: This can take several minutes to complete.
 
-#. Verify “ocs-storagecluster-cephfs” is created
+#. Verify “ocs-storagecluster-cephfs” is created.
 
    .. code-block:: bash
 
@@ -102,7 +83,7 @@ Install and Configure OpenShift Data Foundation (ODF)
 
    .. image:: images/ocgetsc.png
 
-#. Set the default storage class to “ocs-storagecluster-cephfs”
+#. Set the default storage class to “ocs-storagecluster-cephfs”.
 
    .. code-block:: bash
 
@@ -114,13 +95,13 @@ Optional: Disable Noobaa
 ------------------------
 
 #. Change to openshift-storage project, or append "-n openshift-storage" to
-   each patch command below
+   each patch command below.
 
    .. code-block:: bash
 
       oc project openshift-storage
 
-#. Edit storagecluster ocs-storagecluster and add strategy
+#. Edit storagecluster ocs-storagecluster and add strategy.
 
    .. code-block:: bash
 
@@ -131,7 +112,7 @@ Optional: Disable Noobaa
       #   multiCloudGateway:
       #     reconcileStrategy: ignore
 
-#. Edit NooBaa and add allow deletion
+#. Edit NooBaa and add allow deletion.
 
    .. code-block:: bash
 
@@ -142,7 +123,7 @@ Optional: Disable Noobaa
       #   cleanupPolicy:
       #     allowNoobaaDeletion: true
 
-#. Remove NooBaa objects
+#. Remove NooBaa objects.
 
    .. code-block:: bash
 
