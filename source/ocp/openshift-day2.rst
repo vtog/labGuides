@@ -474,6 +474,36 @@ following commands you can confirm expired certs and resolve the issue.
 
    .. image:: ./images/certexpiry.png
 
+
+KubeletConfig podPidsLimit
+--------------------------
+In some cases the deafult 4096 is not enough. Adding this example as the
+solution doc example has mis-aligned yaml.
+
+#. Use the following yaml to set the new "podPidsLimit"
+
+   .. code-block:: yaml
+
+      apiVersion: machineconfiguration.openshift.io/v1
+      kind: KubeletConfig
+      metadata:
+        name: set-pid-limit-kubelet
+      spec:
+        machineConfigPoolSelector:
+          matchLabels:
+            pools.operator.machineconfiguration.openshift.io/worker: ''
+        kubeletConfig:
+          podPidsLimit: 8192
+
+   .. note: This will casue MCP to Update and reboot each node in the
+      designated machine config pool.
+
+#. Confirm new limit is in place.
+
+   .. code-block:: bash
+
+      ssh core@host33 cat /etc/kubernetes/kubelet.conf | grep -i podPidsLimit
+
 Starting the Cluster
 --------------------
 
