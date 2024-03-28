@@ -495,7 +495,7 @@ solution doc example has mis-aligned yaml.
         kubeletConfig:
           podPidsLimit: 8192
 
-   .. note: This will casue MCP to Update and reboot each node in the
+   .. note:: This will casue MCP to Update and reboot each node in the
       designated machine config pool.
 
 #. Confirm new limit is in place.
