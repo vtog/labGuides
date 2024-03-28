@@ -46,13 +46,17 @@ Configure ODF
    .. image:: images/enableodfplugin.png
 
 #. Click "Create StorageSystem".
+
 #. Select "Create a new StorageClass using local storage devices".
+
+   .. image:: images/createstoragesystem.png
+
 #. Click Next.
 
    .. note:: This may take several minutes to discover the available block
       devices.
 
-#. Name LocalVolumeSet name "odf-block".
+#. Set name of your LocalVolumeSet. Example: "odf-block".
 
    .. image:: images/createlocalvolumeset.png
 
