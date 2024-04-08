@@ -8,6 +8,10 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 .. tip:: Check disk performance for etcd with "fio". It's critical to have a
    high performing disk drive for OCP / etcd.
 
+   For more info:
+   `How to Use 'fio' to Check Etcd Disk Performance in OCP
+   <https://access.redhat.com/solutions/4885641?extIdCarryOver=true&sc_cid=701f2000001OH74AAG%20>`_
+
    .. code-block:: bash
 
       podman run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
