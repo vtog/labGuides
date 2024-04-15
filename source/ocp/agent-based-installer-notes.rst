@@ -93,6 +93,11 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. note:: For SNO set "platform:" to "none: {}".
 
+      .. code-block:: yaml
+
+         platform:
+           none: {}
+
 #. Create agent-config.yaml and save in ~/workdir
 
    .. important:: Repeat "-hostname" block for each host in your config.
