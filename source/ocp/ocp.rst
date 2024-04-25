@@ -5,6 +5,7 @@ OpenShift Lab Guides
    :maxdepth: 1
    :caption: Content:
 
+   acm-notes
    assisted-installer-notes
    agent-based-installer-notes
    ipi-notes
