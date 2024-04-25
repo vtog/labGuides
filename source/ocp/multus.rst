@@ -36,8 +36,8 @@ I found the following helpful as well:
 
       # Count vlan interfaces for consistency
 
-      for i in {07..29}; do for j in {1..2}; do echo ims-$i-bond$j && ssh core@ims-$i nmcli con sh | \
-      grep bond$j | wc -l; \
+      for i in {07..29}; do for j in {1..2}; \
+      do echo ims-$i-bond$j && ssh core@ims-$i nmcli con sh | grep bond$j | wc -l; \
       done; done;
 
 MACVLAN w/ Network DHCP
