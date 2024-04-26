@@ -385,3 +385,39 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       # Create Zsh Shell Completion
       sudo cp extra/completions/_alacritty /usr/share/zsh/site-functions
+
+Upgrade Fedora
+--------------
+
+#. Update Fedora 39 (Required)
+
+   .. code-block:: bash
+
+      sudo dnf upgrade --refresh
+
+#. Install the DNF-plugin-system-upgrade Package on Fedora
+
+   .. code-block:: bash
+
+      sudo dnf install dnf-plugin-system-upgrade
+
+#. Download Fedora 40 Release
+
+   .. code-block:: bash
+
+      sudo dnf system-upgrade download --releasever=40
+
+   .. tip:: If you encounter conflicts during the upgrade, try adding
+      "--allowerasing" option.
+
+#. Upgrade and Reboot
+
+   .. code-block:: bash
+
+      sudo dnf system-upgrade reboot
+
+#. Confirm upgrade
+
+   .. code-block:: bash
+
+      cat /etc/redhat-release
