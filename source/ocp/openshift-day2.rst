@@ -504,44 +504,64 @@ solution doc example has mis-aligned yaml.
 
       ssh core@host33 cat /etc/kubernetes/kubelet.conf | grep -i podPidsLimit
 
-Starting the Cluster
---------------------
+Append or Delete kernel argument
+--------------------------------
 
-Bringing the cluster back up is much more simple than the shutdown procedure.
-You just have to start nodes in the right order for the best results.
+I have run into issues where an argument needs to be manually added back to
+the node to satisfy MCP. The following walks through the process.
 
-#. Start your master nodes *"master 1 - 3"*
+.. note:: This is taken directly from the following solution doc:
 
-   Once they have booted we can check that they are healthy using
-   :code:`oc get nodes`
+   `How to add or remove kernel argument from RHCOS node in RHOCP 4
+   <https://access.redhat.com/solutions/6891971>`_
 
-   .. note:: All nodes should be in a ready state before continuing on to your infra
-      nodes.
+1. Cordon node
 
-#. Start your infra nodes *"worker 7 - 9"*
+   .. code-block:: bash
 
-   Once your infra nodes have booted you can ensure the infra nodes are showing
-   in a ready state :code:`oc get nodes`, and that
-   :code:`oc get pods --all-namespaces` shows the logging, metrics, router and
-   registry pods have started and are healthy.
+      oc adm cordon <node1>
 
-#. Start your worker nodes *"worker 4 - 6"*
+#. Drain node
 
-   Once your worker nodes have booted you can ensure that all nodes are showing
-   in a ready state with :code:`oc get nodes`. Refer to the health check
-   documentation for a more in-depth set of checks.
+   .. code-block:: bash
 
-#. Start your applications
+      oc adm drain <node1> --ignore-daemonsets --delete-emptydir-data
 
-   Now that your cluster has started and is healthy, you can now start your
-   application workload. If you chose to simply shutdown your worker nodes
-   without draining workload then your applications will be restarting on the
-   nodes they were previously located, otherwise you will need to increase the
-   number of replica's or *'uncordon'* nodes depending on the approach you
-   took.
+#. SSH to node
 
-#. Health Check
 
-   Finally, check that your application pods have started correctly
-   :code:`oc get pods --all-namespaces` and perform any checks that may be
-   necessary on your application to prove that it is available and healthy.
+   .. code-block:: bash
+
+      ssh core@<node1>
+
+#. Check kernel arguments
+
+   .. code-block:: bash
+
+      sudo rpm-ostree kargs
+
+#. Append or delete kernel arguments
+
+   APPEND:
+
+   .. code-block:: bash
+
+      sudo rpm-ostree kargs --append='<key>=<value>'
+
+   DELETE:
+
+   .. code-block:: bash
+
+      sudo rpm-ostree kargs --delete <key>=<value>
+
+#. Confirm kernel argument changes
+
+   .. code-block:: bash
+
+      sudo rpm-ostree kargs
+
+#. When satisfied uncordon node
+
+   .. code-block:: bash
+
+      oc adm uncordon <node1>
