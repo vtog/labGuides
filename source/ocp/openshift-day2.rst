@@ -565,3 +565,185 @@ the node to satisfy MCP. The following walks through the process.
    .. code-block:: bash
 
       oc adm uncordon <node1>
+
+Change Cluster Network MTU
+--------------------------
+
+It's possible to change MTU post deployment but I recommend getting this right
+at install time. The following is based on:
+`Changing the MTU for the cluster network
+<https://docs.openshift.com/container-platform/4.12/networking/changing-cluster-network-mtu.html>`_
+
+.. important:: This is for **OVN-kubernetes** only.  For OpenShift SDN see
+   official documentation.
+
+.. attention:: Tested with 4.12
+
+#. Confirm current MTU, see "Status" section.
+
+   .. code-block:: bash
+
+      oc describe network.config cluster
+
+   .. code-block:: bash
+      :caption: OUTPUT
+      :emphasize-lines: 5,6
+
+      Status:
+        Cluster Network:
+          Cidr:               10.128.0.0/14
+          Host Prefix:        23
+        Cluster Network MTU:  1400
+        Network Type:         OVNKubernetes
+        Service Network:
+          172.30.0.0/16
+
+#. Confirm **primary interace**, in my example it's "enp1so.122".
+
+   .. note:: Check all interfaces. They should be the same but confirm.
+
+   .. code-block:: bash
+
+      ssh core@host51 nmcli -g connection.interface-name c show ovs-if-phys0
+
+#. Create the following NetworkManager config.
+
+   .. code-block:: bash
+
+      cat << EOF > ./enp1s0.122-mtu.conf
+      [connection-enp1s0.122-mtu]
+      match-device=interface-name:enp1s0.122
+      ethernet.mtu=9000
+      EOF
+
+#. Create the MachinceConfig.
+
+   .. note:: Do this for each machine config pool. In my example I focus on
+      the control-plane only.
+
+   .. code-block:: bash
+      :emphasize-lines: 7,10,12
+
+      cat << EOF > ./control-plane-enp1s0.122-mtu.bu
+      variant: openshift
+      version: 4.12.0
+      metadata:
+        name: 01-control-plane-interface
+        labels:
+          machineconfiguration.openshift.io/role: master
+      storage:
+        files:
+          - path: /etc/NetworkManager/conf.d/99-enp1s0.122-mtu.conf
+            contents:
+              local: enp1s0.122-mtu.conf
+            mode: 0600
+      EOF
+
+#. Create the MachineConfig
+
+   .. code-block:: bash
+
+      butane --files-dir . control-plane-enp1s0.122-mtu.bu > control-plane-enp1s0.122-mtu.yaml
+
+#. Start the MTU update
+
+   .. note:: In my example we're going from 1400 to 8900. OVN requires 100
+      bytes of padding. The interface will be set to 9000.
+
+   .. attention:: This will cause each node to reboot via the machine config
+      process. Be sure to let this process finish before proceeding.
+
+   .. code-block:: bash
+
+      oc patch Network.operator.openshift.io cluster --type=merge --patch \
+      '{"spec": { "migration": { "mtu": { "network": { "from": 1400, "to": 8900 } , "machine": { "to" : 9000 } } } } }'
+
+#. Verify MCP has completed its changes via "watch".
+
+   .. code-block:: bash
+
+      watch "oc get nodes; echo; oc get mcp"
+
+#. Verify cluster MTU update.
+
+   .. code-block:: bash
+
+      oc describe network.config cluster
+
+   .. code-block:: bash
+      :caption: OUTPUT
+      :emphasize-lines: 5,9,11,12
+
+      Status:
+        Cluster Network:
+          Cidr:               10.128.0.0/14
+          Host Prefix:        23
+        Cluster Network MTU:  8900
+        Migration:
+          Mtu:
+            Machine:
+              To:  9000
+            Network:
+              From:    1400
+              To:      8900
+        Network Type:  OVNKubernetes
+        Service Network:
+          172.30.0.0/16
+
+#. Update the network interface MTU. Be sure previous MCP changes are complete.
+
+   .. note:: This file was creating in step 5 via the butane process.
+
+   .. attention:: This will cause each node to reboot via the machine config
+      process. Be sure to let this process finish before proceeding.
+
+   .. code-block:: bash
+
+      oc create -f control-plane-enp1s0.122-mtu.yaml
+
+#. Verify MCP has completed its changes via "watch".
+
+   .. code-block:: bash
+
+      watch "oc get nodes; echo; oc get mcp"
+
+#. Verify interface MTU. Check all nodes.
+
+   .. code-block:: bash
+
+      ssh core@host51 ip a | enp1s0.122
+
+#. Finalize the MTU migration. Be sure previous MCP changes are complet.
+
+   .. attention:: This will cause each node to reboot via the machine config
+      process. Be sure to let this process finish before proceeding.
+
+   .. code-block:: bash
+
+      oc patch Network.operator.openshift.io cluster --type=merge --patch \
+      '{"spec": { "migration": null, "defaultNetwork":{ "ovnKubernetesConfig": { "mtu": 8900 }}}}'
+
+#. Verify MCP has completed its changes via "watch".
+
+   .. code-block:: bash
+
+      watch "oc get nodes; echo; oc get mcp"
+
+#. Verify cluster MTU update.
+
+   .. code-block:: bash
+
+      oc describe network.config cluster
+
+   .. code-block:: bash
+      :caption: OUTPUT
+      :emphasize-lines: 5
+
+      Status:
+        Cluster Network:
+          Cidr:               10.128.0.0/14
+          Host Prefix:        23
+        Cluster Network MTU:  8900
+        Network Type:         OVNKubernetes
+        Service Network:
+          172.30.0.0/16
