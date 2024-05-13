@@ -571,10 +571,14 @@ the node to satisfy MCP. The following walks through the process.
 Change Cluster Network MTU
 --------------------------
 
-It's possible to change MTU post deployment but I recommend getting this right
-at install time. The following is based on:
+It's possible to change the interface MTU post deployment but I recommend
+getting this right at install time. The following is based on:
 `Changing the MTU for the cluster network
 <https://docs.openshift.com/container-platform/4.12/networking/changing-cluster-network-mtu.html>`_
+
+.. note:: In the OCP doc they use a machine config to change the nodes
+   interface MTU. I found this did NOT work. I simply used nmcli to chagne the
+   value.
 
 .. important:: This is for **OVN-kubernetes** only.  For OpenShift SDN see
    official documentation.
@@ -608,44 +612,19 @@ at install time. The following is based on:
 
       ssh core@host51 nmcli -g connection.interface-name c show ovs-if-phys0
 
-#. Create the following NetworkManager config.
+#. Update the network interface MTU. The type of interface will dictate where
+   to make the change. In my example I use VLAN interfaces so will need to
+   change the parent ethernet interface. It doesn't hurt to change both but
+   vlan interfaces inherit this setting from the parent.
+
+   .. attention:: Be sure to update all the "master" nodes.
 
    .. code-block:: bash
 
-      cat << EOF > ./enp1s0.122-mtu.conf
-      [connection-enp1s0.122-mtu]
-      match-device=interface-name:enp1s0.122
-      ethernet.mtu=9000
-      EOF
+      ssh core@host51
 
-#. Create the MachinceConfig.
-
-   .. note:: Do this for each machine config pool. In my example I focus on
-      the control-plane only.
-
-   .. code-block:: bash
-      :emphasize-lines: 7,10,12
-
-      cat << EOF > ./control-plane-enp1s0.122-mtu.bu
-      variant: openshift
-      version: 4.12.0
-      metadata:
-        name: 01-control-plane-interface
-        labels:
-          machineconfiguration.openshift.io/role: master
-      storage:
-        files:
-          - path: /etc/NetworkManager/conf.d/99-enp1s0.122-mtu.conf
-            contents:
-              local: enp1s0.122-mtu.conf
-            mode: 0600
-      EOF
-
-#. Create the MachineConfig
-
-   .. code-block:: bash
-
-      butane --files-dir . control-plane-enp1s0.122-mtu.bu > control-plane-enp1s0.122-mtu.yaml
+      sudo nmcli con modify enp1s0 ethernet.mtu 9000
+      sudo nmcli device reapply enp1s0
 
 #. Start the MTU update
 
@@ -692,33 +671,19 @@ at install time. The following is based on:
         Service Network:
           172.30.0.0/16
 
-#. Update the network interface MTU. Be sure previous MCP changes are complete.
+#. Verify interfaces have correct MTU.
 
-   .. note:: This file was creating in step 5 via the butane process.
+   .. note:: Be sure to check all "master" nodes.
+
+   .. code-block:: bash
+
+      ssh core@host51 ip a | grep -e enp -e br-
+
+
+#. Finalize the MTU migration. Be sure previous changes are complete.
 
    .. attention:: This will cause each node to reboot via the machine config
-      process. Be sure to let this process finish before proceeding.
-
-   .. code-block:: bash
-
-      oc create -f control-plane-enp1s0.122-mtu.yaml
-
-#. Verify MCP has completed its changes via "watch".
-
-   .. code-block:: bash
-
-      watch "oc get nodes; echo; oc get mcp"
-
-#. Verify interface MTU. Check all nodes.
-
-   .. code-block:: bash
-
-      ssh core@host51 ip a | grep enp1s0.122
-
-#. Finalize the MTU migration. Be sure previous MCP changes are complet.
-
-   .. attention:: This will cause each node to reboot via the machine config
-      process. Be sure to let this process finish before proceeding.
+      process. Be sure to let this process finish.
 
    .. code-block:: bash
 
@@ -731,7 +696,7 @@ at install time. The following is based on:
 
       watch "oc get nodes; echo; oc get mcp"
 
-#. Verify cluster MTU update.
+#. Verify cluster MTU.
 
    .. code-block:: bash
 

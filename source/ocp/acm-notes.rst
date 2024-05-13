@@ -23,16 +23,16 @@ The following script creates the necessary objects for ACM Host Inventory list:
 
    # Take "nodes" CSV and create bare-metal resources for cluster
 
-   for host in `cat nodes|grep -v Hostname|awk -F "," '{print $1}'`; do
-   HOST=`grep $host nodes|awk -F "," '{print $1}'`;
-   BMCIP=`grep $host nodes|awk -F "," '{print $2}'`;
-   HOSTIP=`grep $host nodes|awk -F "," '{print $3}'`;
-   MAC1=`grep $host nodes|awk -F "," '{print $4}'`;
-   MAC2=`grep $host nodes|awk -F "," '{print $5}'`;
-   MAC3=`grep $host nodes|awk -F "," '{print $6}'`;
-   MAC4=`grep $host nodes|awk -F "," '{print $7}'`;
-   MAC5=`grep $host nodes|awk -F "," '{print $8}'`;
-   MAC6=`grep $host nodes|awk -F "," '{print $9}'`;
+   for host in `cat nodes | grep -v Hostname | awk -F "," '{print $1}'`; do
+   HOST=`grep $host nodes | awk -F "," '{print $1}'`;
+   BMCIP=`grep $host nodes | awk -F "," '{print $2}'`;
+   HOSTIP=`grep $host nodes | awk -F "," '{print $3}'`;
+   MAC1=`grep $host nodes | awk -F "," '{print $4}'`;
+   MAC2=`grep $host nodes | awk -F "," '{print $5}'`;
+   MAC3=`grep $host nodes | awk -F "," '{print $6}'`;
+   MAC4=`grep $host nodes | awk -F "," '{print $7}'`;
+   MAC5=`grep $host nodes | awk -F "," '{print $8}'`;
+   MAC6=`grep $host nodes | awk -F "," '{print $9}'`;
 
    # NmState
 

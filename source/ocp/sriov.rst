@@ -35,7 +35,7 @@ Prerequisites
               source $NET_ROOT/$i/device/uevent;
               SPEED=$(cat $NET_ROOT/$i/speed);
               STATE=$(cat $NET_ROOT/$i/operstate) ;
-              NIC_NAME=$(lspci |grep  ${PCI_SLOT_NAME#*:} | awk -F ":" '{print $NF}')
+              NIC_NAME=$(lspci | grep  ${PCI_SLOT_NAME#*:} | awk -F ":" '{print $NF}')
               echo -e "\"$HOSTNAME\", \"$i\", \"$NIC_NAME\", \"$STATE\", \"${PCI_ID%%:*}\", \"${PCI_ID#*:}\", \"$PCI_
           fi;
       done
