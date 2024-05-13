@@ -359,9 +359,11 @@ has several network tools to help troubleshoot the cluster/node.
 
    .. code-block:: bash
 
+      cat << EOF > ./.toolboxrc
       REGISTRY=mirror.lab.local:8443
       IMAGE=rhel9/support-tools
       #IMAGE=centos/tools:latest
+      EOF
 
 Configure an htpasswd Identity Provider
 ---------------------------------------
@@ -442,7 +444,7 @@ following commands you can confirm expired certs and resolve the issue.
    .. code-block:: bash
 
       ssh core@master1
-      sudo -s
+      sudo -i
 
 #. Export recovery KUBECONFIG for local cluster management.
 
@@ -711,7 +713,7 @@ at install time. The following is based on:
 
    .. code-block:: bash
 
-      ssh core@host51 ip a | enp1s0.122
+      ssh core@host51 ip a | grep enp1s0.122
 
 #. Finalize the MTU migration. Be sure previous MCP changes are complet.
 

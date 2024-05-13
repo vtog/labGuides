@@ -374,6 +374,12 @@ To create a new cluster using the local mirror & registry see:
    .. note:: Everytime you successfully run "oc mirror" a "results" dir is
       created.
 
+   .. important:: These results are not cumulative. They do NOT include the
+      previously succsessful result. Its VERY important to manaully combine
+      this information by diffing the old and new file. Without doing this the
+      running cluster will be missing references which are required to install
+      and maintain operators and images.
+
    .. code-block:: bash
 
       oc apply -f ./oc-mirror-workspace/results-xxxxxxxxxx/
