@@ -113,8 +113,8 @@ Prerequisites
 #. Successful completion of the previous step should create a new file named,
    ``mirror_seq1_000000.tar``. Copy this file to the destination node.
 
-Create Local Host Mirror Registry
----------------------------------
+Create Node Host Mirror Registry
+--------------------------------
 
 #. SSH to the target node and run the following commands to place the
    binaries in their respective directories.
@@ -193,8 +193,8 @@ Create Local Host Mirror Registry
 
       ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage
 
-Mirror Images to Local Registry
--------------------------------
+Mirror Images to Node Registry
+------------------------------
 
 #. Before mirroring images we need a copy of your Red Hat "Pull Secret" and update
    it with the local mirror information. If you haven't done so download it here:
@@ -265,26 +265,6 @@ Mirror Images to Local Registry
 
    .. image:: ./images/mirror-images.png
 
-#. Apply the YAML files from the results directory to the cluster.
-
-   .. important:: Only do this for first Node hosting registry/mirror. If
-      adding additional Node redundancy, skip to "Adding Registry & Mirror
-      Redundancy" section.
-
-   .. code-block:: bash
-
-      oc apply -f ./oc-mirror-workspace/results-xxxxxxxxxx/
-
-#. The ability to install operators from the local mirror requires the default
-   operator hub sources to be disabled.
-
-   .. code-block:: bash
-
-      oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
-
-   .. attention:: Any update to the operator list requires the "CatalogSource"
-      to be updated. Delete and recreate the object.
-
 Update Cluster for local registry
 ---------------------------------
 
@@ -325,6 +305,26 @@ Update Cluster for local registry
    .. code-block:: bash
 
       oc patch image.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}' --type=merge
+
+#. Apply the YAML files from the results directory to the cluster.
+
+   .. important:: Only do this for first Node hosting registry/mirror. If
+      adding additional Node redundancy, skip to "Adding Registry & Mirror
+      Redundancy" section.
+
+   .. code-block:: bash
+
+      oc apply -f ./oc-mirror-workspace/results-xxxxxxxxxx/
+
+#. The ability to install operators from the local mirror requires the default
+   operator hub sources to be disabled.
+
+   .. code-block:: bash
+
+      oc patch OperatorHub cluster --type json -p '[{"op": "add", "path": "/spec/disableAllDefaultSources", "value": true}]'
+
+   .. attention:: Any update to the operator list requires the "CatalogSource"
+      to be updated. Delete and recreate the object.
 
 Adding Registry & Mirror Redundancy
 -----------------------------------
