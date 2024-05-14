@@ -265,8 +265,8 @@ Mirror Images to Node Registry
 
    .. image:: ./images/mirror-images.png
 
-Update Cluster for local registry
----------------------------------
+Update Cluster for Node Registry
+--------------------------------
 
 #. Extract OCP pull-secret. A new local file ``.dockerconfigjson`` is created.
 
