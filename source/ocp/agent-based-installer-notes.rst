@@ -267,6 +267,9 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 #. With "openshift-install" downloaded in step 1, run the following command. In
    my case I'm using a "workdir" dir to supply the required yaml files.
 
+   .. tip:: Add the sub directory "openshift" to your workdir for custom
+      configs. For example adding operators or setting "core" user passwd.
+
    .. code-block:: bash
 
       openshift-install agent create image --dir workdir
@@ -302,6 +305,45 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       <host mac='52:54:00:f4:16:51' ip='192.168.122.51'/>
       <host mac='52:54:00:f4:16:52' ip='192.168.122.52'/>
       <host mac='52:54:00:f4:16:53' ip='192.168.122.53'/>
+
+Set Core User Passwd
+--------------------
+
+For lab purposes it might be beneficial to login as core user with a passwd vs.
+cert auth. This process will set / override the default random passwd at
+install time.
+
+.. note:: This example is "master" nodes only. If you want to apply to other
+   machine config pools be sure to create the machine config with the
+   appropriate labels.
+
+#. Create the following butane file, "98-master-core-pass.bu". I'm setting the
+   passwd to "core". Use base64 decode to configure passwd of your choice.
+
+   .. code-block:: bash
+      :caption: 98-master-core-pass.bu
+      :emphasize-lines: 5, 10
+
+      variant: openshift
+      version: 4.14.0
+      metadata:
+        labels:
+          machineconfiguration.openshift.io/role: master
+        name: 98-master-core-pass
+      passwd:
+        users:
+          - name: core
+            password_hash: Y29yZQ==
+
+#. Create machine config yaml
+
+   .. code-block:: bash
+
+      butane --files-dir . 98-master-core-pass.bu > 98-master-core-pass.yaml
+
+#. Copy this file to your openshift install "working" dir / sub dir
+   "openshift". By default agent install consumes the machine config in this
+   sub dir.
 
 Calico Example
 --------------
