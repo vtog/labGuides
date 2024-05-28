@@ -50,9 +50,9 @@ Prerequisites
       mkdir ~/.docker
       cp ./pull-secret.json ~/.docker/config.json
 
-#. Create the following "imageset-config.yaml" file. In the content below I'm
+#. Create the following "imageset-config.yaml" file. In the file below I'm
    mirroring OCP v4.12, more specifically only v4.12.5. I've also added some
-   additional operators.
+   additional operators (pulling their latest version for the index).
 
    .. attention:: Be sure to update the mirror-platform-channel and operators
       to your specific version and package requirements.
@@ -84,6 +84,9 @@ Prerequisites
           - name: registry.redhat.io/rhel8/support-tools:latest
           - name: registry.redhat.io/rhel9/support-tools:latest
           - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.12
+          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.12
+          - name: quay.io/openshift/origin-sriov-network-device-plugin:4.12
+          - name: quay.io/openshift-scale/etcd-perf:latest
         helm: {}
 
    .. tip:: To discover operators by their package name, applicable channels,

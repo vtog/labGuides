@@ -189,12 +189,12 @@ Mirror Images to Local Registry
    .. attention:: Be sure path in imageURL (line 5) matches the path assigned
       earlier for "quayRoot".
 
-   .. note:: "graph: true" mirror's the graph data to the disconnected
+   .. note:: **"graph: true"** mirror's the graph data to the disconnected
       registry. This information enables the disconnected cluster, via the
       update service operator, to show a visual representation of the available
       upgrades.
 
-   .. note:: "shortestPath: true" instructs the oc mirror command to only pull
+   .. note:: **"shortestPath: true"** instructs the oc mirror command to only pull
       the required version to upgrade from one version to the next. It will
       prune any unneeded version.
 
@@ -203,7 +203,7 @@ Mirror Images to Local Registry
       "mirror.lab.local:8443/mirror/ocp4".
 
    .. code-block:: yaml
-      :emphasize-lines: 5,10,13,16,19,20,22,35,48
+      :emphasize-lines: 5,10,13,16,19,20,22,36,50
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
