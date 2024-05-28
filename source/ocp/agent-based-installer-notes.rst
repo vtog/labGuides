@@ -306,6 +306,198 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       <host mac='52:54:00:f4:16:52' ip='192.168.122.52'/>
       <host mac='52:54:00:f4:16:53' ip='192.168.122.53'/>
 
+Custom Partitioning
+-------------------
+Here I have a couple of common examples on how to customize the deployment
+partitioning; A single block device and four block devices.
+
+.. attention:: This example is "master" nodes only. If you want to apply to
+   other machine config pools be sure to create the machine config with the
+   appropriate labels.
+
+#. Based on your environment create one of the following butane file/example.
+
+   - One Device (400G)
+
+     .. note:: With a single device the installer will use all the available
+        space across 4 partitions. For this to work **"resize"** partition 4
+        and create 3 additional partitions, utilizing the space free'd up from
+        the resized partition.
+
+     .. note:: By setting **"start_mib: 0"** the partition starts where the
+        previous partition ended.
+
+     .. note:: By setting **"size_mib: 0"** all of the avilable space is
+        utilized by this partition.
+
+     .. important::
+
+        - **"wipe_partition_entry: true"** - If True, delete existing
+          partition.
+        - **"wipe_filesystem: true"** - If True, ignition will always wipe any
+          preexisting filesystem and create the desired filesystem.
+          The old filesystem will be lost.
+        - **"with_mount_unit: true"** - Create the mount point.
+        - **"mount_options: [defaults, prjquota]"** - The prjquota mount option
+          must be enabled for filesystems used for container storage.
+
+     .. code-block:: yaml
+        :caption: 98-master-partition.bu - One Device (400G)
+        :emphasize-lines: 5, 9, 20, 25, 30, 36, 42, 48
+
+        variant: openshift
+        version: 4.14.0
+        metadata:
+          labels:
+            machineconfiguration.openshift.io/role: master
+          name: 98-master-partition
+        storage:
+          disks:
+            - device: /dev/disk/by-path/pci-0000:04:00.0
+              partitions:
+                - number: 1
+                  should_exist: true
+                - number: 2
+                  should_exist: true
+                - number: 3
+                  should_exist: true
+                - number: 4
+                  resize: true
+                  size_mib: 120000
+                - label: var-lib-containers
+                  number: 5
+                  size_mib: 100000
+                  start_mib: 0
+                  wipe_partition_entry: true
+                - label: var-lib-etcd
+                  number: 6
+                  size_mib: 100000
+                  start_mib: 0
+                  wipe_partition_entry: true
+                - label: var-lib-prometheus-data
+                  number: 7
+                  size_mib: 0
+                  start_mib: 0
+                  wipe_partition_entry: true
+          filesystems:
+            - device: /dev/disk/by-partlabel/var-lib-containers
+              format: xfs
+              path: /var/lib/containers
+              wipe_filesystem: true
+              with_mount_unit: true
+              mount_options: [defaults, prjquota]
+            - device: /dev/disk/by-partlabel/var-lib-etcd
+              format: xfs
+              path: /var/lib/etcd
+              wipe_filesystem: true
+              with_mount_unit: true
+              mount_options: [defaults, prjquota]
+            - device: /dev/disk/by-partlabel/var-lib-prometheus-data
+              format: xfs
+              path: /var/lib/prometheus/data
+              wipe_filesystem: true
+              with_mount_unit: true
+              mount_options: [defaults, prjquota]
+
+   - Four Device's (100G each)
+
+     .. note:: With four device's we don't need to identify the first device.
+        I'm doing this for consistency but am making NO changes.
+
+     .. note:: By setting **"start_mib: 0"** the partition starts where the
+        previous partition ended.
+
+     .. note:: By setting **"size_mib: 0"** all of the avilable space is
+        utilized by this partition.
+
+     .. important::
+
+        - **"wipe_table: true"** - Without this the previously installed table
+          is used and partition will not get created.
+        - **"wipe_partition_entry: true"** - If True, delete existing
+          partition.
+        - **"wipe_filesystem: true"** - If True, ignition will always wipe any
+          preexisting filesystem and create the desired filesystem.
+          The old filesystem will be lost.
+        - **"with_mount_unit: true"** - Create the mount point.
+        - **"mount_options: [defaults, prjquota]"** - The prjquota mount option
+          must be enabled for filesystems used for container storage.
+
+     .. code-block:: yaml
+        :caption: 98-master-partition.bu - Four Device's (100G each)
+        :emphasize-lines: 5, 9, 19, 22, 27, 30, 35, 38, 44, 50, 56
+
+        variant: openshift
+        version: 4.14.0
+        metadata:
+          labels:
+            machineconfiguration.openshift.io/role: master
+          name: 98-master-partition
+        storage:
+          disks:
+            - device: /dev/disk/by-path/pci-0000:05:00.0
+              partitions:
+                - number: 1
+                  should_exist: true
+                - number: 2
+                  should_exist: true
+                - number: 3
+                  should_exist: true
+                - number: 4
+                  should_exist: true
+            - device: /dev/disk/by-path/pci-0000:06:00.0
+              wipe_table: true
+              partitions:
+                - label: var-lib-containers
+                  number: 1
+                  size_mib: 0
+                  start_mib: 0
+                  wipe_partition_entry: true
+            - device: /dev/disk/by-path/pci-0000:07:00.0
+              wipe_table: true
+              partitions:
+                - label: var-lib-etcd
+                  number: 1
+                  size_mib: 0
+                  start_mib: 0
+                  wipe_partition_entry: true
+            - device: /dev/disk/by-path/pci-0000:08:00.0
+              wipe_table: true
+              partitions:
+                - label: var-lib-prometheus-data
+                  number: 1
+                  size_mib: 0
+                  start_mib: 0
+                  wipe_partition_entry: true
+          filesystems:
+            - device: /dev/disk/by-partlabel/var-lib-containers
+              format: xfs
+              path: /var/lib/containers
+              wipe_filesystem: true
+              with_mount_unit: true
+              mount_options: [defaults, prjquota]
+            - device: /dev/disk/by-partlabel/var-lib-etcd
+              format: xfs
+              path: /var/lib/etcd
+              wipe_filesystem: true
+              with_mount_unit: true
+              mount_options: [defaults, prjquota]
+            - device: /dev/disk/by-partlabel/var-lib-prometheus-data
+              format: xfs
+              path: /var/lib/prometheus/data
+              wipe_filesystem: true
+              with_mount_unit: true
+              mount_options: [defaults, prjquota]
+
+#. Create machine config yaml.
+
+   .. code-block:: bash
+
+      butane 98-master-partition.bu -o 98-master-partition.yaml
+
+#. Copy the "yaml" output to your install "working" dir / sub dir "openshift".
+   By default agent install consumes the machine config in this sub dir.
+
 Set Core User Passwd
 --------------------
 
@@ -313,14 +505,26 @@ For lab purposes it might be beneficial to login as core user with a passwd vs.
 cert auth. This process will set / override the default random passwd at
 install time.
 
-.. note:: This example is "master" nodes only. If you want to apply to other
-   machine config pools be sure to create the machine config with the
+.. attention:: This example is "master" nodes only. If you want to apply to
+   other machine config pools be sure to create the machine config with the
    appropriate labels.
 
-#. Create the following butane file, "98-master-core-pass.bu". I'm setting the
-   passwd to "core". Use base64 decode to configure passwd of your choice.
+#. Use mkpasswd to generate the encrypted passwd.
+
+   .. note:: If needed:
+
+      .. code-block:: bash
+
+         sudo dnf install mkpasswd
 
    .. code-block:: bash
+
+      mkpasswd
+
+#. Create the following butane file, "98-master-core-pass.bu". I'm setting the
+   passwd to "core" with the "mkpasswd" utility.
+
+   .. code-block:: yaml
       :caption: 98-master-core-pass.bu
       :emphasize-lines: 5, 10
 
@@ -333,17 +537,16 @@ install time.
       passwd:
         users:
           - name: core
-            password_hash: Y29yZQ==
+            password_hash: <mkpasswd output>
 
-#. Create machine config yaml
+#. Create machine config yaml.
 
    .. code-block:: bash
 
-      butane --files-dir . 98-master-core-pass.bu > 98-master-core-pass.yaml
+      butane 98-master-core-pass.bu -o 98-master-core-pass.yaml
 
-#. Copy this file to your openshift install "working" dir / sub dir
-   "openshift". By default agent install consumes the machine config in this
-   sub dir.
+#. Copy the "yaml" output to your install "working" dir / sub dir "openshift".
+   By default agent install consumes the machine config in this sub dir.
 
 Calico Example
 --------------
