@@ -168,6 +168,13 @@ Create Node Host Mirror Registry
 
    .. image:: ./images/mirror-reg-install.png
 
+   .. tip:: Upgrade running registry
+
+      .. code-block:: bash
+
+         ./mirror-registry upgrade --quayHostname $quayHostname --quayRoot $quayRoot \
+         --quayStorage $quayStorage --pgStorage $pgStorage
+
 #. Copy newly created root CA and update the trust.
 
    .. code-block:: bash
@@ -187,11 +194,12 @@ Create Node Host Mirror Registry
 
    .. hint:: Username = "init" / Password = "password"
 
-.. tip:: If needed, the following command will uninstall the registry.
+.. tip:: If something went wrong, the following command will UNINSTALL the registry.
 
    .. code-block:: bash
 
-      ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage
+      ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage /
+      --pgStorage $pgStorage
 
 Mirror Images to Node Registry
 ------------------------------

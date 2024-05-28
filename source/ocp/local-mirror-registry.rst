@@ -72,11 +72,19 @@ Create Local Host Mirror Registry
 
       cd ~/mirror-registry
 
-      sudo ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
+      sudo ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot \
+      --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
 
    If ran correctly should see a similar ansible recap.
 
    .. image:: ./images/mirror-reg-install.png
+
+   .. tip:: Upgrade running registry
+
+      .. code-block:: bash
+
+         sudo ./mirror-registry upgrade --quayHostname $quayHostname --quayRoot $quayRoot \
+         --quayStorage $quayStorage --pgStorage $pgStorage
 
 #. Copy newly created root CA, update trust, and open firewall port.
 
@@ -100,12 +108,13 @@ Create Local Host Mirror Registry
 
    .. hint:: Username = "init" / Password = "password"
 
-#. If something went wrong, the following command will **UNINSTALL** the
+.. tip:: If something went wrong, the following command will **UNINSTALL** the
    registry.
 
    .. code-block:: bash
 
-      sudo ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage --pgStorage $pgStorage
+      sudo ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage \
+      --pgStorage $pgStorage
 
 Mirror Images to Local Registry
 -------------------------------
@@ -228,6 +237,7 @@ Mirror Images to Local Registry
               - name: metallb-operator
               - name: multicluster-engine
               - name: odf-operator
+              - name: quay-operator
               - name: skupper-operator
               - name: sriov-network-operator
           - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.13
@@ -241,6 +251,7 @@ Mirror Images to Local Registry
               - name: metallb-operator
               - name: multicluster-engine
               - name: odf-operator
+              - name: quay-operator
               - name: skupper-operator
               - name: sriov-network-operator
           - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.14
@@ -254,6 +265,7 @@ Mirror Images to Local Registry
               - name: metallb-operator
               - name: multicluster-engine
               - name: odf-operator
+              - name: quay-operator
               - name: skupper-operator
               - name: sriov-network-operator
         additionalImages:
@@ -272,6 +284,7 @@ Mirror Images to Local Registry
           - name: quay.io/openshift/origin-sriov-network-device-plugin:4.12
           - name: quay.io/openshift/origin-sriov-network-device-plugin:4.13
           - name: quay.io/openshift/origin-sriov-network-device-plugin:4.14
+          - name: quay.io/openshift-scale/etcd-perf:latest
           - name: docker.io/centos/tools:latest
           - name: docker.io/f5devcentral/f5-hello-world:latest
           - name: docker.io/library/httpd:latest
