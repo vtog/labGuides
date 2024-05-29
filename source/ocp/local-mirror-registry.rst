@@ -417,11 +417,41 @@ To create a new cluster using the local mirror & registry see:
       to be updated. To do so run "oc remove" and "oc create" of the
       "CatalogSource".
 
+Upgrade a Disconnected Cluster
+------------------------------
+
+The easiest way to update a disconnected cluster is via the cli.
+
+#. From your disconnected registry/mirror, find the release image to upgrade
+   to.
+
+   A. Browse to registry, https://mirror.lab.local:8443
+   #. Filter Repositories for "release-image" and click Name.
+   #. On the left hand side select the "Tags" icon.
+   #. Search for the image tag to upgrade to and click the "Fetch Tag" icon.
+
+      .. image:: images/fetch-release-tags.png
+
+   #. In the "Image Format" drop down list select "Podman Pull (by digest)"
+      and click the "Copy Command"
+
+      .. image:: images/pull-by-digest.png
+
+#. From the CLI start the upgrade. Use the "\-\-to-image=" switch and the image
+   identified in the previous steps.
+
+   .. note:: Be sure to only use the url and release. You can remove "podman
+      pull" from the copied content.
+
+   .. code-block:: bash
+
+      oc adm upgrade --to-image=mirror.lab.local:8443/openshift/release-images@sha256:a0ef946ef8ae75aef726af1d9bbaad278559ad8cab2c1ed1088928a0087990b6
+
 Configure Openshift Update Service
 ----------------------------------
 
-This process is required to update a disconnected cluster using your local
-disconnected registry.
+This process is one way to upgrade a disconnected cluster using your local
+disconnected registry and the "cincinnati" operator.
 
 #. The Update Service Operator needs the config map to include the key name
    "updateservice-registry" in the registry CA cert. Edit the ConfigMap
