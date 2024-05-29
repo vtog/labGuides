@@ -509,7 +509,8 @@ install time.
    other machine config pools be sure to create the machine config with the
    appropriate labels.
 
-#. Use mkpasswd to generate the encrypted passwd.
+#. Use mkpasswd to generate the encrypted passwd. I'm setting the passwd to
+   "core".
 
    .. note:: If needed:
 
@@ -519,7 +520,7 @@ install time.
 
    .. code-block:: bash
 
-      mkpasswd
+      mkpasswd core
 
 #. Create the following butane file, "98-master-core-pass.bu". I'm setting the
    passwd to "core" with the "mkpasswd" utility.
@@ -537,7 +538,7 @@ install time.
       passwd:
         users:
           - name: core
-            password_hash: <mkpasswd output>
+            password_hash: <mkpasswd_output>
 
 #. Create machine config yaml.
 
