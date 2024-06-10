@@ -64,7 +64,7 @@ install-config.yaml I used with KVM.
             - name: host40.ocp4.lab.local
               role: master
               bmc:
-                address: redfish+http://192.168.1.72:8000/redfish/v1/Systems/940a6eaa-4b4f-4297-8182-e24cbfc64460
+                address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/940a6eaa-4b4f-4297-8182-e24cbfc64460
                 username: kni
                 password: kni
                 disableCertificateVerification: True

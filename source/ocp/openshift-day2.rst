@@ -577,7 +577,7 @@ getting this right at install time. The following is based on:
 <https://docs.openshift.com/container-platform/4.12/networking/changing-cluster-network-mtu.html>`_
 
 .. note:: In the OCP doc they use a machine config to change the nodes
-   interface MTU. I found this did NOT work. I simply used nmcli to chagne the
+   interface MTU. I found this did NOT work. I simply used nmcli to change the
    value.
 
 .. important:: This is for **OVN-kubernetes** only.  For OpenShift SDN see
