@@ -102,6 +102,9 @@ Add Host Inventory
 To add hosts to the "Host Inventory" use the following script and CSV file.
 Together it creates three objects in the "output" directory.
 
+.. tip:: When removing these objects be sure to do it via the console. Doing
+   so via the cli will leave orphaned objects.
+
 - Secret
 - NMStateConfig
 - BareMetalHost

@@ -11,11 +11,11 @@ OpenShift Lab Guides
    ipi-notes
    add-node
    openshift-day2
-   nfs
    lso-quick-start
    odf-quick-start
    image-registry
    local-mirror-registry
    node-mirror-registry
    multus
+   nfs
    sriov
