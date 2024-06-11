@@ -38,6 +38,64 @@ Basic ACM install to get started.
 Basic Config
 ------------
 
+Simple config to get started. The following steps will create the following
+objects:
+
+- Project
+- Credentials
+- Host Inventory
+
+#. Create a new project/namespace for your spoke cluster objects.
+
+   .. code-block:: bash
+
+      oc new-project <project_name>
+
+#. Switch from "local-cluster" to "All Clusters".
+
+   .. image:: ./images/acm-allclusters.png
+
+#. Configure credentials. Select "Credentials" then click "Add credentials".
+
+   .. image:: ./images/acm-credentials.png
+
+#. Select Credential Type. In my lab/example I'm using Host Inventory.
+
+   .. image:: ./images/acm-host-inventory.png
+
+#. Enter the basic credential information and click Next.
+
+   .. image:: ./images/acm-basic-info.png
+
+#. Add your "Pull secret" and "SSH public key" and click Next.
+
+   .. image:: ./images/acm-pull-secret.png
+
+#. Review and click Add.
+
+#. From the console go to Infrastructure --> Host Inventory. Click "Create
+   infrastructure environment.
+
+   .. image:: ./images/acm-infra-env.png
+
+#. Enter the information for your infrastructure environment. Click "Create"
+   when finished.
+
+   .. note:: Use the previously created credentials in the "Infrastructure
+      provider credentials" drop down list.
+
+   .. attention:: Be patient this process will take some time. For a connected
+      environment several images need to be pulled down. You can monitor this
+      process with the following command. Wait for the pod to fully start.
+
+      .. code-block:: bash
+
+         oc get pod assisted-image-service-0 -n multicluster-engine
+
+         oc logs assisted-image-service-0 -n multicluster-engine -f
+
+   .. image:: ./images/acm-create-infra-env.png
+
 Add Host Inventory
 ------------------
 
