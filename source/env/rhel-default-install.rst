@@ -302,9 +302,22 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
 #. Configure OpenShift client tab complete
 
-   .. code-block:: bash
+   - for zsh
 
-      oc completion zsh | sudo tee /usr/share/zsh/site-functions/_oc
+     .. code-block:: bash
+
+        oc completion zsh | sudo tee /usr/share/zsh/site-functions/_oc
+
+     .. code-block:: bash
+
+        # Add the following to ~/.zshrc
+        source /usr/share/zsh/site-functions/_oc 2>/dev/null
+
+   - for bash
+
+     .. code-block:: bash
+
+        oc completion bash | sudo tee /etc/bash_completion.d/oc_completion
 
 #. Prefer IPv4. By default IPv6 addresses are preferred. Create /etc/gai.conf
    and change default priorities.
