@@ -86,7 +86,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       sudo dnf install bat btop neofetch neovim terminator slack
 
-#. Insall packages via Sofware store.
+#. Install packages via Sofware store.
 
    - Yubico Authenticator
    - Visual Studio Code
@@ -352,7 +352,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       make CMAKE_BUILD_TYPE=Release
       sudo make install
 
-#. Insall Terminator from Source **(If Needed)**
+#. Install Terminator from Source **(If Needed)**
 
    .. code-block:: bash
 
