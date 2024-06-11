@@ -15,4 +15,5 @@ Platform/Environment Lab Guides
    intel-i350
    docker
    er4
+   git
    help
