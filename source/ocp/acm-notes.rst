@@ -144,12 +144,13 @@ Together it creates three objects in the "output" directory.
 
       # Take "nodes" CSV and create bare-metal resources for cluster.
 
-      for host in `cat nodes | grep -v HOST | awk -F "," '{print $1}'`; do
+      for host in `cat nodes | grep -v HOST`; do
       HOST=`grep $host nodes | awk -F "," '{print $1}'`;
       BMCIP=`grep $host nodes | awk -F "," '{print $2}'`;
       HOSTIP=`grep $host nodes | awk -F "," '{print $3}'`;
       MAC1=`grep $host nodes | awk -F "," '{print $4}'`;
       UUID=`grep $host nodes | awk -F "," '{print $5}'`;
+      done;
 
       # Secret
 
