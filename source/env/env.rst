@@ -6,14 +6,12 @@ Platform/Environment Lab Guides
    :caption: Content:
 
    rhel-default-install
-   kvm
    simple-bind-config
+   kvm
    nfs
    sushy
    sriov
-   create-key-cert-pair
    intel-i350
    docker
    er4
-   git
    help

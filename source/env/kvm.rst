@@ -22,22 +22,48 @@ KVM Install Notes
 
 #. Tagging on the **Host**. Create the following file.
 
-   .. note:: In this example there are two VLANs, 122 & 132. Both **VLAN**
+   .. note:: In these examples I have two VLANs, 122 & 132. Both **VLAN**
       intefaces need to be created on the **host** first. The network is
       configured with trunked ports.
 
    .. code-block:: xml
 
       <network>
-        <name>macvtap-net</name>
+        <name>macvtap-122</name>
         <forward mode="bridge">
           <interface dev="enp3s0f0.122"/>
+        </forward>
+      </network>
+
+   .. code-block:: xml
+
+      <network>
+        <name>macvtap-132</name>
+        <forward mode="bridge">
           <interface dev="enp3s0f0.132"/>
         </forward>
       </network>
 
    .. attention:: When creating the VM add two network interfaces. Each will be
       on their respective VLAN.
+
+#. SRIOV Networks
+
+   .. note:: With qemu v8+ you can use sriov to dynamically creat VF
+      interfaces for the guest.
+
+      .. code-block::
+
+         qemu-img --version
+
+   .. code-block:: xml
+
+      <network>
+        <name>sriov-ens6f0</name>
+          <forward mode='hostdev' managed='yes'>
+            <pf dev='ens6f0'/>
+          </forward>
+      </network>
 
 #. Run the following commands to create the new network. This procedure is the
    same regardless of tagging option choosen in previous steps.
