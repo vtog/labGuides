@@ -116,7 +116,7 @@ Together it creates three objects in the "output" directory.
 
    .. code-block:: bash
 
-      HOSTNAME,DRAC-IP,NODE-IP,ETH0,UUID
+      HOST,BMCIP,HOSTIP,MAC1,UUID
       host11,192.168.1.72:8000,192.168.122.11,52:54:00:f4:16:11,0ef41f53-b22b-4809-a8e4-6fd76b1385af
       host12,192.168.1.72:8000,192.168.122.12,52:54:00:f4:16:12,9ccd79b0-d21c-494d-a51a-8d08a371cc8f
       host13,192.168.1.72:8000,192.168.122.13,52:54:00:f4:16:13,8ac8719f-12fc-43e9-a04c-e3647af877f9
