@@ -714,3 +714,37 @@ getting this right at install time. The following is based on:
         Network Type:         OVNKubernetes
         Service Network:
           172.30.0.0/16
+
+SRIOV Unsupported NIC
+---------------------
+
+.. warning:: Enabling an unsupported NICs is not officially.
+
+#. Disable supported devices only checking.
+
+   .. code-block:: bash
+
+      oc patch sriovoperatorconfig default --type=merge \
+      -n openshift-sriov-network-operator \
+      --patch '{ "spec": { "enableOperatorWebhook": false } }'
+
+#. Enable "DEV_MODE" on the sriov subscription.
+
+   .. code-block:: bash
+
+      oc patch subscription sriov-network-operator -n openshift-sriov-network-operator \
+      --type=merge -p '{"spec": {"config": {"env": [{"name": "DEV_MODE", "value": "TRUE"}]}}}'
+
+#. After operator and config-daemon pods restart verify dev mode.
+
+   Check pods restart:
+
+   .. code-block:: bash
+
+      oc -n openshift-sriov-network-operator get pods
+
+   Verify dev mode:
+
+   .. code-block:: bash
+
+      oc -n openshift-sriov-network-operator logs -f -c sriov-network-config-daemon sriov-network-config-daemon-xxxxx
