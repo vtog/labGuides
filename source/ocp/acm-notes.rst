@@ -245,3 +245,13 @@ Together it creates three objects in the "output" directory.
       done;
 
       echo -e "\n\nTo create the inventory run \"oc create -f output/\"."
+
+#. Run script and create openshift objects.
+
+   .. code-block:: bash
+
+      ./script.sh
+
+   .. code-block:: bash
+
+      oc create -f output/
