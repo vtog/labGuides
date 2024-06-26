@@ -100,7 +100,7 @@ Create Local Host Mirror Registry
 
    .. code-block:: bash
 
-       podman login -u init -p password $quayHostname:8443
+       podman login -u init -p $initPassword $quayHostname:8443
 
    .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
 
@@ -123,21 +123,14 @@ Mirror Images to Local Registry
    it with the local mirror information. If you haven't done so download it here:
    `your pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
-#. Convert "pull secret" to json format.
+#. Convert and copy pull-secret.json to ~/.docker and rename config.json
 
    .. attention:: You may need to install "jq" for this step.
 
    .. code-block:: bash
 
-      cd ~
-      cat ./pull-secret.txt | jq . > ./pull-secret.json
-
-#. Copy pull-secret.json to ~/.docker and rename config.json
-
-   .. code-block:: bash
-
       mkdir ~/.docker
-      cp ./pull-secret.json ~/.docker/config.json
+      cat ./pull-secret.txt | jq . > ~/.docker/config.json
 
 #. Generate the base64-encoded user name and password for mirror registry.
 
