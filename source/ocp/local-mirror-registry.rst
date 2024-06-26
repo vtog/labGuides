@@ -230,6 +230,7 @@ Mirror Images to Local Registry
               - name: metallb-operator
               - name: multicluster-engine
               - name: odf-operator
+              - name: openshift-gitops-operator
               - name: quay-operator
               - name: skupper-operator
               - name: sriov-network-operator
@@ -244,6 +245,7 @@ Mirror Images to Local Registry
               - name: metallb-operator
               - name: multicluster-engine
               - name: odf-operator
+              - name: openshift-gitops-operator
               - name: quay-operator
               - name: skupper-operator
               - name: sriov-network-operator
@@ -258,6 +260,7 @@ Mirror Images to Local Registry
               - name: metallb-operator
               - name: multicluster-engine
               - name: odf-operator
+              - name: openshift-gitops-operator
               - name: quay-operator
               - name: skupper-operator
               - name: sriov-network-operator
