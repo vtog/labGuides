@@ -277,6 +277,8 @@ Mirror Images to Local Registry
           - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.12
           - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.13
           - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.14
+          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:4.15
+          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:4.16
           - name: quay.io/openshift/origin-sriov-network-device-plugin:4.12
           - name: quay.io/openshift/origin-sriov-network-device-plugin:4.13
           - name: quay.io/openshift/origin-sriov-network-device-plugin:4.14
