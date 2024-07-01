@@ -6,8 +6,9 @@ OpenShift Lab Guides
    :caption: Content:
 
    acm-notes
-   assisted-installer-notes
    agent-based-installer-notes
+   appliance-based-installer-notes
+   assisted-installer-notes
    ipi-notes
    add-node
    openshift-day2

@@ -23,6 +23,17 @@ Before starting have a naming and IP plan. The following is based on static IP.
   - "A" records for each host/node
   - "PTR" records for each host/node
 
+.. tip:: Check disk performance for etcd with "fio". It's critical to have a
+   high performing disk drive for OCP / etcd.
+
+   For more info:
+   `How to Use 'fio' to Check Etcd Disk Performance in OCP
+   <https://access.redhat.com/solutions/4885641?extIdCarryOver=true&sc_cid=701f2000001OH74AAG%20>`_
+
+   .. code-block:: bash
+
+      podman run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
+
 Method of Procedure
 -------------------
 

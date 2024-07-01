@@ -5,6 +5,9 @@ The following are notes on deploying OCP with the NEW (4.12) agent-based
 installer. Two files are required to build the ISO, "install-config.yaml" and
 "agent-config.yaml".
 
+.. seealso:: For more detail: `Preparing to install with the Agent-based installer
+   <https://docs.openshift.com/container-platform/4.12/installing/installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.html>`_
+
 .. tip:: Check disk performance for etcd with "fio". It's critical to have a
    high performing disk drive for OCP / etcd.
 
@@ -15,9 +18,6 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    .. code-block:: bash
 
       podman run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
-
-.. seealso:: For more detail: `Preparing to install with the Agent-based installer
-   <https://docs.openshift.com/container-platform/4.12/installing/installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.html>`_
 
 #. Download the latest openshift-install utility found here:
 
