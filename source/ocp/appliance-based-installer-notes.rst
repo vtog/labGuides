@@ -5,7 +5,7 @@ The following are notes on deploying OCP using the Appliance Builder and
 Agent Based Installer.
 
 .. seealso:: My notes are based on the following Red Hat Article. For a more
-   thorough explanation of the process: `OpenShift-based Appliance Builder User
+   thorough explanation of the process see: `OpenShift-based Appliance Builder User
    Guide <https://access.redhat.com/articles/7065136>`_
 
 .. tip:: Check disk performance for etcd with "fio". It's critical to have a
@@ -19,14 +19,116 @@ Agent Based Installer.
 
       podman run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
 
-#. Download the latest openshift-install utility found here:
+Build the disk image
+--------------------
 
-   `OpenShift for x86_64 Installer <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-install-linux.tar.gz>`_
+#. Set the environment variables.
 
-   .. attention:: The link points to the most recent version. Typically you'll
-      want a specific version. You can find that here:
+   .. important:: Use absolute directory paths.
 
-      `<https://access.redhat.com/downloads/content/290/>`_
+   .. tip:: For container info and download instructions see:
+      `OpenShift-based Appliance Builder
+      <https://catalog.redhat.com/software/containers/assisted/agent-preinstall-image-builder-rhel9/65a55174031d94dbea7f2e00?architecture=amd64&image=66314d3a84d042ce9f6acbaf&container-tabs=overview>`_
+
+   .. code-block:: bash
+
+      export APPLIANCE_IMAGE="registry.redhat.io/assisted/agent-preinstall-image-builder-rhel9:1.0-1714506949"
+      export APPLIANCE_ASSETS="/home/vince/OCP/appliance-builder"
+
+#. Get the openshift appliance builder.
+
+   .. code-block:: bash
+
+      podman pull $APPLIANCE_IMAGE
+
+#.  Generate the appliance template. A new file, "appliance-config.yaml" is
+    created in the $APPLIANCE_ASSETS directory.
+
+   .. code-block:: bash
+
+      podman run --rm -it --pull newer -v $APPLIANCE_ASSETS:/assets:Z $APPLIANCE_IMAGE generate-config
+
+#. Modify "appliance-config.yaml" for your environment.
+
+   .. code-block:: yaml
+
+      apiVersion: v1beta1
+      kind: ApplianceConfig
+      ocpRelease:
+        version: 4.14
+        channel: stable
+        cpuArchitecture: x86_64
+      diskSizeGB: 200
+      pullSecret: <your-pull-secret>
+      sshKey: <your-ssh-key>
+      userCorePass: <your-core-passwd>
+      imageRegistry:
+        # Default: docker.io/library/registry:2
+        # [Optional]
+        uri: docker.io/library/registry:2
+        # Default: 5005
+        # [Optional]
+        port: 5005
+      # Enable all default CatalogSources (on openshift-marketplace namespace).
+      # Should be disabled for disconnected environments.
+      # Default: false
+      # [Optional]
+      enableDefaultSources: false
+      # Stop the local registry post cluster installation.
+      # Note that additional images and operators won't be available when stopped.
+      # Default: false
+      # [Optional]
+      stopLocalRegistry: false
+
+#. Build the disk image. This will create a "raw" disk image for your cluter
+   appliance.
+
+   .. code-block:: bash
+
+      sudo podman run --rm -it --pull newer --privileged --net=host -v $APPLIANCE_ASSETS:/assets:Z $APPLIANCE_IMAGE build
+
+   .. important:: If needed you can rebuild the disk image with another version
+      or updated or additional manifests but you must first "clean" the assets
+      directory first.
+
+      .. code-block:: bash
+
+         sudo podman run --rm -it -v $APPLIANCE_ASSETS:/assets:Z $APPLIANCE_IMAGE clean
+
+   .. note: The clean command keeps the cache folder under assets intact. To
+      clean the entire cache as well, use the --cache flag with the clean
+      command.
+
+Clone the appliance disk image
+------------------------------
+
+In my environment I'm using libvirt.
+
+#. Convert the raw image to qcow2.
+
+   .. code-block:: bash
+
+      qemu-img convert -O qcow2 appliance.raw appliance-4.14.30.qcow2
+
+#. Create a disk image for each node and copy to the destination storage pool.
+   In my case 3 nodes host11-13.
+
+   .. code-block:: bash
+
+      for i in {11..13}; do cp appliance-4.14.30.qcow2 /local/host$i.qcow2; done;
+
+.. tip:: For baremetal you can copy the raw image to the destination drive
+
+   .. code-block:: bash
+
+      dd if=appliance.raw of=/dev/sda bs=1M status=progress
+
+
+Create the agent install manifests
+----------------------------------
+
+#. Download the version specific openshift-install utility. You can find that
+   here: `<https://access.redhat.com/downloads/content/290/>`_
 
 #. Install nmstate
 
@@ -76,20 +178,9 @@ Agent Based Installer.
         baremetal:
           apiVIP: "192.168.122.110"
           ingressVIP: "192.168.122.111"
-      pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
+      pullSecret: '{"auths":{"":{"auth":"dXNlcjpwYXNz"}}}'
       sshKey: |
-        ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
-      imageContentSources:
-      - mirrors:
-        - mirror.lab.local:8443/openshift/release
-        source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
-      - mirrors:
-        - mirror.lab.local:8443/openshift/release-images
-        source: quay.io/openshift-release-dev/ocp-release
-      additionalTrustBundle: |
-        -----BEGIN CERTIFICATE-----
-        <Use rootCA.pem from your mirror registry here>
-        -----END CERTIFICATE-----
+        <your-ssh-key>
 
    .. note:: For SNO set "platform:" to "none: {}".
 
@@ -272,7 +363,12 @@ Agent Based Installer.
 
    .. code-block:: bash
 
-      openshift-install agent create image --dir workdir
+      openshift-install agent create config-image --dir workdir
+
+   .. note:: This is not a bootable image. It contains all the necessary
+      information to build the cluster. The boot image is contained on the disk
+      images created earlier.
+
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
    with the following command:
@@ -280,28 +376,3 @@ Agent Based Installer.
    .. code-block:: bash
 
       openshift-install agent wait-for install-complete --dir workdir
-
-.. note:: For my environment I manually set the MAC addresses for the VM's
-   primary interface using the following patterns.
-
-   .. code-block:: yaml
-
-      <host mac='52:54:00:f4:16:11' ip='192.168.122.11'/>
-      <host mac='52:54:00:f4:16:12' ip='192.168.122.12'/>
-      <host mac='52:54:00:f4:16:13' ip='192.168.122.13'/>
-
-      <host mac='52:54:00:f4:16:21' ip='192.168.122.21'/>
-      <host mac='52:54:00:f4:16:22' ip='192.168.122.22'/>
-      <host mac='52:54:00:f4:16:23' ip='192.168.122.23'/>
-
-      <host mac='52:54:00:f4:16:31' ip='192.168.122.31'/>
-      <host mac='52:54:00:f4:16:32' ip='192.168.122.32'/>
-      <host mac='52:54:00:f4:16:33' ip='192.168.122.33'/>
-
-      <host mac='52:54:00:f4:16:41' ip='192.168.122.41'/>
-      <host mac='52:54:00:f4:16:42' ip='192.168.122.42'/>
-      <host mac='52:54:00:f4:16:43' ip='192.168.122.43'/>
-
-      <host mac='52:54:00:f4:16:51' ip='192.168.122.51'/>
-      <host mac='52:54:00:f4:16:52' ip='192.168.122.52'/>
-      <host mac='52:54:00:f4:16:53' ip='192.168.122.53'/>
