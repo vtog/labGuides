@@ -41,8 +41,8 @@ Build the disk image
 
       podman pull $APPLIANCE_IMAGE
 
-#.  Generate the appliance template. A new file, "appliance-config.yaml" is
-    created in the $APPLIANCE_ASSETS directory.
+#. Generate the appliance template. A new file, "appliance-config.yaml" is
+   created in the $APPLIANCE_ASSETS directory.
 
    .. code-block:: bash
 

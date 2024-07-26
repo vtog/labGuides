@@ -328,6 +328,10 @@ each machine type.
 
       ssh core@host44 cat /boot/loader/entries/ostree-1-rhcos.conf
 
+      # and/or
+
+      ssh core@host44 cat /proc/cmdline
+
 Stuck Terminating
 -----------------
 
