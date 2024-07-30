@@ -386,13 +386,13 @@ require an Identity Provider. These steps will get you started with htpasswd.
 
 #. Add or delete users as needed
 
-   - Add
+   - ADD
 
      .. code-block:: bash
 
         htpasswd -B -b </path/to/users.htpasswd> <user_name> <password>
 
-   - Delete
+   - DELETE
 
      .. code-block:: bash
 
@@ -400,7 +400,7 @@ require an Identity Provider. These steps will get you started with htpasswd.
 
 #. From the OCP console create the HTPasswd identity provider
 
-   #. Go to :menuselection:`Administration --> Cluster Settings` and click the
+   a. Go to :menuselection:`Administration --> Cluster Settings` and click the
       Configuration tab
    #. Filter the list for "oath". Click the "OAuth" resource
    #. In the "Identity providers" section click "Add" and select "HTPasswd"
@@ -410,7 +410,7 @@ require an Identity Provider. These steps will get you started with htpasswd.
 
 #. Update the htpasswd identity provider
 
-   #. Get secret
+   a. Get secret
 
       .. code-block:: bash
 
