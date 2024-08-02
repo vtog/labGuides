@@ -480,6 +480,50 @@ following commands you can confirm expired certs and resolve the issue.
 
    .. image:: ./images/certexpiry.png
 
+.. tip:: To automate this you can use the following machine config:
+
+   .. code-block:: yaml
+
+      kind: MachineConfig
+      apiVersion: machineconfiguration.openshift.io/v1
+      metadata:
+        name: master-certificate-approve-systemd-service
+        labels:
+          machineconfiguration.openshift.io/role: master
+      spec:
+        config:
+          ignition:
+            version: 3.2.0
+          systemd:
+            units:
+            - name: csr-approve.service
+              enabled: true
+              contents: |
+                [Unit]
+                Description=This script approves pending certificates
+                [Service]
+                ExecStart=/etc/scripts/csr-approve.sh
+                [Install]
+                WantedBy=multi-user.target
+            - name: csr-approve.timer
+              enabled: true
+              contents: |
+                [Unit]
+                Description=Run csr-approve.service every 5 minutes
+                [Timer]
+                OnCalendar=*:0/5
+                Unit=csr-approve.service
+                [Install]
+                WantedBy=timers.target
+          storage:
+            files:
+            - filesystem: root
+              path: "/etc/scripts/csr-approve.sh"
+              contents:
+                source: data:text/plain;charset=utf-8;base64,IyEvYmluL2Jhc2gKZXhwb3J0IEtVQkVDT05GSUc9L2V0Yy9rdWJlcm5ldGVzL3N0YXRpYy1wb2QtcmVzb3VyY2VzL2t1YmUtYXBpc2VydmVyLWNlcnRzL3NlY3JldHMvbm9kZS1rdWJlY29uZmlncy9sYi1pbnQua3ViZWNvbmZpZwpvYyBnZXQgY3NyIC1vIGdvLXRlbXBsYXRlPSd7e3JhbmdlIC5pdGVtc319e3tpZiBub3QgLnN0YXR1c319e3subWV0YWRhdGEubmFtZX19e3siXG4ifX17e2VuZH19e3tlbmR9fScgfCB4YXJncyAtLW5vLXJ1bi1pZi1lbXB0eSBvYyBhZG0gY2VydGlmaWNhdGUgYXBwcm92ZSAyPiYx
+                verification: {}
+              mode: 0755
+              overwrite: true
 
 KubeletConfig podPidsLimit
 --------------------------
