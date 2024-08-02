@@ -26,6 +26,31 @@ and deleting that line.
 
    sed -i -e '/^host51/d' ~/.ssh/known_hosts
 
+
+Create auth key
+---------------
+
+.. note::
+
+   **-b bits**
+
+   Specifies the number of bits in the key to create. For RSA keys, the minimum
+   size is 1024 bits and the default is 3072 bits. Generally, 3072 bits is
+   considered suffi‐cient.
+
+   **-t dsa | ecdsa | ecdsa-sk | ed25519 | ed25519-sk | rsa**
+
+   Specifies the type of key to create.  The possible values are “dsa”,
+   “ecdsa”, “ecdsa-sk”, “ed25519”, “ed25519-sk”, or “rsa”. This flag may also
+   be used to specify the desired signature type when signing certificates
+   using an RSA CA key. The available RSA signature variants are “ssh-rsa”
+   (SHA1 signatures, not recommended), “rsa-sha2-256”, and “rsa-sha2-512” (the
+   default).
+
+.. code-block:: bash
+
+   ssh-keygen -t rsa -b 4096
+
 Create key/cert pair with OpenSSL
 ---------------------------------
 
