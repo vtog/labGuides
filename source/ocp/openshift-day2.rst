@@ -807,8 +807,8 @@ Recover root passwd
 
 #. Select the the boot OS and press "e" to edit.
 
-#. On the line starting with **"linux"** line add **"rd.break"** to the end of
-   the line. Press Ctrl-x to continue.
+#. On the line starting with **"linux"** add **"rd.break"** to the end of the
+   line. Press Ctrl-x to continue.
 
 #. At the "switch_root:/#" prompt, enter the **"mount -o rw,remount /sysroot"**
    command to remount the system’s root as read/write.
@@ -818,7 +818,7 @@ Recover root passwd
 
 #. Set root password with: *"passwd root"**.
 
-#. Exit; Reboot
+#. Now "exit" and "reboot"
 
    .. important:: When rebooting be ready to interrupt the bootloader screen
       just as we did in step 1.
@@ -828,14 +828,14 @@ Recover root passwd
 
 #. Select the the boot OS and press "e" to edit.
 
-#. On the line starting with **"linux"** line add **"autorelabel=1"** to the
-   end of the line. Press Ctrl-x to continue.
+#. On the line starting with **"linux"** add **"autorelabel=1"** to the end of
+   the line. Press Ctrl-x to continue.
 
-   .. warning:: The system will autorelabel and several warnings will appear,
-      you can ignore these.
+   .. warning:: Upon boot the system will autorelabel and several warnings
+      will appear. You can ignore these.
 
 #. The system will reboot when autolabel completes.
 
-#. Let the node reboot with noraml command line switches.
+#. Let the node reboot with normal command line switches.
 
 #. On prompt try logging in with root and new passwd.
