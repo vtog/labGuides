@@ -796,3 +796,46 @@ SRIOV Unsupported NIC
    .. code-block:: bash
 
       oc -n openshift-sriov-network-operator logs -f -c sriov-network-config-daemon sriov-network-config-daemon-xxxxx
+
+Recover root passwd
+-------------------
+
+.. important:: Tested on v4.14.x only.
+
+#. Reboot the system. When the grub bootloader screen appears, use the UpArrow
+   and DownArrow keys to stop the countdown timer.
+
+#. Select the the boot OS and press "e" to edit.
+
+#. On the line starting with **"linux"** line add **"rd.break"** to the end of
+   the line. Press Ctrl-x to continue.
+
+#. At the "switch_root:/#" prompt, enter the **"mount -o rw,remount /sysroot"**
+   command to remount the system’s root as read/write.
+
+#. Now type **"chroot /sysroot"** and hit enter. This will change you into the
+   sysroot (/) directory, and make that your path for executing commands.
+
+#. Set root password with: *"passwd root"**.
+
+#. Exit; Reboot
+
+   .. important:: When rebooting be ready to interrupt the bootloader screen
+      just as we did in step 1.
+
+#. When the grub bootloader screen appears, use the UpArrow and DownArrow keys
+   to stop the countdown timer.
+
+#. Select the the boot OS and press "e" to edit.
+
+#. On the line starting with **"linux"** line add **"autorelabel=1"** to the
+   end of the line. Press Ctrl-x to continue.
+
+   .. warning:: The system will autorelabel and several warnings will appear,
+      you can ignore these.
+
+#. The system will reboot when autolabel completes.
+
+#. Let the node reboot with noraml command line switches.
+
+#. On prompt try logging in with root and new passwd.
