@@ -808,17 +808,17 @@ Recover root passwd
 #. Select the the boot OS and press "e" to edit.
 
 #. On the line starting with **"linux"** add **"rd.break"** to the end of the
-   line. Press Ctrl-x to continue.
+   line. Press ``Ctrl-x`` to continue.
 
-#. At the "switch_root:/#" prompt, enter the **"mount -o rw,remount /sysroot"**
-   command to remount the system’s root as read/write.
+#. At the **"switch_root:/#"** prompt, enter the ``mount -o rw,remount
+   /sysroot`` command to remount the system’s root as read/write.
 
-#. Now type **"chroot /sysroot"** and hit enter. This will change you into the
+#. Now type ``chroot /sysroot`` and hit enter. This will change you into the
    sysroot (/) directory, and make that your path for executing commands.
 
-#. Set root password with: *"passwd root"**.
+#. Set root password with: ``passwd root``.
 
-#. Now "exit" and "reboot"
+#. Now ``exit`` and ``reboot``.
 
    .. important:: When rebooting be ready to interrupt the bootloader screen
       just as we did in step 1.
@@ -829,7 +829,7 @@ Recover root passwd
 #. Select the the boot OS and press "e" to edit.
 
 #. On the line starting with **"linux"** add **"autorelabel=1"** to the end of
-   the line. Press Ctrl-x to continue.
+   the line. Press ``Ctrl-x`` to continue.
 
    .. warning:: Upon boot the system will autorelabel and several warnings
       will appear. You can ignore these.
