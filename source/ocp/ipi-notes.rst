@@ -94,8 +94,8 @@ install-config.yaml I used with KVM.
                     search:
                       - lab.local
                     server:
-                      - 192.168.1.72
-                      - 2600:1702:4c73:f110::72
+                      - 192.168.1.68
+                      - 2600:1702:4c73:f110::68
                 routes:
                   config:
                     - destination: 0.0.0.0/0

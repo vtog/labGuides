@@ -174,7 +174,7 @@ The following are static network configurations when manually configuring
        search:
        - lab.local
        server:
-       - 192.168.1.72
+       - 192.168.1.68
    routes:
      config:
      - destination: 0.0.0.0/0
@@ -210,7 +210,7 @@ The following are static network configurations when manually configuring
        search:
        - lab.local
        server:
-       - 192.168.1.72
+       - 192.168.1.68
    routes:
      config:
      - destination: 0.0.0.0/0
@@ -259,7 +259,7 @@ The following are static network configurations when manually configuring
        search:
        - lab.local
        server:
-       - 192.168.1.72
+       - 192.168.1.68
    routes:
      config:
      - destination: 0.0.0.0/0

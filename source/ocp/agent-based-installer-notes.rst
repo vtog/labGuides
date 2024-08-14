@@ -111,7 +111,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
         name: ocp1
       rendezvousIP: 192.168.122.11
       additionalNTPSources:
-      - 192.168.1.72
+      - 192.168.1.68
       hosts:
         - hostname: host11
           role: master
@@ -139,7 +139,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                 search:
                   - lab.local
                 server:
-                  - 192.168.1.72
+                  - 192.168.1.68
             routes:
               config:
                 - destination: 0.0.0.0/0
@@ -156,7 +156,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
         name: ocp1
       rendezvousIP: 192.168.122.11
       additionalNTPSources:
-      - 192.168.1.72
+      - 192.168.1.68
       hosts:
         - hostname: host11
           role: master
@@ -190,7 +190,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                 search:
                   - lab.local
                 server:
-                  - 192.168.1.72
+                  - 192.168.1.68
             routes:
               config:
                 - destination: 0.0.0.0/0
@@ -207,7 +207,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
         name: ocp1
       rendezvousIP: 192.168.122.11
       additionalNTPSources:
-      - 192.168.1.72
+      - 192.168.1.68
       hosts:
         - hostname: host11
           role: master
@@ -256,7 +256,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
                 search:
                   - lab.local
                 server:
-                  - 192.168.1.72
+                  - 192.168.1.68
             routes:
               config:
                 - destination: 0.0.0.0/0
@@ -609,7 +609,7 @@ installer will consume the new informantion.
         name: ocp5
       rendezvousIP: 192.168.122.51
       additionalNTPSources:
-      - 192.168.1.72
+      - 192.168.1.68
       hosts:
         - hostname: host51
           role: master
@@ -643,7 +643,7 @@ installer will consume the new informantion.
                 search:
                   - lab.local
                 server:
-                  - 192.168.1.72
+                  - 192.168.1.68
             routes:
               config:
                 - destination: 0.0.0.0/0
@@ -770,7 +770,7 @@ IPv6 Only Example
              search:
                - lab.local
              server:
-               - 2600:1702:4c73:f110::72
+               - 2600:1702:4c73:f110::68
          routes:
            config:
              - destination: '::/0'

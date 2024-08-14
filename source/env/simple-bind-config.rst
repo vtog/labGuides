@@ -99,8 +99,8 @@ Simple BIND Config
               IN      NS      ns1.lab.local.
 
       ; name servers - A records
-      ns1.lab.local.                 IN      A       192.168.1.72
-                                     IN      AAAA    2600:1702:4c73:f110::72
+      ns1.lab.local.                 IN      A       192.168.1.68
+                                     IN      AAAA    2600:1702:4c73:f110::68
 
       ; 192.168.1.0/24 - A records
       bfg.lab.local.                 IN      A       192.168.1.72
@@ -163,7 +163,7 @@ Simple BIND Config
               IN      NS      ns1.lab.local.
 
       ; PTR Records
-      72      IN      PTR      ns1.lab.local.                   ; 192.168.1.72
+      68      IN      PTR      ns1.lab.local.                   ; 192.168.1.68
       72      IN      PTR      bfg.lab.local.                   ; 192.168.1.72
       72      IN      PTR      mirror.lab.local.                ; 192.168.1.72
 
