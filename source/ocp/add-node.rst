@@ -38,7 +38,7 @@ for the addition of a new master or worker node, depending on how you set the
 #. Create a new igniton file "new-$NODE_TYPE.ign" that includes a reference to
    the original "$NODE_TYPE.ign" and an additional instruction that the
    coreos-installer program uses to populate the /etc/hostname file on the new
-   master host.
+   host.
 
    .. code-block:: yaml
       :emphasize-lines: 8,18
