@@ -196,7 +196,7 @@ Mirror Images to Local Registry
       "mirror.lab.local:8443/mirror/ocp4".
 
    .. code-block:: yaml
-      :emphasize-lines: 5,10,13,16,19,20,22,36,50
+      :emphasize-lines: 5,10,13,14,17,18,21,22,24,39,54
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
@@ -210,9 +210,11 @@ Mirror Images to Local Registry
             - name: stable-4.12
               type: ocp
               minVersion: 4.12.34
+              shortestPath: true
             - name: stable-4.13
               type: ocp
               minVersion: 4.13.14
+              shortestPath: true
             - name: stable-4.14
               type: ocp
               minVersion: 4.14.4
