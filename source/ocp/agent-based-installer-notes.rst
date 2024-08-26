@@ -42,8 +42,13 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
 #. Create "install-config.yaml" and save in ~/workdir
 
-   .. tip:: Optional: To enable workload partitioning add "cpuPartitioningMode:
-      AllNodes" line right after "baseDomain:" line.
+   .. tip:: In resource-constrained environments, you can use
+      `workload partitioning <https://docs.openshift.com/container-platform/4.14/scalability_and_performance/enabling-workload-partitioning.html>`_
+      to isolate OpenShift Container Platform services, cluster management
+      workloads, and infrastructure pods to run on a reserved set of CPUs.
+
+      To enable "workload partitioning" add "cpuPartitioningMode: AllNodes"
+      line right after "baseDomain:" line.
 
    .. code-block:: yaml
       :caption: install-config.yaml
