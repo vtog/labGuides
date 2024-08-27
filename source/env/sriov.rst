@@ -124,9 +124,9 @@ will guide you through configuring the VF's and passing them to KVM.
       ip link set ens6f1 vf 5 mac 52:54:00:a6:12:05
       ip link set ens6f1 vf 6 mac 52:54:00:a6:13:01
 
-   .. note:: If the VF's are NOT created, you may need to add "ixgbe.max_vfs=7" to the
-      kernel command line options. (This could igb or ixgbe depending on your
-      interface.)
+   .. note:: If the VF's are NOT created, you may need to add "ixgbe.max_vfs=7"
+      to the kernel command line options. Depending on your NIC this could be
+      igb or ixgbe or whatever_driver.
 
       The follow process walks through updating the host kernel:
       `Configuring kernel command-line parameters
