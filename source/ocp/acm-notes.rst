@@ -79,16 +79,15 @@ Credentials
 
 #. Review and click Add.
 
-Host inventory settings
-~~~~~~~~~~~~~~~~~~~~~~~
+Host inventory (Connected)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #. From the console go to Infrastructure --> Host Inventory. Click "Configure
    host inventory settings".
 
    .. image:: ./images/acm-host-inventory-settings.png
 
-#. **Connected environments:** Configure host inventory settings and click
-   "Configure".
+#. Configure host inventory settings and click "Configure".
 
    .. warning:: For disconnected environments skip to next step.
 
@@ -104,191 +103,226 @@ Host inventory settings
 
          oc logs assisted-image-service-0 -n multicluster-engine -f
 
-#. **Disconnected environments:** Requires the config to be done via "oc" by
-   applying the following yaml.
+#. Patch the provisioning to watch all name spaces.
 
-   A. First create the following configmap yaml file referencing your
-      disconnected registry.
+   .. code-block:: bash
 
-      .. important:: In my lab I found only the following three references were
-         required. Your environment may require others. I plan on adding the
-         additional operators/registries manually post install.
+      oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
 
-      .. code-block:: yaml
-         :emphasize-lines: 4,10-12,20,26,32
+Host inventory (Disconnected)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-         apiVersion: v1
-         kind: ConfigMap
-         metadata:
-           name: assisted-installer-mirror-config
-           namespace: multicluster-engine
-           labels:
-             app: assisted-service
-         data:
-           ca-bundle.crt: |
-               -----BEGIN CERTIFICATE-----
-               <Use rootCA.pem from your mirror registry here>
-               -----END CERTIFICATE-----
-           registries.conf: |
-             unqualified-search-registries = ["registry.access.redhat.com", "docker.io"]
-             [[registry]]
-                prefix = ""
-                location = "quay.io/openshift-release-dev/ocp-v4.0-art-dev"
-                mirror-by-digest-only = true
-                [[registry.mirror]]
-                location = "mirror.lab.local:8443/openshift/release"
-             [[registry]]
-                prefix = ""
-                location = "quay.io/openshift-release-dev/ocp-release"
-                mirror-by-digest-only = true
-                [[registry.mirror]]
-                location = "mirror.lab.local:8443/openshift/release-images"
-             [[registry]]
-                prefix = ""
-                location = "registry.redhat.io/multicluster-engine"
-                mirror-by-digest-only = true
-                [[registry.mirror]]
-                location = "mirror.lab.local:8443/multicluster-engine"
+From your terminal:
 
-   #. Apply the newly created file.
+1. Create the following configmap referencing your disconnected registry.
+
+   .. important:: In my lab I found the following four references were
+      required. Your environment may require others. I plan on manually
+      adding the other operators/registries post install.
+
+   .. code-block:: yaml
+      :emphasize-lines: 4,10-12,17,20,23,26,29,32,35,38
+
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: assisted-installer-mirror-config
+        namespace: multicluster-engine
+        labels:
+          app: assisted-service
+      data:
+        ca-bundle.crt: |
+          -----BEGIN CERTIFICATE-----
+          <Use rootCA.pem from your mirror registry here>
+          -----END CERTIFICATE-----
+        registries.conf: |
+          unqualified-search-registries = ["registry.access.redhat.com", "docker.io"]
+          [[registry]]
+            prefix = ""
+            location = "quay.io/openshift-release-dev/ocp-v4.0-art-dev"
+            mirror-by-digest-only = true
+            [[registry.mirror]]
+            location = "mirror.lab.local:8443/openshift/release"
+          [[registry]]
+            prefix = ""
+            location = "quay.io/openshift-release-dev/ocp-release"
+            mirror-by-digest-only = true
+            [[registry.mirror]]
+            location = "mirror.lab.local:8443/openshift/release-images"
+          [[registry]]
+            prefix = ""
+            location = "registry.redhat.io/multicluster-engine"
+            mirror-by-digest-only = true
+            [[registry.mirror]]
+            location = "mirror.lab.local:8443/multicluster-engine"
+          [[registry]]
+            prefix = ""
+            location = "registry.redhat.io/rhacm2"
+            mirror-by-digest-only = true
+            [[registry.mirror]]
+            location = "mirror.lab.local:8443/rhacm2"
+
+#. Apply the newly created file.
+
+   .. code-block:: bash
+
+      oc apply -f assisted-installer-mirror-config.yaml
+
+#. Before creating the agent service config we need to identify the variables
+   for each version of OCP you plan on deploying. This information will be
+   included in the osImages section of the AgentServiceConfig (Host environment
+   settings).
+
+   a. Obtain the RHCOS ISO and RootFS IMG from:
+      `mirror.openshift.com <https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/>`_
+
+      .. important:: Each OCP version may have more then one option. The
+         version you plan to deploy will dictate which version to download.
+         For example 4.15. If 4.15.22 or lower select 4.15.0. For 4.15.23
+         and higher select the 4.15.23. In my case I need both.
+
+         .. image:: ./images/mirror-openshift-415.png
+
+   #. Set the environment variables
 
       .. code-block:: bash
 
-         oc apply -f assisted-installer-mirror-config.yaml
+         OCP_VERSION=4.15.14
+         ARCH=x86_64
 
-   #. Before creating the agent service config we need to identify the
-      variables for each version of OCP you plan on deploying. This information
-      will be included in the osImages section of the AgentServiceConfig
-      (Host environment settings).
+   #. If needed download the version specific openshift installer.
 
-      i. Obtain the RHCOS ISO and RootFS IMG from:
-         `mirror.openshift.com <https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/>`_
+      .. code-block:: bash
 
-         .. important:: Each OCP version may have more then one option. The
-            version you plan to deploy will dictate which version to download.
-            For example 4.15. If 4.15.22 or lower select 4.15.0. For 4.15.23
-            and higher select the 4.15.23. In my case I need both.
+         curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OCP_VERSION/openshift-install-linux.tar.gz -o openshift-install-linux-$OCP_VERSION.tar.gz
 
-            .. image:: ./images/mirror-openshift-415.png
+   #. Extract the installer.
 
-      #. Set the environment variables
+      .. code-block:: bash
 
-         .. code-block:: bash
+         tar -xzvf openshift-install-linux-$OCP_VERSION.tar.gz
+         mv openshift-install openshift-install-$OCP_VERSION
+         rm README.md
 
-            OCP_VERSION=4.15.14
-            ARCH=x86_64
+   #. Extract the RHCOS Live Version. Save this info for next step.
 
-      #. If needed download the version specific openshift installer.
+      .. code-block:: bash
 
-         .. code-block:: bash
+         ./openshift-install-$OCP_VERSION coreos print-stream-json | grep location | grep $ARCH | grep iso | cut -d\/ -f10
 
-            curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OCP_VERSION/openshift-install-linux.tar.gz -o openshift-install-linux-$OCP_VERSION.tar.gz
+   #. Repeat steps a - e for each version.
 
-      #. Extract the installer.
+#. Create the AgentServiceConfig with reference to the config map created in
+   step A. Adjust your storage requirements as needed, I'm using default
+   values. Add each osImage you plan on deploying for spoke clusters. The
+   version information from last step will be used here.
 
-         .. code-block:: bash
+   .. code-block:: yaml
+      :emphasize-lines: 11,17,23,25,27-41
 
-            tar -xzvf openshift-install-linux-$OCP_VERSION.tar.gz
-            mv openshift-install openshift-install-$OCP_VERSION
-            rm README
+      apiVersion: agent-install.openshift.io/v1beta1
+      kind: AgentServiceConfig
+      metadata:
+       name: agent
+      spec:
+        databaseStorage:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
+        filesystemStorage:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 100Gi
+        imageStorage:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 50Gi
+        mirrorRegistryRef:
+          name: assisted-installer-mirror-config
+        osImages:
+          - openshiftVersion: "4.15"
+            cpuArchitecture: "x86_64"
+            version: "415.92.202402201450-0"
+            url: "http://192.168.1.72/rhcos/rhcos-4.15.0-x86_64-live.x86_64.iso"
+            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.15.0-x86_64-live-rootfs.x86_64.img"
+          - openshiftVersion: "4.15"
+            cpuArchitecture: "x86_64"
+            version: "415.92.202407091355-0"
+            url: "http://192.168.1.72/rhcos/rhcos-4.15.23-x86_64-live.x86_64.iso"
+            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.15.23-x86_64-live-rootfs.x86_64.img"
+          - openshiftVersion: "4.16"
+            cpuArchitecture: "x86_64"
+            version: "416.94.202406251923-0"
+            url: "http://192.168.1.72/rhcos/rhcos-4.16.3-x86_64-live.x86_64.iso"
+            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.16.3-x86_64-live-rootfs.x86_64.img"
 
-      #. Extract the RHCOS Live Version. Save this info for next step.
+#. Apply the agent service config yaml to the cluster.
 
-         .. code-block:: bash
+   .. code-block:: bash
 
-            ./openshift-install-$OCP_VERSION coreos print-stream-json | grep location | grep $ARCH | grep iso | cut -d\/ -f10
+      oc apply -f agentserviceconfig.yaml
 
-      #. Repeat steps 1 - 5 for each version.
+   .. attention:: Each iso and img defined in the osImages section will be
+      download to the cluster. You can monitor this process with the following
+      commands. Wait for the pod to fully start.
 
-   #. Create the AgentServiceConfig with reference to the config map created in
-      step A. Adjust your storage requirements as needed, I'm using default
-      values. Add each osImage you plan on deploying for spoke clusters. The
-      version information from last step will be used here.
+      .. code-block:: bash
 
-      .. code-block:: yaml
-         :emphasize-lines: 11,17,23,25,27-41
+         oc get pod assisted-image-service-0 -n multicluster-engine
 
-         apiVersion: agent-install.openshift.io/v1beta1
-         kind: AgentServiceConfig
-         metadata:
-          name: agent
-         spec:
-           databaseStorage:
-             accessModes:
-             - ReadWriteOnce
-             resources:
-               requests:
-                 storage: 10Gi
-           filesystemStorage:
-             accessModes:
-             - ReadWriteOnce
-             resources:
-               requests:
-                 storage: 100Gi
-           imageStorage:
-             accessModes:
-             - ReadWriteOnce
-             resources:
-               requests:
-                 storage: 50Gi
-           mirrorRegistryRef:
-             name: assisted-installer-mirror-config
-           osImages:
-             - openshiftVersion: "4.15"
-               cpuArchitecture: "x86_64"
-               version: "415.92.202402201450-0"
-               url: "http://192.168.1.72/rhcos/rhcos-4.15.0-x86_64-live.x86_64.iso"
-               rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.15.0-x86_64-live-rootfs.x86_64.img"
-             - openshiftVersion: "4.15"
-               cpuArchitecture: "x86_64"
-               version: "415.92.202407091355-0"
-               url: "http://192.168.1.72/rhcos/rhcos-4.15.23-x86_64-live.x86_64.iso"
-               rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.15.23-x86_64-live-rootfs.x86_64.img"
-             - openshiftVersion: "4.16"
-               cpuArchitecture: "x86_64"
-               version: "416.94.202406251923-0"
-               url: "http://192.168.1.72/rhcos/rhcos-4.16.3-x86_64-live.x86_64.iso"
-               rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.16.3-x86_64-live-rootfs.x86_64.img"
+         oc logs assisted-image-service-0 -n multicluster-engine -f
 
-   #. Create the ClusterImageSet for each hosted version of openshift. In my
-      example I'm hosting 4.15.14, 4.15.28 and 4.16.8. Save the file and apply
-      to cluster "oc apply -f clusterimageset.yaml".
+#. Patch the provisioning to watch all name spaces.
 
-      .. note:: I'm including all three in one file but three ClusterImageSet's
-         are created.
+   .. code-block:: bash
 
-      .. code-block:: yaml
-         :emphasize-lines: 2,7,9,12,17,19,22,27,29
+      oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
 
-         apiVersion: hive.openshift.io/v1
-         kind: ClusterImageSet
-         metadata:
-           labels:
-             channel: stable
-             visible: 'true'
-           name: img4.15.14-x86-64-appsub
-         spec:
-           releaseImage: mirror.lab.local:8443/openshift/release-images:4.15.14-x86_64
-         ---
-         apiVersion: hive.openshift.io/v1
-         kind: ClusterImageSet
-         metadata:
-           labels:
-             channel: stable
-             visible: 'true'
-           name: img4.15.28-x86-64-appsub
-         spec:
-           releaseImage: mirror.lab.local:8443/openshift/release-images:4.15.28-x86_64
-         ---
-         apiVersion: hive.openshift.io/v1
-         kind: ClusterImageSet
-         metadata:
-           labels:
-             channel: stable
-             visible: 'true'
-           name: img4.16.8-x86-64-appsub
-         spec:
-           releaseImage: mirror.lab.local:8443/openshift/release-images:4.16.8-x86_64
+#. Create the ClusterImageSet for each hosted version of openshift. In my
+   example I'm hosting 4.15.14, 4.15.28 and 4.16.8. Save the file and apply
+   to cluster "oc apply -f clusterimageset.yaml".
+
+   .. note:: I'm including all three in one file but three ClusterImageSet's
+      are created.
+
+   .. code-block:: yaml
+      :emphasize-lines: 2,7,9,12,17,19,22,27,29
+
+      apiVersion: hive.openshift.io/v1
+      kind: ClusterImageSet
+      metadata:
+        labels:
+          channel: stable
+          visible: 'true'
+        name: img4.15.14-x86-64-appsub
+      spec:
+        releaseImage: mirror.lab.local:8443/openshift/release-images:4.15.14-x86_64
+      ---
+      apiVersion: hive.openshift.io/v1
+      kind: ClusterImageSet
+      metadata:
+        labels:
+          channel: stable
+          visible: 'true'
+        name: img4.15.28-x86-64-appsub
+      spec:
+        releaseImage: mirror.lab.local:8443/openshift/release-images:4.15.28-x86_64
+      ---
+      apiVersion: hive.openshift.io/v1
+      kind: ClusterImageSet
+      metadata:
+        labels:
+          channel: stable
+          visible: 'true'
+        name: img4.16.8-x86-64-appsub
+      spec:
+        releaseImage: mirror.lab.local:8443/openshift/release-images:4.16.8-x86_64
 
 Infrastructure environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -339,7 +373,7 @@ Together it creates three objects in the "output" directory.
 
    .. code-block:: bash
       :linenos:
-      :emphasize-lines: 28,30,31,39,42-45,48,66,88,91,96-98,102,103,105
+      :emphasize-lines: 29,31,32,40,43-46,49,67,89,92,97-99,103,105,106,108
 
       #/bin/bash
 
@@ -441,7 +475,9 @@ Together it creates three objects in the "output" directory.
         name: $HOST
         namespace: lablocal
       spec:
-        automatedCleaningMode: disabled
+        automatedCleaningMode: metadata
+        rootDeviceHints:
+          deviceName: "/dev/vda"
         bmc:
           address: redfish-virtualmedia+http://$BMCIP/redfish/v1/Systems/$UUID
           credentialsName: bmc-$HOST
