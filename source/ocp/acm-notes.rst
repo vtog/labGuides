@@ -138,29 +138,29 @@ From your terminal:
         registries.conf: |
           unqualified-search-registries = ["registry.access.redhat.com", "docker.io"]
           [[registry]]
-            prefix = ""
-            location = "quay.io/openshift-release-dev/ocp-v4.0-art-dev"
-            mirror-by-digest-only = true
-            [[registry.mirror]]
-            location = "mirror.lab.local:8443/openshift/release"
+             prefix = ""
+             location = "quay.io/openshift-release-dev/ocp-v4.0-art-dev"
+             mirror-by-digest-only = true
+             [[registry.mirror]]
+             location = "mirror.lab.local:8443/openshift/release"
           [[registry]]
-            prefix = ""
-            location = "quay.io/openshift-release-dev/ocp-release"
-            mirror-by-digest-only = true
-            [[registry.mirror]]
-            location = "mirror.lab.local:8443/openshift/release-images"
+             prefix = ""
+             location = "quay.io/openshift-release-dev/ocp-release"
+             mirror-by-digest-only = true
+             [[registry.mirror]]
+             location = "mirror.lab.local:8443/openshift/release-images"
           [[registry]]
-            prefix = ""
-            location = "registry.redhat.io/multicluster-engine"
-            mirror-by-digest-only = true
-            [[registry.mirror]]
-            location = "mirror.lab.local:8443/multicluster-engine"
+             prefix = ""
+             location = "registry.redhat.io/multicluster-engine"
+             mirror-by-digest-only = true
+             [[registry.mirror]]
+             location = "mirror.lab.local:8443/multicluster-engine"
           [[registry]]
-            prefix = ""
-            location = "registry.redhat.io/rhacm2"
-            mirror-by-digest-only = true
-            [[registry.mirror]]
-            location = "mirror.lab.local:8443/rhacm2"
+             prefix = ""
+             location = "registry.redhat.io/rhacm2"
+             mirror-by-digest-only = true
+             [[registry.mirror]]
+             location = "mirror.lab.local:8443/rhacm2"
 
 #. Apply the newly created file.
 
