@@ -177,9 +177,9 @@ From your terminal:
       `mirror.openshift.com <https://mirror.openshift.com/pub/openshift-v4/dependencies/rhcos/>`_
 
       .. important:: Each OCP version may have more then one option. The
-         version you plan to deploy will dictate which version to download.
-         For example 4.15. If 4.15.22 or lower select 4.15.0. For 4.15.23
-         and higher select the 4.15.23. In my case I need both.
+         version you plan to deploy will dictate which version to download. For
+         example 4.15; If 4.15.22 or lower, select 4.15.0. If 4.15.23 and
+         higher, select 4.15.23. In my case I need both.
 
          .. image:: ./images/mirror-openshift-415.png
 
@@ -216,6 +216,10 @@ From your terminal:
    step A. Adjust your storage requirements as needed, I'm using default
    values. Add each osImage you plan on deploying for spoke clusters. The
    version information from last step will be used here.
+
+   .. warning:: I've had many issues with discovery when defining multiple
+      osImages.  I recommend starting with only defining the oldest needed
+      version. Then run node discovery. Then add the additional osImages.
 
    .. code-block:: yaml
       :emphasize-lines: 11,17,23,25,27-41
