@@ -69,7 +69,7 @@ Remove Sushy
 
 .. code-block:: bash
 
-   sudo systemctl disable systeminfo.service
+   sudo systemctl disable container-sushy-emulator.service
    sudo rm /etc/systemd/system/container-sushy-emulator.service
    sudo systemctl daemon-reload
    sudo podman stop sushy-emulator
