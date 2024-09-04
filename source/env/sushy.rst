@@ -63,3 +63,15 @@ Containerize Sushy-Tools
    .. code-block:: bash
 
       curl http://192.168.1.72:8000/redfish/v1/Managers
+
+Remove Sushy
+------------
+
+.. code-block:: bash
+
+   sudo systemctl disable systeminfo.service
+   sudo rm /etc/systemd/system/container-sushy-emulator.service
+   sudo systemctl daemon-reload
+   sudo podman stop sushy-emulator
+   sudo podman rm sushy-emulator
+   sudo podman rmi quay.io/metal3-io/sushy-tools
