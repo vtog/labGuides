@@ -10,8 +10,8 @@ Basic ACM install to get started.
    For ACM I start with a three node cluster, each node has 16 cores, 32G
    memory, and small 600G ODF/Ceph deployment.
 
-#. From the OCP Console select Operators --> OperatorHub. In the search box
-   type "acm".
+#. From the OCP Console select :menuselection:`Operators --> OperatorHub`. In
+   the search box type "acm".
 
    .. image:: ./images/acm-operatorhub.png
 
@@ -82,8 +82,8 @@ Credentials
 Host inventory (Connected)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. From the console go to Infrastructure --> Host Inventory. Click "Configure
-   host inventory settings".
+#. From the console select :menuselection:`Infrastructure --> Host Inventory`.
+   Click :menuselection:`Configure host inventory settings`.
 
    .. image:: ./images/acm-host-inventory-settings.png
 
@@ -331,8 +331,8 @@ From your terminal:
 Infrastructure environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#. From the console go to Infrastructure --> Host Inventory. Click "Create
-   infrastructure environment.
+#. From the console select :menuselection:`Infrastructure --> Host Inventory`.
+   Click :menuselection:`Create infrastructure environment`.
 
    .. image:: ./images/acm-infra-env.png
 

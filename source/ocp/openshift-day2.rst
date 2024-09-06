@@ -797,6 +797,13 @@ SRIOV Unsupported NIC
 
       oc -n openshift-sriov-network-operator logs -f -c sriov-network-config-daemon sriov-network-config-daemon-xxxxx
 
+SRIOV and Primary MGMT/CNI
+--------------------------
+
+In some cases your node may only have one NIC with SRIOV capabilities. We need
+to use this NIC for the primary CNI but want to create VF’s for our CNF’s via
+the SRIOV operator.
+
 Recover root passwd
 -------------------
 

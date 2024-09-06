@@ -296,7 +296,7 @@ Test SRIOV Device Plugin
 #. Create NetworkAttachmentDefinition ``sriov-net.yaml`` and run
    ``oc create -f sriov_machineConfig_pool.yaml``
 
-   .. seealso:: For more information on multiple networks and config types goto:
+   .. seealso:: For more information on multiple networks and config types go to:
       `<https://docs.openshift.com/container-platform/4.12/networking/multiple_networks/understanding-multiple-networks.html>`_
 
    .. code-block:: yaml
