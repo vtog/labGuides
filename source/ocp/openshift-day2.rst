@@ -335,15 +335,26 @@ each machine type.
 Stuck Terminating
 -----------------
 
-Sometimes when deleting a PVC it can get stuck in the "Terminating" phase. The
-following command will remove it:
+Sometimes when deleting an object it can get stuck in the "Terminating" phase.
+The following command will remove it:
+
+PVC Example
 
 .. code-block:: bash
 
    oc patch pvc <PVC_NAME> -p '{"metadata":{"finalizers":null}}'
 
-.. note:: This could be true of any object, so check the metadata for
-   finalizers.
+BMH Example
+
+.. code-block:: bash
+
+   oc patch bmh <BMH_NAME> --type merge -p '{"metadata":{"finalizers":null}}'
+
+.. tip:: for-loop-example
+
+   .. code-block:: bash
+
+      for i in $(oc get bmh | grep -v NAME | awk '{print $1}'); do oc patch bmh $i --type merge -p '{"metadata":{"finalizers":null}}'; done
 
 Start toolbox (node)
 --------------------

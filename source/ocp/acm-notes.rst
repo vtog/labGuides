@@ -375,6 +375,8 @@ Together it creates three objects in the "output" directory.
 
    .. important:: You may need to change or add variables for your environment.
 
+   .. note:: The Secret username and password are base64 encoded.
+
    .. code-block:: bash
       :linenos:
       :emphasize-lines: 29,31,32,40,43-46,49,67,89,92,97-99,103,105,106,108
