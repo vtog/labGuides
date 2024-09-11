@@ -35,52 +35,27 @@ Basic ACM install to get started.
 
       oc get pods -n multicluster-engine
 
-Basic Config
-------------
+Basic / Manual Config
+---------------------
 
 Simple config to get started. The following steps will create the following
 objects:
 
+- Host inventory (Connected or Disconnected)
 - Credentials
-- Host inventory settings
 - Infrastructure environment
+- Add host inventory
 
-Credentials
-~~~~~~~~~~~
-
-#. From the CLI create a new project/namespace for your spoke cluster objects.
-
-   .. code-block:: bash
-
-      oc new-project <project_name>
-
-#. Connect to the console and switch from "local-cluster" to "All Clusters".
-
-   .. image:: ./images/acm-allclusters.png
-
-#. Configure credentials. Select "Credentials" then click "Add credentials".
-
-   .. image:: ./images/acm-credentials.png
-
-#. Select Credential Type. In my lab/example I'm using Host Inventory.
-
-   .. image:: ./images/acm-host-inventory.png
-
-#. Enter the basic credential information and click Next.
-
-   .. image:: ./images/acm-basic-info.png
-
-#. Add your "Pull secret" and "SSH public key" and click Next.
-
-   .. note:: If disconnected environment be sure to include/add your on-prem
-      registry / mirror credentials.
-
-   .. image:: ./images/acm-pull-secret.png
-
-#. Review and click Add.
+.. _host-inventory-connected:
 
 Host inventory (Connected)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Patch the provisioning-configuration to watch all name spaces.
+
+   .. code-block:: bash
+
+      oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
 
 #. From the console select :menuselection:`Infrastructure --> Host Inventory`.
    Click :menuselection:`Configure host inventory settings`.
@@ -103,18 +78,18 @@ Host inventory (Connected)
 
          oc logs assisted-image-service-0 -n multicluster-engine -f
 
-#. Patch the provisioning to watch all name spaces.
+.. _host-inventory-disconnected:
+
+Host inventory (Disconnected)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Patch the provisioning-configuration to watch all name spaces.
 
    .. code-block:: bash
 
       oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
 
-Host inventory (Disconnected)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-From your terminal:
-
-1. Create the following configmap referencing your disconnected registry.
+#. Create the following configmap referencing your disconnected registry.
 
    .. important:: In my lab I found the following four references were
       required. Your environment may require others. I plan on manually
@@ -282,12 +257,6 @@ From your terminal:
 
          oc logs assisted-image-service-0 -n multicluster-engine -f
 
-#. Patch the provisioning to watch all name spaces.
-
-   .. code-block:: bash
-
-      oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
-
 #. Create the ClusterImageSet for each hosted version of openshift. In my
    example I'm hosting 4.15.14, 4.15.28 and 4.16.8. Save the file and apply
    to cluster "oc apply -f clusterimageset.yaml".
@@ -328,6 +297,40 @@ From your terminal:
       spec:
         releaseImage: mirror.lab.local:8443/openshift/release-images:4.16.8-x86_64
 
+Credentials
+~~~~~~~~~~~
+
+#. From the CLI create a new project/namespace for your spoke cluster objects.
+
+   .. code-block:: bash
+
+      oc new-project <project_name>
+
+#. Connect to the console and switch from "local-cluster" to "All Clusters".
+
+   .. image:: ./images/acm-allclusters.png
+
+#. Configure credentials. Select "Credentials" then click "Add credentials".
+
+   .. image:: ./images/acm-credentials.png
+
+#. Select Credential Type. In my lab/example I'm using Host Inventory.
+
+   .. image:: ./images/acm-host-inventory.png
+
+#. Enter the basic credential information and click Next.
+
+   .. image:: ./images/acm-basic-info.png
+
+#. Add your "Pull secret" and "SSH public key" and click Next.
+
+   .. note:: If disconnected environment be sure to include/add your on-prem
+      registry / mirror credentials.
+
+   .. image:: ./images/acm-pull-secret.png
+
+#. Review and click Add.
+
 Infrastructure environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -344,8 +347,8 @@ Infrastructure environment
 
    .. image:: ./images/acm-create-infra-env.png
 
-Add Host Inventory
-------------------
+Add host inventory
+~~~~~~~~~~~~~~~~~~
 
 To add hosts to the "Host Inventory" use the following script and CSV file.
 Together it creates three objects in the "output" directory.
@@ -507,3 +510,321 @@ Together it creates three objects in the "output" directory.
    .. code-block:: bash
 
       oc create -f output/
+
+GitOps
+------
+
+.. tip:: Clone my github repo. All the files below are included, modify as
+   needed.
+
+   .. code-block:: bash
+
+      git clone https://github.com/vtog/gitops.git
+
+Host inventory
+~~~~~~~~~~~~~~
+
+Just like the basic/manual config we need to configure the host inventory
+first. This can be done connected or disconnected:
+
+For **connected** see :ref:`host-inventory-connected`
+
+For **disconnected** see :ref:`host-inventory-disconnected`
+
+Environment / Cluster
+~~~~~~~~~~~~~~~~~~~~~
+
+From the cli create the following yaml manifests and apply them to your hub
+cluster. When finished you'll have a SNO cluster running.
+
+- 00-namespace.yaml
+- 01-unsealed-bmc-secret.yaml
+- 02-unsealed-pull-secret.yaml
+- 03-agentclusterinstall.yaml
+- 04-clusterdeployment.yaml
+- 05-klusterlet.yaml
+- 06-managedcluster.yaml
+- 07-nmstate.yaml
+- 08-infraenv.yaml
+- 09-baremetalhost.yaml
+- kustomization.yaml
+
+.. code-block:: bash
+   :caption: 00-namespace.yaml
+   :emphasize-lines: 2,4
+
+   apiVersion: v1
+   kind: Namespace
+   metadata:
+     name: ztp-spoke-01
+   spec: {}
+
+.. code-block:: bash
+   :caption: 01-unsealed-bmc-secret.yaml
+   :emphasize-lines: 2,4,5,10,11
+
+   apiVersion: v1
+   kind: Secret
+   metadata:
+     name: bmc-secret
+     namespace: ztp-spoke-01
+     labels:
+       environment.metal3.io: baremetal
+   type: Opaque
+   data:
+     password: a25p
+     username: a25p
+
+.. code-block:: bash
+   :caption: 02-unsealed-pull-secret.yaml
+   :emphasize-lines: 5,7,8,14
+
+   # After creating the secret use the following to set the data with your custom docker config json.
+   # oc set data secret/pull-secret --from-file=.dockerconfigjson=/home/vince/.docker/config.json -n ztp-spoke-01
+
+   apiVersion: v1
+   kind: Secret
+   metadata:
+     name: pull-secret
+     namespace: ztp-spoke-01
+     labels:
+       agent-install.openshift.io/watch: "true"
+       cluster.open-cluster-management.io/backup: "true"
+   type: kubernetes.io/dockerconfigjson
+   data:
+     .dockerconfigjson: ewoJImF1dGhzIjogewoJICAibWlycm9yLmxhYi5sb2NhbDo4NDQzIjogewogICAgICAiYXV0aCI6ICJhVzVwZERwd1lYTnpkMjl5WkE9PSIKICAgIH0KICB9Cn0K
+
+.. code-block:: bash
+   :caption: 03-agentclusterinstall.yaml
+   :emphasize-lines: 2,4,5,7,10,12,20,26
+
+   apiVersion: extensions.hive.openshift.io/v1beta1
+   kind: AgentClusterInstall
+   metadata:
+     name: ztp-spoke-01
+     namespace: ztp-spoke-01
+     labels:
+       cluster-name: ztp-spoke-01
+   spec:
+     clusterDeploymentRef:
+       name: ztp-spoke-01
+     imageSetRef:
+       name: img4.16.8-x86-64-appsub
+     networking:
+       networkType: OVNKubernetes
+       userManagedNetworking: true
+       clusterNetwork:
+         - cidr: 10.128.0.0/14
+           hostPrefix: 23
+       machineNetwork:
+         - cidr: 192.168.132.0/24
+       serviceNetwork:
+         - 172.30.0.0/16
+     provisionRequirements:
+       controlPlaneAgents: 1
+       workerAgents: 0
+     sshPublicKey: <redacted>
+
+.. code-block:: bash
+   :caption: 04-clusterdeployment.yaml
+   :emphasize-lines: 2,4,5,12,13,19,25,27
+
+   apiVersion: hive.openshift.io/v1
+   kind: ClusterDeployment
+   metadata:
+     name: ztp-spoke-01
+     namespace: ztp-spoke-01
+     labels:
+       cluster.open-cluster-management.io/clusterset: default
+       hive.openshift.io/cluster-platform: agent-baremetal
+     annotations:
+       agentBareMetal-cpuArchitecture: x86_64
+   spec:
+     baseDomain: lab.local
+     clusterName: ztp-spoke-01
+     controlPlaneConfig:
+       servingCertificates: {}
+     clusterInstallRef:
+       group: extensions.hive.openshift.io
+       kind: AgentClusterInstall
+       name: ztp-spoke-01
+       version: v1beta1
+     platform:
+       agentBareMetal:
+         agentSelector:
+           matchLabels:
+             cluster-name: "ztp-spoke-01"
+     pullSecretRef:
+       name: pull-secret
+
+.. code-block:: bash
+   :caption: 05-klusterlet.yaml
+   :emphasize-lines: 2,4,5,13,16,17
+
+   apiVersion: agent.open-cluster-management.io/v1
+   kind: KlusterletAddonConfig
+   metadata:
+     name: ztp-spoke-01
+     namespace: ztp-spoke-01
+   spec:
+     applicationManager:
+       argocdCluster: false
+       enabled: true
+     certPolicyController:
+       enabled: true
+     clusterLabels:
+       name: ztp-spoke-01
+       cloud: Baremetal
+       vendor: OpenShift
+     clusterName: ztp-spoke-01
+     clusterNamespace: ztp-spoke-01
+     iamPolicyController:
+       enabled: true
+     policyController:
+       enabled: true
+     searchCollector:
+       enabled: true
+
+.. code-block:: bash
+   :caption: 06-managedcluster.yaml
+   :emphasize-lines: 2,4,5,7
+
+   apiVersion: cluster.open-cluster-management.io/v1
+   kind: ManagedCluster
+   metadata:
+     name: ztp-spoke-01
+     namespace: ztp-spoke-01
+     labels:
+       name: ztp-spoke-01
+       cloud: baremetal
+       vendor: OpenShift
+   spec:
+     hubAcceptsClient: true
+     leaseDurationSeconds: 60
+
+.. code-block:: bash
+   :caption: 07-nmstate.yaml
+   :emphasize-lines: 2,4,5,7,8,11,12,15-17,19,20,23,24,29,30,36,38,42,43
+
+   apiVersion: agent-install.openshift.io/v1beta1
+   kind: NMStateConfig
+   metadata:
+     name: ztp-spoke-01
+     namespace: ztp-spoke-01
+     labels:
+       agent-install.openshift.io/bmh: ztp-spoke-01
+       infraenvs.agent-install.openshift.io: ztp-spoke-01
+   spec:
+     interfaces:
+       - name: enp1s0
+         macAddress: 52:54:00:f4:16:21
+     config:
+       interfaces:
+         - name: enp1s0
+           type: ethernet
+           mtu: 9000
+           state: up
+         - name: enp1s0.132
+           type: vlan
+           state: up
+           vlan:
+             base-iface: enp1s0
+             id: 132
+           ipv4:
+             enabled: true
+             dhcp: false
+             address:
+               - ip: 192.168.132.21
+                 prefix-length: 24
+           ipv6:
+             enabled: false
+       dns-resolver:
+         config:
+           search:
+             - lab.local
+           server:
+             - 192.168.1.68
+       routes:
+         config:
+           - destination: 0.0.0.0/0
+             next-hop-address: 192.168.132.1
+             next-hop-interface: enp1s0.132
+             table-id: 254
+
+.. code-block:: bash
+   :caption: 08-infraenv.yaml
+   :emphasize-lines: 2,4,5,7,13,17-19,22,24,27
+
+   apiVersion: agent-install.openshift.io/v1beta1
+   kind: InfraEnv
+   metadata:
+     name: ztp-spoke-01
+     namespace: ztp-spoke-01
+     labels:
+       networkType: static
+     annotations:
+       infraenv.agent-install.openshift.io/enable-ironic-agent: "true"
+       argocd.argoproj.io/sync-options: Validate=false
+   spec:
+     additionalNTPSources:
+       - 192.168.1.68
+     cpuArchitecture: x86_64
+     ipxeScriptType: DiscoveryImageAlways
+     clusterRef:
+       name: ztp-spoke-01
+       namespace: ztp-spoke-01
+     sshAuthorizedKey: '<redacted>'
+     agentLabelSelector:
+       matchLabels:
+         cluster-name: ztp-spoke-01
+     pullSecretRef:
+       name: pull-secret
+     nmStateConfigLabelSelector:
+       matchLabels:
+         cluster-name: ztp-spoke-01
+
+.. code-block:: bash
+   :caption: 09-baremetalhost.yaml
+   :emphasize-lines: 2,6,8-10,14,18,20,21
+
+   apiVersion: metal3.io/v1alpha1
+   kind: BareMetalHost
+   metadata:
+     annotations:
+       inspect.metal3.io: disabled
+       bmac.agent-install.openshift.io/hostname: ztp-spoke-01
+     labels:
+       infraenvs.agent-install.openshift.io: ztp-spoke-01
+     name: ztp-spoke-01
+     namespace: ztp-spoke-01
+   spec:
+     online: true
+     automatedCleaningMode: metadata
+     bootMACAddress: 52:54:00:f4:16:21
+     customDeploy:
+       method: start_assisted_install
+     rootDeviceHints:
+       deviceName: /dev/vda
+     bmc:
+       address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/e2342765-5b52-4d6b-88fc-86db5b3913dd
+       credentialsName: bmc-secret
+       disableCertificateVerification: true
+
+.. code-block:: bash
+   :caption: kustomization.yaml
+   :emphasize-lines: 2
+
+   apiVersion: kustomize.config.k8s.io/v1beta1
+   kind: Kustomization
+
+   resources:
+     - 00-namespace.yaml
+     - 01-unsealed-bmc-secret.yaml
+     - 02-unsealed-pull-secret.yaml
+     - 03-agentclusterinstall.yaml
+     - 04-clusterdeployment.yaml
+     - 05-klusterlet.yaml
+     - 06-managedcluster.yaml
+     - 07-nmstateconfig.yaml
+     - 08-infraenv.yaml
+     - 09-baremetalhost.yaml
