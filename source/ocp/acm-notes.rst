@@ -511,11 +511,17 @@ Together it creates three objects in the "output" directory.
 
       oc create -f output/
 
+   .. tip:: Monitor BMH progress
+
+      .. code-block:: bash
+
+         oc logs metal3-baremetal-operator-675565dfc-7stdm -n openshift-machine-api --follow
+
 GitOps
 ------
 
-.. tip:: Clone my github repo. All the files below are included, modify as
-   needed.
+.. tip:: Clone my github repo. All the files listed below are included, modify
+   as needed.
 
    .. code-block:: bash
 
@@ -524,7 +530,7 @@ GitOps
 Host inventory
 ~~~~~~~~~~~~~~
 
-Just like the basic/manual config we need to configure the host inventory
+Just like the basic/manual config, we need to configure the host inventory
 first. This can be done connected or disconnected:
 
 For **connected** see :ref:`host-inventory-connected`
@@ -557,62 +563,61 @@ cluster. When finished you'll have a SNO cluster running.
    kind: Namespace
    metadata:
      name: ztp-spoke-01
-   spec: {}
 
 .. code-block:: bash
    :caption: 01-unsealed-bmc-secret.yaml
-   :emphasize-lines: 2,4,5,10,11
+   :emphasize-lines: 3-5,9,10
 
    apiVersion: v1
-   kind: Secret
-   metadata:
-     name: bmc-secret
-     namespace: ztp-spoke-01
-     labels:
-       environment.metal3.io: baremetal
-   type: Opaque
    data:
      password: a25p
      username: a25p
+   kind: Secret
+   metadata:
+     labels:
+       app.kubernetes.io/instance: clusters
+     name: bmc-secret
+     namespace: ztp-spoke-01
+   type: Opaque
 
 .. code-block:: bash
    :caption: 02-unsealed-pull-secret.yaml
-   :emphasize-lines: 5,7,8,14
+   :emphasize-lines: 8,9,11,12
 
    # After creating the secret use the following to set the data with your custom docker config json.
    # oc set data secret/pull-secret --from-file=.dockerconfigjson=/home/vince/.docker/config.json -n ztp-spoke-01
+   # or
+   # oc create secret docker-registry --from-file=.dockerconfigjson=/home/vince/.docker/config.json pull-secret -n ztp-spoke-01
 
    apiVersion: v1
+   data:
+     .dockerconfigjson: ewoJImF1dGhzIjogewoJICAibWlycm9yLmxhYi5sb2NhbDo4NDQzIjogewogICAgICAiYXV0aCI6ICJhVzVwZERwd1lYTnpkMjl5WkE9PSIKICAgIH0KICB9Cn0K
    kind: Secret
    metadata:
      name: pull-secret
      namespace: ztp-spoke-01
-     labels:
-       agent-install.openshift.io/watch: "true"
-       cluster.open-cluster-management.io/backup: "true"
-   type: kubernetes.io/dockerconfigjson
-   data:
-     .dockerconfigjson: ewoJImF1dGhzIjogewoJICAibWlycm9yLmxhYi5sb2NhbDo4NDQzIjogewogICAgICAiYXV0aCI6ICJhVzVwZERwd1lYTnpkMjl5WkE9PSIKICAgIH0KICB9Cn0K
 
 .. code-block:: bash
    :caption: 03-agentclusterinstall.yaml
-   :emphasize-lines: 2,4,5,7,10,12,20,26
+   :emphasize-lines: 2,8,9,11,14,16,22,28
 
    apiVersion: extensions.hive.openshift.io/v1beta1
    kind: AgentClusterInstall
    metadata:
+     annotations:
+       agent-install.openshift.io/install-config-overrides: '{"networking":{"networkType":"OVNKubernetes"}}'
+       argocd.argoproj.io/sync-wave: '1'
+       ran.openshift.io/ztp-gitops-generated: '{}'
+     labels:
+       app.kubernetes.io/instance: clusters
      name: ztp-spoke-01
      namespace: ztp-spoke-01
-     labels:
-       cluster-name: ztp-spoke-01
    spec:
      clusterDeploymentRef:
        name: ztp-spoke-01
      imageSetRef:
        name: img4.16.8-x86-64-appsub
      networking:
-       networkType: OVNKubernetes
-       userManagedNetworking: true
        clusterNetwork:
          - cidr: 10.128.0.0/14
            hostPrefix: 23
@@ -627,23 +632,19 @@ cluster. When finished you'll have a SNO cluster running.
 
 .. code-block:: bash
    :caption: 04-clusterdeployment.yaml
-   :emphasize-lines: 2,4,5,12,13,19,25,27
+   :emphasize-lines: 2,4,5,7,8,15,21,23
 
    apiVersion: hive.openshift.io/v1
    kind: ClusterDeployment
    metadata:
      name: ztp-spoke-01
      namespace: ztp-spoke-01
-     labels:
-       cluster.open-cluster-management.io/clusterset: default
-       hive.openshift.io/cluster-platform: agent-baremetal
-     annotations:
-       agentBareMetal-cpuArchitecture: x86_64
    spec:
      baseDomain: lab.local
      clusterName: ztp-spoke-01
      controlPlaneConfig:
        servingCertificates: {}
+     installed: false
      clusterInstallRef:
        group: extensions.hive.openshift.io
        kind: AgentClusterInstall
@@ -675,7 +676,7 @@ cluster. When finished you'll have a SNO cluster running.
      clusterLabels:
        name: ztp-spoke-01
        cloud: Baremetal
-       vendor: OpenShift
+       vendor: auto-detect
      clusterName: ztp-spoke-01
      clusterNamespace: ztp-spoke-01
      iamPolicyController:
@@ -684,6 +685,7 @@ cluster. When finished you'll have a SNO cluster running.
        enabled: true
      searchCollector:
        enabled: true
+     version: 2.6.2
 
 .. code-block:: bash
    :caption: 06-managedcluster.yaml
@@ -696,15 +698,13 @@ cluster. When finished you'll have a SNO cluster running.
      namespace: ztp-spoke-01
      labels:
        name: ztp-spoke-01
-       cloud: baremetal
-       vendor: OpenShift
    spec:
      hubAcceptsClient: true
      leaseDurationSeconds: 60
 
 .. code-block:: bash
    :caption: 07-nmstate.yaml
-   :emphasize-lines: 2,4,5,7,8,11,12,15-17,19,20,23,24,29,30,36,38,42,43
+   :emphasize-lines: 2,4,5,7,10,11,14-16,18,19,22,23,28,29,35,37,41,42
 
    apiVersion: agent-install.openshift.io/v1beta1
    kind: NMStateConfig
@@ -712,8 +712,7 @@ cluster. When finished you'll have a SNO cluster running.
      name: ztp-spoke-01
      namespace: ztp-spoke-01
      labels:
-       agent-install.openshift.io/bmh: ztp-spoke-01
-       infraenvs.agent-install.openshift.io: ztp-spoke-01
+       cluster-name: ztp-spoke-01
    spec:
      interfaces:
        - name: enp1s0
@@ -753,23 +752,18 @@ cluster. When finished you'll have a SNO cluster running.
 
 .. code-block:: bash
    :caption: 08-infraenv.yaml
-   :emphasize-lines: 2,4,5,7,13,17-19,22,24,27
+   :emphasize-lines: 2,4,5,10,12-14,17,19,22
 
    apiVersion: agent-install.openshift.io/v1beta1
    kind: InfraEnv
    metadata:
      name: ztp-spoke-01
      namespace: ztp-spoke-01
-     labels:
-       networkType: static
      annotations:
-       infraenv.agent-install.openshift.io/enable-ironic-agent: "true"
        argocd.argoproj.io/sync-options: Validate=false
    spec:
      additionalNTPSources:
        - 192.168.1.68
-     cpuArchitecture: x86_64
-     ipxeScriptType: DiscoveryImageAlways
      clusterRef:
        name: ztp-spoke-01
        namespace: ztp-spoke-01
@@ -785,30 +779,29 @@ cluster. When finished you'll have a SNO cluster running.
 
 .. code-block:: bash
    :caption: 09-baremetalhost.yaml
-   :emphasize-lines: 2,6,8-10,14,18,20,21
+   :emphasize-lines: 2,6,8-10,14,16,17,19
 
    apiVersion: metal3.io/v1alpha1
    kind: BareMetalHost
    metadata:
      annotations:
        inspect.metal3.io: disabled
-       bmac.agent-install.openshift.io/hostname: ztp-spoke-01
+       bmac.agent-install.openshift.io/hostname: "ztp-spoke-01"
      labels:
-       infraenvs.agent-install.openshift.io: ztp-spoke-01
+       infraenvs.agent-install.openshift.io: "ztp-spoke-01"
      name: ztp-spoke-01
      namespace: ztp-spoke-01
    spec:
-     online: true
      automatedCleaningMode: metadata
-     bootMACAddress: 52:54:00:f4:16:21
-     customDeploy:
-       method: start_assisted_install
      rootDeviceHints:
        deviceName: /dev/vda
      bmc:
-       address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/e2342765-5b52-4d6b-88fc-86db5b3913dd
+       address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/4df1a257-6ab8-4de9-a530-1781da98aa98
        credentialsName: bmc-secret
        disableCertificateVerification: true
+     bootMACAddress: '52:54:00:f4:16:21'
+     bootMode: UEFI
+     online: true
 
 .. code-block:: bash
    :caption: kustomization.yaml
