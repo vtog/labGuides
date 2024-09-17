@@ -54,6 +54,17 @@ Create auth key
 Create key/cert pair with OpenSSL
 ---------------------------------
 
+.. tip:: For binding more then one key for auth, create ~/.ssh/config file
+   with following info. This will check both keys (or more) when authenticating
+   to all hosts.
+
+   .. code-block:: bash
+
+      Host *
+        AddKeysToAgent yes
+        IdentityFile ~/.ssh/id_rsa
+        IdentityFile ~/.ssh/gitea
+
 #. Run the following command to create the private key
 
    .. code-block:: bash

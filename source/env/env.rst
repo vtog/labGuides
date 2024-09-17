@@ -7,6 +7,7 @@ Platform/Environment Lab Guides
 
    rhel-default-install
    simple-bind-config
+   gitea
    kvm
    nfs
    sushy
