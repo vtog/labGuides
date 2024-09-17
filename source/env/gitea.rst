@@ -136,4 +136,14 @@ Run Gitea as service
 
    .. code-block:: bash
 
-      sudo firewall-cmd --add-port=3000/tcp --permanent
+      firewall-cmd --add-port=3000/tcp --permanent
+      firewall-cmd --reload
+
+#. Browse to http://<server_IP>:3000/ and configure gitea. Should only need
+   to add DB settings.
+
+   .. image:: ./images/gitea-conf.png
+
+#. Register Account / User
+
+   .. image:: ./images/gitea-user.png
