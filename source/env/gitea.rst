@@ -57,9 +57,8 @@ Database Prep (MariaDB)
    .. code-block:: bash
 
       exit
-      mysql -u gitea -p giteadb
 
-   .. note:: gitea passwd = "gitea"
+      mysql --user=gitea --password=gitea giteadb
 
 Install from binary
 -------------------
