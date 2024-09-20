@@ -527,6 +527,17 @@ GitOps
 
       git clone https://github.com/vtog/gitops.git
 
+Install operators
+~~~~~~~~~~~~~~~~~
+
+For GitOps two operators are required:
+
+- Red Hat OpenShift GitOps
+- Topology Aware Lifecycle Manager
+
+Both operators can be found on the OperatorHub and for this lab the default
+config is all that is needed. Simply accept the defaults and click "Install".
+
 Host inventory
 ~~~~~~~~~~~~~~
 
@@ -542,6 +553,10 @@ Environment / Cluster
 
 From the cli create the following yaml manifests and apply them to your hub
 cluster. When finished you'll have a SNO cluster running.
+
+.. tip:: Use the "kustomization.yaml" to create the manifests
+   ``oc create -k ./<manifest-dir>``. This process can be used to test the
+   manifests for errors before gitops automation.
 
 - 00-namespace.yaml
 - 01-unsealed-bmc-secret.yaml
@@ -821,3 +836,30 @@ cluster. When finished you'll have a SNO cluster running.
      - 07-nmstateconfig.yaml
      - 08-infraenv.yaml
      - 09-baremetalhost.yaml
+
+Automation
+~~~~~~~~~~
+
+#. From the ACM console view select: :menuselection:`Applications` from the
+   menu. Click "Create application" and select "Subscription".
+
+   .. image:: ./images/acm-create-app.png
+
+#. Add the name and namespace for the cluster and select "Git".
+
+   .. important:: Use the same name and namespace used in your manifests.
+      00-namespace.yaml is not part of the kustomization yaml so creating the
+      right namespace is critical.
+
+   .. image:: ./images/acm-create-app2.png
+
+#. Add your repo info for the cluster. In my lab I only need:
+
+   - URL
+   - Branch
+   - Path
+
+   .. image:: ./images/acm-git.png
+
+#. After adding repo info scroll down to "Cluster sets" and select "default".
+   Then click "Create" in the upper right corner.
