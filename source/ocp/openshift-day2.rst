@@ -389,13 +389,13 @@ require an Identity Provider. These steps will get you started with htpasswd.
 .. attention:: I've noticed without this, access to the local registry doesn't
    work.
 
-#. Create your flat file with a user name and hashed password
+#. Create your flat file with a user name and hashed password.
 
    .. code-block:: bash
 
       htpasswd -c -B -b </path/to/users.htpasswd> <user_name> <password>
 
-#. Add or delete users as needed
+#. Add or delete users as needed.
 
    - ADD
 
@@ -409,7 +409,7 @@ require an Identity Provider. These steps will get you started with htpasswd.
 
         htpasswd -D users.htpasswd <username>
 
-#. From the OCP console create the HTPasswd identity provider
+#. From the OCP console create the HTPasswd identity provider.
 
    a. Go to :menuselection:`Administration --> Cluster Settings` and click the
       Configuration tab
@@ -419,31 +419,42 @@ require an Identity Provider. These steps will get you started with htpasswd.
    #. Click "Browse" and upload the file created earlier
    #. Click "Add"
 
-#. Update the htpasswd identity provider
+#. Update the htpasswd identity provider.
 
-   a. Get secret
+   a. Get the htpasswd secret name.
 
-      .. code-block:: bash
-
-         oc get secret htpass-secret -ojsonpath={.data.htpasswd} -n openshift-config | base64 --decode > users.htpasswd
-
-   #. Add or delete users (see step 2)
-   #. Update secret
+      .. attention:: I'm assuming you have one htpasswd identity provider.
 
       .. code-block:: bash
 
-         oc create secret generic htpass-secret -n openshift-config --from-file=htpasswd=users.htpasswd --dry-run=client -o yaml
+         HTPASSWD=`oc get secret -n openshift-config | grep htpasswd | awk '{print $1}'`
 
-#. If you remove a user from htpasswd you must manually remove the user
-   resources from OCP
+   #. Get/copy current htpasswd secret to local file.
 
-   .. code-block:: bash
+      .. note:: You can skip this step and simply edit the file created in
+         step 1.
 
-      oc delete user <username>
+      .. code-block:: bash
 
-      #AND
+         oc get secret $HTPASSWD -n openshift-config -ojsonpath={.data.htpasswd} | base64 --decode > users.htpasswd
 
-      oc delete identity <identity_provider>:<username>
+   #. Add or delete users (see step 2).
+   #. Update htpasswd secret.
+
+      .. code-block:: bash
+
+         oc create secret generic $HTPASSWD -n openshift-config --from-file=htpasswd=users.htpasswd --dry-run=client -o yaml | oc replace -f -
+
+      .. important:: If you remove a user from htpasswd you must manually
+         remove the user resources from OCP.
+
+         .. code-block:: bash
+
+            oc delete user <username>
+
+            #AND
+
+            oc delete identity <identity_provider>:<username>
 
 OCP Cert Expiry and Resolution
 ------------------------------
