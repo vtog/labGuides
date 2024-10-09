@@ -12,7 +12,7 @@ Prerequisites
 
    `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz>`_
 
-   `Mirror Registry for OpenShift <https://developers.redhat.com/content-gateway/rest/mirror/pub/openshift-v4/clients/mirror-registry/latest/mirror-registry.tar.gz>`_
+   `Mirror Registry for OpenShift <https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz>`_
 
    `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
 
@@ -201,7 +201,7 @@ Create Node Host Mirror Registry
 
    .. code-block:: bash
 
-      ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage /
+      ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage \
       --pgStorage $pgStorage
 
 Mirror Images to Node Registry
