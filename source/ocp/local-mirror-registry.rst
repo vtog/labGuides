@@ -48,6 +48,12 @@ Prerequisites
       via DNS or the local hosts file. The installer will use that name to
       validate the service.
 
+   .. important:: With v2 "pgStorage" is replaced with "sqliteStorage".
+
+   .. tip:: The default port is 8443, you can specify a custom port by adding
+      it to quayHostname, for example: mirror.lab.local:8444. Be sure to use
+      this custom port throughout the rest of the guide.
+
    .. note:: The "ocp4" directory in "/mirror" will be created by the installer.
 
    .. code-block:: bash
@@ -55,7 +61,7 @@ Prerequisites
       quayHostname="mirror.lab.local"
       quayRoot="/mirror/ocp4"
       quayStorage="/mirror/ocp4"
-      pgStorage="/mirror/ocp4"
+      sqliteStorage="/mirror/ocp4"
       initPassword="password"
 
 Create Local Host Mirror Registry
@@ -73,7 +79,7 @@ Create Local Host Mirror Registry
       cd ~/mirror-registry
 
       sudo ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot \
-      --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
+      --quayStorage $quayStorage --sqliteStorage $sqliteStorage --initPassword $initPassword
 
    If ran correctly should see a similar ansible recap.
 
@@ -84,7 +90,7 @@ Create Local Host Mirror Registry
       .. code-block:: bash
 
          sudo ./mirror-registry upgrade --quayHostname $quayHostname --quayRoot $quayRoot \
-         --quayStorage $quayStorage --pgStorage $pgStorage
+         --quayStorage $quayStorage --sqliteStorage $sqliteStorage
 
 #. Copy newly created root CA, update trust, and open firewall port.
 
@@ -114,7 +120,7 @@ Create Local Host Mirror Registry
    .. code-block:: bash
 
       sudo ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage \
-      --pgStorage $pgStorage
+      --sqliteStorage $sqliteStorage
 
 Mirror Images to Local Registry
 -------------------------------
