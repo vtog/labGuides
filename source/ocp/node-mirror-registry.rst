@@ -126,9 +126,9 @@ Create Node Host Mirror Registry
 
       mkdir -p ~/.local/bin
       mkdir -p ~/mirror/ocp4
-      tar -xzvf mirror-registry.tar.gz -C ~/mirror/
-      tar -xzvf openshift-client-linux.tar.gz -C ~/.local/bin/
-      tar -xzvf oc-mirror.tar.gz -C ~/.local/bin/
+      tar -xzvf mirror-registry-2.0.1.tar.gz -C ~/mirror/
+      tar -xzvf oc-4.16.8-linux.tar.gz -C ~/.local/bin/
+      tar -xzvf oc-mirror.rhel9.tar.gz -C ~/.local/bin/
       chmod +x ~/.local/bin/oc-mirror
       rm ~/.local/bin/README.md
       mkdir -p ~/.kube
@@ -146,26 +146,31 @@ Create Node Host Mirror Registry
 
    .. code-block:: bash
 
-      quayHostname="host31.ocp2.lab.local"
-      quayRoot="/home/core/mirror/ocp4"
-      quayStorage="/home/core/mirror/ocp4"
-      pgStorage="/home/core/mirror/ocp4"
-      initPassword="password"
+      cat << EOF > ./variables
+      export quayHostname="host31.ocp2.lab.local"
+      export quayRoot="/home/core/mirror/ocp4"
+      export initPassword="password"
+      EOF
+
+      source ./variables
 
 #. Update /etc/hosts
 
    .. code-block:: bash
 
-      echo "192.168.122.31 host31.ocp2.lab.local" | sudo tee -a /etc/hosts  > /dev/null
+      echo "192.168.122.31 $quayHostname" | sudo tee -a /etc/hosts  > /dev/null
 
    .. note:: If adding redundant registries add all the hosts entries here.
 
 #. Run the following command to install the registry.
 
+   .. tip:: The registry uses port 8443 by default. This can be changed by
+      adding :port to $quayHostname when installing. Be sure to add that port
+      in every subsequent step.
+
    .. code-block:: bash
 
-      ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot \
-        --quayStorage $quayStorage --pgStorage $pgStorage --initPassword $initPassword
+      ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot --initPassword $initPassword
 
    If ran correctly should see a similar ansible recap.
 
@@ -175,8 +180,7 @@ Create Node Host Mirror Registry
 
       .. code-block:: bash
 
-         ./mirror-registry upgrade --quayHostname $quayHostname --quayRoot $quayRoot \
-         --quayStorage $quayStorage --pgStorage $pgStorage
+         ./mirror-registry upgrade --quayHostname $quayHostname --quayRoot $quayRoot
 
 #. Copy newly created root CA and update the trust.
 
@@ -201,8 +205,7 @@ Create Node Host Mirror Registry
 
    .. code-block:: bash
 
-      ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage \
-      --pgStorage $pgStorage
+      ./mirror-registry uninstall --quayRoot $quayRoot
 
 Mirror Images to Node Registry
 ------------------------------

@@ -28,14 +28,14 @@ Prerequisites
    .. code-block:: bash
 
       mkdir ~/mirror-registry
-      tar -xzvf mirror-registry-1.3.6.tar.gz -C ~/mirror-registry/
-      tar -xzvf oc-4.13.1-linux.tar.gz -C ~/.local/bin
-      tar -xzvf oc-mirror.tar.gz -C ~/.local/bin
+      tar -xzvf mirror-registry-2.0.1.tar.gz -C ~/mirror-registry/
+      tar -xzvf oc-4.16.8-linux.tar.gz -C ~/.local/bin
+      tar -xzvf oc-mirror.rhel9.tar.gz -C ~/.local/bin
       chmod +x ~/.local/bin/oc-mirror
       rm ~/.local/bin/README.md
 
-#. Create the target directory for the new registry. In my lab we're using
-   "/mirror"
+#. Create the target directory for the new registry. In my lab I'm using
+   "/mirror".
 
    .. code-block:: bash
 
@@ -49,10 +49,6 @@ Prerequisites
       validate the service.
 
    .. important:: With v2 "pgStorage" is replaced with "sqliteStorage".
-
-   .. tip:: The default port is 8443, you can specify a custom port by adding
-      it to quayHostname, for example: mirror.lab.local:8444. Be sure to use
-      this custom port throughout the rest of the guide.
 
    .. note:: The "ocp4" directory in "/mirror" will be created by the installer.
 
@@ -73,6 +69,10 @@ Create Local Host Mirror Registry
       pods with ``sudo podman ps``
 
    .. warning:: Installing as "root" will force IPv4 only listener.
+
+   .. tip:: The registry uses port 8443 by default. This can be changed by
+      adding :port to $quayHostname when installing. Be sure to add that port
+      in every subsequent step.
 
    .. code-block:: bash
 
