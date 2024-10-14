@@ -33,6 +33,7 @@ Prerequisites
       tar -xzvf oc-mirror.rhel9.tar.gz -C ~/.local/bin
       chmod +x ~/.local/bin/oc-mirror
       rm ~/.local/bin/README.md
+      cd ~/mirror-registry
 
 #. Create the target directory for the new registry. In my lab I'm using
    "/mirror".
@@ -80,8 +81,6 @@ Create Local Host Mirror Registry
       in every subsequent step.
 
    .. code-block:: bash
-
-      cd ~/mirror-registry
 
       sudo ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot \
       --quayStorage $quayStorage --sqliteStorage $sqliteStorage --initPassword $initPassword
