@@ -54,11 +54,16 @@ Prerequisites
 
    .. code-block:: bash
 
-      quayHostname="mirror.lab.local"
-      quayRoot="/mirror/ocp4"
-      quayStorage="/mirror/ocp4"
-      sqliteStorage="/mirror/ocp4"
-      initPassword="password"
+      cat << EOF > ./variables
+
+      export quayHostname="mirror.lab.local"
+      export quayRoot="/mirror/ocp4"
+      export quayStorage="/mirror/ocp4"
+      export sqliteStorage="/mirror/ocp4"
+      export initPassword="password"
+      EOF
+
+      source ./variables
 
 Create Local Host Mirror Registry
 ---------------------------------
