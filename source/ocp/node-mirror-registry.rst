@@ -125,7 +125,7 @@ Create Node Host Mirror Registry
    .. code-block:: bash
 
       mkdir -p ~/.local/bin
-      mkdir -p ~/mirror/ocp4
+      mkdir -p ~/mirror
       tar -xzvf mirror-registry-2.0.1.tar.gz -C ~/mirror/
       tar -xzvf oc-4.16.8-linux.tar.gz -C ~/.local/bin/
       tar -xzvf oc-mirror.rhel9.tar.gz -C ~/.local/bin/
@@ -143,6 +143,11 @@ Create Node Host Mirror Registry
    .. important:: For "quayHostname" be sure to use a name that can be resolved
       via DNS or the local hosts file. The installer will use that name to
       validate the service.
+
+   .. important:: With v2 “pgStorage” is replaced with “sqliteStorage”.
+
+   .. note:: The “ocp4” directory in “/mirror” will be created by the
+      installer.
 
    .. code-block:: bash
 
