@@ -55,8 +55,17 @@ Build the disk image
       apiVersion: v1beta1
       kind: ApplianceConfig
       ocpRelease:
+        # OCP release version in major.minor or major.minor.patch format
+        # (in case of major.minor - latest patch version will be used)
+        # If the specified version is not yet available, the latest supported version will be used.
         version: 4.14
+        # OCP release update channel: stable|fast|eus|candidate
+        # Default: stable
+        # [Optional]
         channel: stable
+        # OCP release CPU architecture: x86_64|aarch64|ppc64le
+        # Default: x86_64
+        # [Optional]
         cpuArchitecture: x86_64
       diskSizeGB: 200
       pullSecret: <your-pull-secret>
@@ -79,6 +88,50 @@ Build the disk image
       # Default: false
       # [Optional]
       stopLocalRegistry: false
+      # Additional images to be included in the appliance disk image.
+      # [Optional]
+      additionalImages:
+        - name: registry.redhat.io/ubi8/ubi:latest
+        - name: registry.redhat.io/ubi9/ubi:latest
+        - name: registry.redhat.io/ubi9/httpd-24:latest
+        - name: registry.redhat.io/ubi9/nginx-122:latest
+        - name: registry.redhat.io/rhel8/support-tools:latest
+        - name: registry.redhat.io/rhel9/support-tools:latest
+        - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
+        - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.12
+        - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.13
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.12
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.13
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.14
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.15
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.16
+        - name: quay.io/openshift/origin-sriov-network-device-plugin:4.12
+        - name: quay.io/openshift/origin-sriov-network-device-plugin:4.13
+        - name: quay.io/openshift/origin-sriov-network-device-plugin:4.14
+        - name: quay.io/openshift-scale/etcd-perf:latest
+        - name: docker.io/centos/tools:latest
+        - name: docker.io/f5devcentral/f5-hello-world:latest
+        - name: docker.io/library/httpd:latest
+        - name: docker.io/library/nginx:latest
+      # Operators to be included in the appliance disk image.
+      # See examples in https://github.com/openshift/oc-mirror/blob/main/docs/imageset-config-ref.yaml.
+      # [Optional]
+      operators:
+      - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.14
+        packages:
+          - name: advanced-cluster-management
+          - name: cincinnati-operator
+          - name: kubernetes-nmstate-operator
+          - name: kubevirt-hyperconverged
+          - name: local-storage-operator
+          - name: lvms-operator
+          - name: metallb-operator
+          - name: multicluster-engine
+          - name: odf-operator
+          - name: openshift-gitops-operator
+          - name: quay-operator
+          - name: skupper-operator
+          - name: sriov-network-operator
 
 #. Build the disk image. This will create a "raw" disk image for your cluter
    appliance.
