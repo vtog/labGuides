@@ -1,6 +1,14 @@
 Node Mirror & Registry
 ======================
 
+.. warning:: This guide is unsupported and post 4.14.x unnecessary. Currently
+   in tech preview, "OpenShift-based Appliance Builder" is the way forward.
+   See my lab guide and official documentation.
+
+   `Appliance-Based Install Notes <../ocp/appliance-based-installer-notes.html>`_
+
+   `OpenShift-based Appliance Builder User Guide <https://access.redhat.com/articles/7065136>`_
+
 In a disconnected environment you might not always have the option to deploy a
 registry and mirror on dedicated server. This guide will walk through the
 process of using one or more nodes running in an OpenShift cluster.
