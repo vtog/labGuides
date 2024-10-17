@@ -206,7 +206,7 @@ Mirror Images to Local Registry
       "mirror.lab.local:8443/mirror/ocp4".
 
    .. code-block:: yaml
-      :emphasize-lines: 5,10,13,14,17,18,21,22,24,39,54
+      :emphasize-lines: 5,10,12,14,16,18,20,24,40,56
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
@@ -217,88 +217,86 @@ Mirror Images to Local Registry
       mirror:
         platform:
           channels:
-            - name: stable-4.12
-              type: ocp
-              minVersion: 4.12.34
-              shortestPath: true
-            - name: stable-4.13
-              type: ocp
-              minVersion: 4.13.14
-              shortestPath: true
-            - name: stable-4.14
-              type: ocp
-              minVersion: 4.14.4
-              shortestPath: true
+          - name: stable-4.14
+            type: ocp
+            minVersion: 4.14.35
+            shortestPath: true
+          - name: stable-4.15
+            type: ocp
+            minVersion: 4.15.28
+            shortestPath: true
+          - name: stable-4.16
+            type: ocp
+            minVersion: 4.16.8
+            shortestPath: true
           graph: true
         operators:
-          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.12
-            packages:
-              - name: advanced-cluster-management
-              - name: cincinnati-operator
-              - name: kubernetes-nmstate-operator
-              - name: kubevirt-hyperconverged
-              - name: local-storage-operator
-              - name: lvms-operator
-              - name: metallb-operator
-              - name: multicluster-engine
-              - name: odf-operator
-              - name: openshift-gitops-operator
-              - name: quay-operator
-              - name: skupper-operator
-              - name: sriov-network-operator
-          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.13
-            packages:
-              - name: advanced-cluster-management
-              - name: cincinnati-operator
-              - name: kubernetes-nmstate-operator
-              - name: kubevirt-hyperconverged
-              - name: local-storage-operator
-              - name: lvms-operator
-              - name: metallb-operator
-              - name: multicluster-engine
-              - name: odf-operator
-              - name: openshift-gitops-operator
-              - name: quay-operator
-              - name: skupper-operator
-              - name: sriov-network-operator
-          - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.14
-            packages:
-              - name: advanced-cluster-management
-              - name: cincinnati-operator
-              - name: kubernetes-nmstate-operator
-              - name: kubevirt-hyperconverged
-              - name: local-storage-operator
-              - name: lvms-operator
-              - name: metallb-operator
-              - name: multicluster-engine
-              - name: odf-operator
-              - name: openshift-gitops-operator
-              - name: quay-operator
-              - name: skupper-operator
-              - name: sriov-network-operator
+        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.14
+          packages:
+          - name: advanced-cluster-management
+          - name: cincinnati-operator
+          - name: kubernetes-nmstate-operator
+          - name: kubevirt-hyperconverged
+          - name: local-storage-operator
+          - name: lvms-operator
+          - name: metallb-operator
+          - name: multicluster-engine
+          - name: odf-operator
+          - name: openshift-gitops-operator
+          - name: quay-operator
+          - name: skupper-operator
+          - name: sriov-network-operator
+          - name: topology-aware-lifecycle-manager
+        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.15
+          packages:
+          - name: advanced-cluster-management
+          - name: cincinnati-operator
+          - name: kubernetes-nmstate-operator
+          - name: kubevirt-hyperconverged
+          - name: local-storage-operator
+          - name: lvms-operator
+          - name: metallb-operator
+          - name: multicluster-engine
+          - name: odf-operator
+          - name: openshift-gitops-operator
+          - name: quay-operator
+          - name: skupper-operator
+          - name: sriov-network-operator
+          - name: topology-aware-lifecycle-manager
+        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.16
+          packages:
+          - name: advanced-cluster-management
+          - name: cincinnati-operator
+          - name: kubernetes-nmstate-operator
+          - name: kubevirt-hyperconverged
+          - name: local-storage-operator
+          - name: lvms-operator
+          - name: metallb-operator
+          - name: multicluster-engine
+          - name: odf-operator
+          - name: openshift-gitops-operator
+          - name: quay-operator
+          - name: skupper-operator
+          - name: sriov-network-operator
+          - name: topology-aware-lifecycle-manager
         additionalImages:
-          - name: registry.redhat.io/ubi8/ubi:latest
-          - name: registry.redhat.io/ubi9/ubi:latest
-          - name: registry.redhat.io/ubi9/httpd-24:latest
-          - name: registry.redhat.io/ubi9/nginx-122:latest
-          - name: registry.redhat.io/rhel8/support-tools:latest
-          - name: registry.redhat.io/rhel9/support-tools:latest
-          - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
-          - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.12
-          - name: registry.redhat.io/openshift4/performance-addon-operator-must-gather-rhel8:v4.13
-          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.12
-          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.13
-          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-operator:v4.14
-          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.15
-          - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.16
-          - name: quay.io/openshift/origin-sriov-network-device-plugin:4.12
-          - name: quay.io/openshift/origin-sriov-network-device-plugin:4.13
-          - name: quay.io/openshift/origin-sriov-network-device-plugin:4.14
-          - name: quay.io/openshift-scale/etcd-perf:latest
-          - name: docker.io/centos/tools:latest
-          - name: docker.io/f5devcentral/f5-hello-world:latest
-          - name: docker.io/library/httpd:latest
-          - name: docker.io/library/nginx:latest
+        - name: registry.redhat.io/ubi8/ubi:latest
+        - name: registry.redhat.io/ubi9/ubi:latest
+        - name: registry.redhat.io/ubi9/httpd-24:latest
+        - name: registry.redhat.io/ubi9/nginx-122:latest
+        - name: registry.redhat.io/rhel8/support-tools:latest
+        - name: registry.redhat.io/rhel9/support-tools:latest
+        - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.14
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.15
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.16
+        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.16.1
+        - name: ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:latest
+        - name: quay.io/openshift-scale/etcd-perf:latest
+        - name: docker.io/centos/tools:latest
+        - name: docker.io/f5devcentral/f5-hello-world:latest
+        - name: docker.io/library/httpd:latest
+        - name: docker.io/library/nginx:latest
         helm: {}
 
    .. tip:: To discover operators by their package name, applicable channels,

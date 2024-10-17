@@ -133,7 +133,7 @@ Build the disk image
           - name: skupper-operator
           - name: sriov-network-operator
 
-#. Build the disk image. This will create a "raw" disk image for your cluter
+#. Build the disk image. This will create a "raw" disk image for your cluster
    appliance.
 
    .. code-block:: bash
