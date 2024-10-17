@@ -11,6 +11,7 @@ OpenShift Lab Guides
    assisted-installer-notes
    ipi-notes
    add-node
+   upgrade-cluster
    openshift-day2
    lso-quick-start
    odf-quick-start
