@@ -52,8 +52,8 @@ Server
 
    .. code-block:: bash
 
-      exportfs -arv
-      exportfs -s
+      sudo exportfs -arv
+      sudo exportfs -s
 
 #. Update firewall to allow nfs.
 
