@@ -136,17 +136,15 @@ Build the disk image
 
       sudo podman run --rm -it --pull newer --privileged --net=host -v $APPLIANCE_ASSETS:/assets:Z $APPLIANCE_IMAGE build
 
-   .. important:: If needed you can rebuild the disk image with another version
+   .. tip:: If needed you can rebuild the disk image with another version
       or updated or additional manifests but you must first "clean" the assets
-      directory first.
+      directory first. The clean command keeps the cache folder under assets
+      intact. To clean the entire cache as well, add the **\-\-cache** flag
+      with the clean command.
 
       .. code-block:: bash
 
          sudo podman run --rm -it -v $APPLIANCE_ASSETS:/assets:Z $APPLIANCE_IMAGE clean
-
-   .. note: The clean command keeps the cache folder under assets intact. To
-      clean the entire cache as well, use the --cache flag with the clean
-      command.
 
 Clone the appliance disk image
 ------------------------------
