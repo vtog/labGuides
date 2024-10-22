@@ -32,8 +32,13 @@ Build the disk image
 
    .. code-block:: bash
 
+      cat << EOF > ./variables
+
       export APPLIANCE_IMAGE="registry.redhat.io/assisted/agent-preinstall-image-builder-rhel9:1.0-1714506949"
       export APPLIANCE_ASSETS="/home/vince/OCP/appliance-builder"
+      EOF
+
+      source ./variables
 
 #. Get the openshift appliance builder.
 
@@ -202,6 +207,11 @@ To create the install manifests follow the instructions found here:
       information to build the cluster. The boot image is contained on the disk
       image created earlier.
 
+#. Copy config-image iso to VM's
+
+   .. code-block:: bash
+
+      for i in {11..13}; do cp workdir/agentconfig.noarch.iso /local/host$i-agentconfig.iso; done;
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
    with the following command:
