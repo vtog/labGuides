@@ -108,3 +108,17 @@ network booting.
       sudo firewall-cmd --add-port=10809/tcp --permanent
       sudo firewall-cmd --add-port=26000/tcp --permanent
       sudo firewall-cmd --reload
+
+Simulate Latency
+----------------
+
+.. code-block:: bash
+
+   ssh vince@192.168.1.1
+
+   configure
+
+   set traffic-policy network-emulator test network-delay 200
+   set interfaces ethernet eth1 traffic-policy out test
+
+   commit ; save ; exit
