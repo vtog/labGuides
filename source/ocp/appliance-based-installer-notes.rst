@@ -67,7 +67,12 @@ Build the disk image
         # Default: x86_64
         # [Optional]
         cpuArchitecture: x86_64
-      diskSizeGB: 200
+      # Virtual size of the appliance disk image.
+      # If specified, should be at least 150GiB.
+      # If not specified, the disk image should be resized when
+      # cloning to a device (e.g. using virt-resize tool).
+      # [Optional]
+      # diskSizeGB: 150
       pullSecret: <your-pull-secret>
       sshKey: <your-ssh-key>
       userCorePass: <your-core-passwd>
@@ -180,9 +185,9 @@ To create the install manifests follow the instructions found here:
 #. With "openshift-install" run the following command. In my case I'm using a
    "workdir" dir to supply the required yaml files.
 
-   .. important:: The big difference between this method and "Agent-Based" is
-      this command syntax. Substituting the command switch "agent create image"
-      for "agent create config-image"
+   .. important:: The big difference between this method and Agent-Based is the
+      command syntax. Substituting the command switch **"image"** for
+      **"config-image"**.
 
    .. code-block:: bash
 
@@ -190,7 +195,7 @@ To create the install manifests follow the instructions found here:
 
    .. note:: This is not a bootable image. It contains all the necessary
       information to build the cluster. The boot image is contained on the disk
-      images created earlier.
+      image created earlier.
 
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
