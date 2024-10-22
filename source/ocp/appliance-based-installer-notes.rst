@@ -50,6 +50,11 @@ Build the disk image
 
 #. Modify "appliance-config.yaml" for your environment.
 
+   .. important:: diskSizeGB is somewhat confusing. I'm unable to build this
+      without the option so not optional.  I also discovered, depending on the
+      mirror sizing, finding the right size was hit or miss. With the following
+      ApplianceConfig I required 300Gib.
+
    .. code-block:: yaml
 
       apiVersion: v1beta1
@@ -72,7 +77,7 @@ Build the disk image
       # If not specified, the disk image should be resized when
       # cloning to a device (e.g. using virt-resize tool).
       # [Optional]
-      # diskSizeGB: 150
+      diskSizeGB: 300
       pullSecret: <your-pull-secret>
       sshKey: <your-ssh-key>
       userCorePass: <your-core-passwd>
