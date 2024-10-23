@@ -61,6 +61,7 @@ Build the disk image
       ApplianceConfig I required 300Gib.
 
    .. code-block:: yaml
+      :emphasize-lines: 7,11,15,21-24,44,62
 
       apiVersion: v1beta1
       kind: ApplianceConfig
@@ -114,7 +115,6 @@ Build the disk image
         - name: registry.redhat.io/rhel9/support-tools:latest
         - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
         - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.16
-        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.16.1
         - name: ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:latest
         - name: quay.io/openshift-scale/etcd-perf:latest
         - name: docker.io/centos/tools:latest
@@ -177,7 +177,7 @@ In my environment I'm using libvirt.
 
    .. code-block:: bash
 
-      for i in {11..13}; do cp appliance-4.14.30.qcow2 /local/host$i.qcow2; done;
+      for i in {11..13}; do sudo cp appliance-4.14.30.qcow2 /local/host$i.qcow2; done;
 
 .. tip:: For baremetal you can copy the raw image to the destination drive
 
@@ -211,7 +211,7 @@ To create the install manifests follow the instructions found here:
 
    .. code-block:: bash
 
-      for i in {11..13}; do cp workdir/agentconfig.noarch.iso /local/host$i-agentconfig.iso; done;
+      for i in {11..13}; do sudo cp workdir/agentconfig.noarch.iso /local/host$i-agentconfig.iso; done;
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
    with the following command:
