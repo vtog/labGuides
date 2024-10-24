@@ -4,6 +4,8 @@ Appliance-Based Install Notes
 The following are notes on deploying OCP using the Appliance Builder and
 Agent Based Installer.
 
+.. warning:: The following process only works with 4.14.x and 4.15.x.
+
 .. seealso:: My notes are based on the following Red Hat Article. For a more
    thorough explanation of the process see: `OpenShift-based Appliance Builder User
    Guide <https://access.redhat.com/articles/7065136>`_
@@ -201,7 +203,7 @@ To create the install manifests follow the instructions found here:
 
    .. code-block:: bash
 
-      openshift-install agent create config-image --dir workdir
+      ./openshift-install agent create config-image --dir workdir
 
    .. note:: This is not a bootable image. It contains all the necessary
       information to build the cluster. The boot image is contained on the disk
@@ -218,4 +220,4 @@ To create the install manifests follow the instructions found here:
 
    .. code-block:: bash
 
-      openshift-install agent wait-for install-complete --dir workdir
+      ./openshift-install agent wait-for install-complete --dir workdir
