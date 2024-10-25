@@ -38,9 +38,9 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
    .. code-block:: bash
 
-      mkdir ~/workdir
+      mkdir ./workdir
 
-#. Create "install-config.yaml" and save in ~/workdir
+#. Create "install-config.yaml" and save in ./workdir
 
    .. tip:: In resource-constrained environments, you can use
       `workload partitioning <https://docs.openshift.com/container-platform/4.14/scalability_and_performance/enabling-workload-partitioning.html>`_
@@ -103,7 +103,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
          platform:
            none: {}
 
-#. Create agent-config.yaml and save in ~/workdir
+#. Create agent-config.yaml and save in ./workdir
 
    .. important:: Repeat "-hostname" block for each host in your config.
 
@@ -273,18 +273,18 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    my case I'm using a "workdir" dir to supply the required yaml files.
 
    .. tip:: Add the sub directory "openshift" to your workdir for custom
-      configs. For example adding operators or setting "core" user passwd.
+      manifests. For example adding operators or setting "core" user passwd.
 
    .. code-block:: bash
 
-      openshift-install agent create image --dir workdir
+      openshift-install agent create image --dir ./workdir
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
    with the following command:
 
    .. code-block:: bash
 
-      openshift-install agent wait-for install-complete --dir workdir
+      openshift-install agent wait-for install-complete --dir ./workdir
 
 .. note:: For my environment I manually set the MAC addresses for the VM's
    primary interface using the following patterns.
@@ -671,13 +671,13 @@ installer will consume the new informantion.
 
    .. code-block:: bash
 
-      openshift-install agent create image --dir workdir
+      openshift-install agent create image --dir ./workdir
 
 #. Monitor the install
 
    .. code-block:: bash
 
-      openshift-install agent wait-for install-complete --dir workdir
+      openshift-install agent wait-for install-complete --dir ./workdir
 
 #. Once the cluster is up and running, check the Calico operator status.
 
