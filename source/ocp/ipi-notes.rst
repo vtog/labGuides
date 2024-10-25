@@ -21,9 +21,9 @@ install-config.yaml I used with KVM.
 
    .. code-block:: bash
 
-      mkdir ~/workdir
+      mkdir ./workdir
 
-#. Create "install-config.yaml" and save in ~/workdir
+#. Create "install-config.yaml" and save in ./workdir
 
    .. code-block:: yaml
 
@@ -126,4 +126,4 @@ install-config.yaml I used with KVM.
 
    .. code-block:: bash
 
-      openshift-install create cluster --dir workdir --log-level debug
+      openshift-install create cluster --dir ./workdir --log-level debug

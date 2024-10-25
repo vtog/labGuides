@@ -203,7 +203,7 @@ To create the install manifests follow the instructions found here:
 
    .. code-block:: bash
 
-      ./openshift-install agent create config-image --dir workdir
+      ./openshift-install agent create config-image --dir ./workdir
 
    .. note:: This is not a bootable image. It contains all the necessary
       information to build the cluster. The boot image is contained on the disk
@@ -213,11 +213,11 @@ To create the install manifests follow the instructions found here:
 
    .. code-block:: bash
 
-      for i in {11..13}; do sudo cp workdir/agentconfig.noarch.iso /local/host$i-agentconfig.iso; done;
+      for i in {11..13}; do sudo cp ./workdir/agentconfig.noarch.iso /local/host$i-agentconfig.iso; done;
 
 #. Boot the VM's with the ISO created in the previous step. Follow the progress
    with the following command:
 
    .. code-block:: bash
 
-      ./openshift-install agent wait-for install-complete --dir workdir
+      ./openshift-install agent wait-for install-complete --dir ./workdir
