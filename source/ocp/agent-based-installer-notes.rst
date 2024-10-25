@@ -311,6 +311,60 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       <host mac='52:54:00:f4:16:52' ip='192.168.122.52'/>
       <host mac='52:54:00:f4:16:53' ip='192.168.122.53'/>
 
+Add Operators
+-------------
+
+You can add operators to the install by creating the "openshift" dir in your
+"workdir". Doing this saves a step post install.
+
+NMState Example
+~~~~~~~~~~~~~~~
+
+Create the following yaml files and add to ./workdir/openshift before running
+openshift-install.
+
+.. code-block:: yaml
+
+   apiVersion: v1
+   kind: Namespace
+   metadata:
+     labels:
+       name: openshift-nmstate
+     name: openshift-nmstate
+   spec:
+     finalizers:
+     - kubernetes
+
+.. code-block:: yaml
+
+   apiVersion: operators.coreos.com/v1
+   kind: OperatorGroup
+   metadata:
+     annotations:
+       olm.providedAPIs: NMState.v1.nmstate.io
+     name: openshift-nmstate
+     namespace: openshift-nmstate
+   spec:
+     targetNamespaces:
+     - openshift-nmstate
+     upgradeStrategy: Default
+
+.. code-block:: yaml
+
+   apiVersion: operators.coreos.com/v1alpha1
+   kind: Subscription
+   metadata:
+     labels:
+       operators.coreos.com/kubernetes-nmstate-operator.openshift-nmstate: ""
+     name: kubernetes-nmstate-operator
+     namespace: openshift-nmstate
+   spec:
+     channel: stable
+     installPlanApproval: Automatic
+     name: kubernetes-nmstate-operator
+     source: cs-redhat-operator-index
+     sourceNamespace: openshift-marketplace
+
 Custom Partitioning
 -------------------
 Here I have a couple of common examples on how to customize the deployment
