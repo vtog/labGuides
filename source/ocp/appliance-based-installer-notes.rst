@@ -4,7 +4,7 @@ Appliance-Based Install Notes
 The following are notes on deploying OCP using the Appliance Builder and
 Agent Based Installer.
 
-.. warning:: The following process only works with 4.14.x and 4.15.x.
+.. warning:: Currently the following process works with 4.14.x and beyond.
 
 .. seealso:: My notes are based on the following Red Hat Article. For a more
    thorough explanation of the process see: `OpenShift-based Appliance Builder User
@@ -36,7 +36,8 @@ Build the disk image
 
       cat << EOF > ./variables
 
-      export APPLIANCE_IMAGE="registry.redhat.io/assisted/agent-preinstall-image-builder-rhel9:1.0-1714506949"
+      #export APPLIANCE_IMAGE="registry.redhat.io/assisted/agent-preinstall-image-builder-rhel9:1.0-1714506949"
+      export APPLIANCE_IMAGE="quay.io/edge-infrastructure/openshift-appliance:latest"
       export APPLIANCE_ASSETS="/home/vince/OCP/appliance-builder"
       EOF
 
