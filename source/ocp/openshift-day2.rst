@@ -868,3 +868,9 @@ Recover root passwd
 #. Let the node reboot with normal command line switches.
 
 #. On prompt try logging in with root and new passwd.
+
+Tech Preview
+------------
+
+.. seealso:: `Enabling features using feature gates
+   <https://docs.openshift.com/container-platform/4.16/nodes/clusters/nodes-cluster-enabling-features.html>`_
