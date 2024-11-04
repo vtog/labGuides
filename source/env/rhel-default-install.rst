@@ -31,11 +31,12 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install zsh git rsync NetworkManager-tui firewall-config cockpit cockpit-machines cockpit-composer
+      sudo dnf install zsh git rsync NetworkManager-tui firewall-config \
+      cockpit cockpit-machines cockpit-composer util-linux-user
 
-#. Enable/start service and Open firewall
+#. Enable/start and open firewall for "cockpit" service
 
-   .. tip:: To see the ports for the firewall service, "cat" the
+   .. tip:: To see the ports for any firewall service, "cat" the
       <service_name>.xml
 
       .. code-block:: bash
@@ -63,7 +64,11 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
+      #Fedora
       sudo dnf group install --with-optional "virtualization"
+
+      #RHEL
+      sudo dnf install virt-install virt-viewer virt-manager virt-top libguestfs-tools libvirt qemu-kvm
 
       sudo systemctl enable --now libvirtd
 
@@ -80,7 +85,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
          sudo firewall-cmd --add-service=dns --zone=home --permanent
          sudo firewall-cmd --reload
 
-#. Install various packages
+#. Install various packages (Optional)
 
    .. code-block:: bash
 
@@ -101,6 +106,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 #. Install themes & icons https://www.gnome-look.org/browse/
 
    - Nordic-v40
+   - Bluish-Dark-Icons
    - Tango2
 
 #. Install and update PIP. Install misc packages
@@ -118,7 +124,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      pip install sphinx==7.2.6 docutils==0.18 sphinx_rtd_theme==1.3.0 sphinx-copybutton==0.5.2
+      pip install sphinx==7.4.7 docutils==0.20.1 sphinx_rtd_theme==2.0.0 sphinx-copybutton==0.5.2 pre-commit==3.8.0
 
       # F5 Theme
       pip install f5_sphinx_theme recommonmark sphinxcontrib.addmetahtml sphinxcontrib.nwdiag sphinxcontrib.blockdiag sphinxcontrib-websupport
@@ -212,7 +218,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
          PasswordAuthentication no
 
       # reload service
-      systemctl restart sshd
+      sudo systemctl restart sshd
 
       # Allow port 22
       sudo firewall-cmd --add-service=ssh --permanent
