@@ -139,7 +139,7 @@ will guide you through configuring the VF's and passing them to KVM.
 
    .. code-block:: bash
 
-      sudo grubby --update-kernel=ALL --args="iommu=pt"
+      sudo grubby --update-kernel=ALL --args="intel_iommu=on iommu=pt"
 
    Validate change before and after reboot.
 

@@ -72,6 +72,12 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       sudo systemctl enable --now libvirtd
 
+   .. tip:: Verify the system is ready to be a virtualization host:
+
+      .. code-block:: bash
+
+         sudo virt-host-validate
+
    .. attention:: Depending on your network configuration you may need to
       configure firewalld to allow external traffic to connect to the virtual
       network via the host. The following firewall-cmd's allow the virtual
@@ -84,6 +90,16 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
          sudo firewall-cmd --add-source=192.168.122.0/24 --zone=home --permanent
          sudo firewall-cmd --add-service=dns --zone=home --permanent
          sudo firewall-cmd --reload
+
+#. Enable IOMMU
+
+   .. code-block:: bash
+
+      sudo grubby --update-kernel=ALL --args="intel_iommu=on iommu=pt"
+
+   .. code-block:: bash
+
+      sudo dmesg | grep "iommu: Default"
 
 #. Install various packages (Optional)
 
