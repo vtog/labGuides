@@ -109,7 +109,7 @@ install-config.yaml I used with KVM.
       pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
       sshKey: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
-      imageDigestSources
+      imageDigestSources:
       - mirrors:
         - mirror.lab.local:8443/openshift/release
         source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
