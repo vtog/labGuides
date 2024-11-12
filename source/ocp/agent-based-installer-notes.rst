@@ -84,7 +84,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
       pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
       sshKey: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
-      imageContentSources:
+      imageDigestSources
       - mirrors:
         - mirror.lab.local:8443/openshift/release
         source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
@@ -777,7 +777,7 @@ IPv6 Only Example
    pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
    sshKey: |
      ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
-   imageContentSources:
+   imageDigestSources
    - mirrors:
      - mirror.lab.local:8443/openshift/release
      source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
