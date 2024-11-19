@@ -12,6 +12,12 @@ vi command to remove trailing white space in file:
 
    :%s/\s\+$//e
 
+vi command to remove blank lines:
+
+.. code-block:: bash
+
+   :g/^$/d
+
 sed command to remove trailing white space in file:
 
 .. code-block:: bash
