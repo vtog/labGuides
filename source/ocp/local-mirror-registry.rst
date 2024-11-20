@@ -186,7 +186,7 @@ Mirror Images to Local Registry
       }
 
 #. Create the following "imageset-config.yaml" file. In the example ImageSet
-   file below I'm mirroring 4.12.x, 4.13.x and 4.14.x images and operators.
+   file below I'm mirroring 4.14.x, 4.15.x and 4.16.x images and operators.
    Plus some additional images I find useful.
 
    .. attention:: Be sure path in imageURL (line 5) matches the path assigned
@@ -206,7 +206,7 @@ Mirror Images to Local Registry
       "mirror.lab.local:8443/mirror/ocp4".
 
    .. code-block:: yaml
-      :emphasize-lines: 5,10,12,14,16,18,20,24,40,56
+      :emphasize-lines: 5,10,12,14,16,18,20,24,41,58,75
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v1alpha2
@@ -241,6 +241,7 @@ Mirror Images to Local Registry
           - name: lvms-operator
           - name: metallb-operator
           - name: multicluster-engine
+          - name: nfd
           - name: odf-operator
           - name: openshift-gitops-operator
           - name: quay-operator
@@ -257,6 +258,7 @@ Mirror Images to Local Registry
           - name: lvms-operator
           - name: metallb-operator
           - name: multicluster-engine
+          - name: nfd
           - name: odf-operator
           - name: openshift-gitops-operator
           - name: quay-operator
@@ -273,12 +275,16 @@ Mirror Images to Local Registry
           - name: lvms-operator
           - name: metallb-operator
           - name: multicluster-engine
+          - name: nfd
           - name: odf-operator
           - name: openshift-gitops-operator
           - name: quay-operator
           - name: skupper-operator
           - name: sriov-network-operator
           - name: topology-aware-lifecycle-manager
+        - catalog: registry.redhat.io/redhat/certified-operator-index:v4.16
+          packages:
+          - name: gpu-operator-certified
         additionalImages:
         - name: registry.redhat.io/ubi8/ubi:latest
         - name: registry.redhat.io/ubi9/ubi:latest
@@ -305,10 +311,10 @@ Mirror Images to Local Registry
       .. code-block:: bash
 
          # List ALL available operators
-         oc mirror list operators --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
+         oc mirror list operators --catalog registry.redhat.io/redhat/redhat-operator-index:v4.16
 
          # List package specific inormation for an operator
-         oc mirror list operators --package sriov-network-operator --catalog registry.redhat.io/redhat/redhat-operator-index:v4.12
+         oc mirror list operators --package sriov-network-operator --catalog registry.redhat.io/redhat/redhat-operator-index:v4.16
 
 #. Mirror the registry.
 
