@@ -64,7 +64,7 @@ Host inventory (Connected)
 
 #. Configure host inventory settings and click "Configure".
 
-   .. warning:: For disconnected environments skip to next step.
+   .. warning:: For disconnected environments skip to next section.
 
    .. image:: ./images/acm-configure-host-inventory.png
 
@@ -305,6 +305,10 @@ Credentials
    .. code-block:: bash
 
       oc new-project <project_name>
+
+   .. tip:: I recommend making the project_name the domain name with no dots.
+
+      For example: "lab.local" ==  "lablocal"
 
 #. Connect to the console and switch from "local-cluster" to "All Clusters".
 
