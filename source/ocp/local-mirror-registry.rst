@@ -66,8 +66,8 @@ Prerequisites
 
       source ./variables
 
-Create Local Host Mirror Registry
----------------------------------
+Create Local Registry
+---------------------
 
 #. Run the following command to install the registry pods as root.
 
@@ -341,6 +341,9 @@ Mirror Images to Local Registry
    You should see something similar to the following:
 
    .. image:: ./images/mirror-images.png
+
+Mirror Images to Local Registry v2
+----------------------------------
 
 Update Running Cluster
 ----------------------
