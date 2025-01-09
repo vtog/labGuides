@@ -424,34 +424,34 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 Upgrade Fedora
 --------------
 
-#. Update Fedora 39 (Required)
+#. Update/Upgrade current running verion.
 
    .. code-block:: bash
 
       sudo dnf upgrade --refresh
 
-#. Install the DNF-plugin-system-upgrade Package on Fedora
+#. Install the DNF-plugin-system-upgrade Package on Fedora.
 
    .. code-block:: bash
 
       sudo dnf install dnf-plugin-system-upgrade
 
-#. Download Fedora 40 Release
+#. Download desired Fedora release. In my example release 41.
 
    .. code-block:: bash
 
-      sudo dnf system-upgrade download --releasever=40
+      sudo dnf system-upgrade download --releasever=41
 
    .. tip:: If you encounter conflicts during the upgrade, try adding
       "--allowerasing" option.
 
-#. Upgrade and Reboot
+#. Upgrade and Reboot.
 
    .. code-block:: bash
 
       sudo dnf system-upgrade reboot
 
-#. Confirm upgrade
+#. Confirm upgrade.
 
    .. code-block:: bash
 
