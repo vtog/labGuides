@@ -421,6 +421,19 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       # Create Zsh Shell Completion
       sudo cp extra/completions/_alacritty /usr/share/zsh/site-functions
 
+Broken Defaults
+---------------
+
+#. Disable automatic mounting of tmpfs to /tmp by systemd.
+
+   .. note:: I ran into an issue where the default /tmp size caused an issue
+      with oc mirror. Needed more space. Removing this default puts /tmp back
+      in root.
+
+  .. code-block:: bash
+
+     systemctl mask tmp.mount
+
 Upgrade Fedora
 --------------
 

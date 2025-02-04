@@ -42,21 +42,15 @@ Prerequisites
       chmod +x ~/.local/bin/oc-mirror
       rm ~/.local/bin/README.md
 
-#. Convert your "pull-secret.txt" to json format.
+#. Convert and copy pull-secret.txt to ~/.docker/config.json
 
    .. attention:: You may need to install "jq" for this step.
 
    .. code-block:: bash
 
       cd ~
-      cat ./pull-secret.txt | jq . > ./pull-secret.json
-
-#. Copy "pull-secret.json" to ~/.docker and rename "config.json".
-
-   .. code-block:: bash
-
       mkdir ~/.docker
-      cp ./pull-secret.json ~/.docker/config.json
+      cat ./pull-secret.txt | jq . > ~/.docker/config.json
 
 #. Create the following "imageset-config.yaml" file. In the file below I'm
    mirroring OCP v4.12, more specifically only v4.12.5. I've also added some
@@ -227,21 +221,15 @@ Mirror Images to Node Registry
    it with the local mirror information. If you haven't done so download it here:
    `your pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
-#. Convert "pull secret" to json format.
+#. Convert and copy pull-secret.txt to ~/.docker/config.json
 
    .. attention:: You may need to install "jq" for this step.
 
    .. code-block:: bash
 
       cd ~
-      cat ./pull-secret.txt | jq . > ./pull-secret.json
-
-#. Copy pull-secret.json to ~/.docker and rename config.json
-
-   .. code-block:: bash
-
       mkdir ~/.docker
-      cp ./pull-secret.json ~/.docker/config.json
+      cat ./pull-secret.txt | jq . > ~/.docker/config.json
 
 #. Generate the base64-encoded user name and password for mirror registry.
 

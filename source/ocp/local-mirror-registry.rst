@@ -133,12 +133,13 @@ Mirror Images to Local Registry
    it with the local mirror information. If you haven't done so download it here:
    `your pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
-#. Convert and copy pull-secret.json to ~/.docker and rename config.json
+#. Convert and copy pull-secret.txt to ~/.docker/config.json
 
    .. attention:: You may need to install "jq" for this step.
 
    .. code-block:: bash
 
+      cd ~
       mkdir ~/.docker
       cat ./pull-secret.txt | jq . > ~/.docker/config.json
 
