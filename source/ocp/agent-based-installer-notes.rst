@@ -19,6 +19,11 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 
       podman run --volume /var/lib/etcd:/var/lib/etcd:Z quay.io/openshift-scale/etcd-perf
 
+.. important:: Install will not complete without NTP, validation to start install
+   will fail. Be sure to have a timesource on your network. For disconnected
+   environments that don't have an NTP server, you can set up a time source on
+   the local bastion server.
+
 #. Download the latest openshift-install utility found here:
 
    `OpenShift for x86_64 Installer <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-install-linux.tar.gz>`_
