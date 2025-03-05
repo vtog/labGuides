@@ -29,9 +29,12 @@ Basic ACM install to get started.
    .. image:: ./images/acm-create-multiclusterhub.png
 
 #. Be patient several containers are pulled and started. You can monitor the
-   progress by watching the pods in the namespace "multicluster-engine".
+   progress by watching the pods in the "multicluster-engine" and
+   "open-cluster-management" namespace.
 
    .. code-block:: bash
+
+      oc get pods -n open-cluster-management
 
       oc get pods -n multicluster-engine
 
