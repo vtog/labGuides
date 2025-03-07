@@ -869,6 +869,33 @@ Recover root passwd
 
 #. On prompt try logging in with root and new passwd.
 
+Update DNS via NMSTATE
+----------------------
+
+With nmstate we can change the cluster deployed resolv.conf settings. Install
+the nmstate operator with defaults and inititialize the operator. Create the
+following policy yaml and apply to cluster.
+
+.. code-block:: yaml
+   :emphasize-lines: 4,7
+
+   apiVersion: nmstate.io/v1
+   kind: NodeNetworkConfigurationPolicy
+   metadata:
+     name: dns-policy
+   spec:
+     nodeSelector:
+       node-role.kubernetes.io/master: ""
+     desiredState:
+       dns-resolver:
+         config:
+             search:
+             - lab.local
+             - test.local
+             server:
+             - 192.168.1.68
+             - 192.168.1.53
+
 Tech Preview
 ------------
 
