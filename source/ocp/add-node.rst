@@ -161,6 +161,8 @@ Back-Up ETCD
 OpenShift comes with scripts that will backup the etcd state. It's best
 practice to backup etcd before removing and replacing a control node.
 
+.. seealso:: `Control plane backup and restore <https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/backup_and_restore/control-plane-backup-and-restore>`_
+
 #. Determine which master node is currently the leader.
 
    A. Change to the openshift-etcd project
@@ -216,6 +218,8 @@ Clean-Up ETCD
 
 In the event of a control node failure the failed node must be removed from
 etcd. Before starting be sure to follow the previous section backing up etcd.
+
+.. seealso:: `Control plane backup and restore <https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/backup_and_restore/control-plane-backup-and-restore>`_
 
 #. Remove failed node
 
@@ -294,6 +298,8 @@ Verify ETCD
 
 After adding the new node to the cluster, we need to ensure that the pods are
 running and force a redeployment of this etcd member using the etcd operator.
+
+.. seealso:: `Control plane backup and restore <https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/backup_and_restore/control-plane-backup-and-restore>`_
 
 #. Check the etcd operator "AVAILABLE" status is "True". If not you may need to
    wait or troubleshoot the status.
