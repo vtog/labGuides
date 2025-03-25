@@ -95,7 +95,7 @@ for the addition of a new master or worker node, depending on how you set the
 
    .. code-block:: bash
 
-      curl -L $ISO_URL -o rhcos-live.iso
+      curl -L $ISO_URL -o rhcos-$OCP_VERSION-$ARCH-live.iso
 
 #. Boot the target host from the RHCOS ISO.
 
@@ -128,9 +128,11 @@ for the addition of a new master or worker node, depending on how you set the
 
 #. When the install is complete, **reboot** the host.
 
+   .. image:: ./images/coreos-install-complete.png
+
    .. note:: The machine may reboot more than once.
 
-#. For the new host to join the cluster several pending csr's will need to be
+#. For the new host to join the cluster, several pending csr's will need to be
    approved.
 
    .. attention:: The csr approval command will need to be run more than once.
