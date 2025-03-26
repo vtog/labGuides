@@ -32,6 +32,12 @@ and deleting that line.
 
    sed -i -e '/^host51/d' ~/.ssh/known_hosts
 
+Append rootCA to file indenting each line with two spaces.
+
+.. code-block:: bash
+
+   echo "additionalTrustBundle: |" >> install-config.yaml
+   sed -e 's/^/  /' /mirror/ocp4/quay-rootCA/rootCA.pem >> install-config.yaml
 
 Create auth key
 ---------------
