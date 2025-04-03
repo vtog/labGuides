@@ -410,7 +410,6 @@ Together it creates three objects in the "output" directory.
       HOSTIP=`grep $host nodes | awk -F "," '{print $3}'`;
       MAC1=`grep $host nodes | awk -F "," '{print $4}'`;
       UUID=`grep $host nodes | awk -F "," '{print $5}'`;
-      done;
 
       # Secret
 
