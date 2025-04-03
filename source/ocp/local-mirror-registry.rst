@@ -126,8 +126,11 @@ Create Local Registry
       sudo ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage \
       --sqliteStorage $sqliteStorage
 
-Mirror Images to Local Registry
--------------------------------
+Mirror Images to Local Registry (v2)
+------------------------------------
+
+.. important:: This section is now based on oc-mirror **v2** released with
+   v4.18.
 
 #. Before mirroring images we need a copy of your Red Hat "Pull Secret" and update
    it with the local mirror information. If you haven't done so download it here:
@@ -144,6 +147,8 @@ Mirror Images to Local Registry
       cat ./pull-secret.txt | jq . > ~/.docker/config.json
 
 #. Generate the base64-encoded user name and password for mirror registry.
+
+   .. note:: My registry username and password are "init" and "password".
 
    .. code-block:: bash
 
@@ -190,82 +195,37 @@ Mirror Images to Local Registry
    file below I'm mirroring 4.14.x, 4.15.x and 4.16.x images and operators.
    Plus some additional images I find useful.
 
-   .. attention:: Be sure path in imageURL (line 5) matches the path assigned
-      earlier for "quayRoot".
-
-   .. note:: **"graph: true"** mirror's the graph data to the disconnected
+   .. tip:: **"graph: true"** mirror's the graph data to the disconnected
       registry. This information enables the disconnected cluster, via the
       update service operator, to show a visual representation of the available
       upgrades.
 
-   .. note:: **"shortestPath: true"** instructs the oc mirror command to only pull
+   .. tip:: **"shortestPath: true"** instructs the oc mirror command to only pull
       the required version to upgrade from one version to the next. It will
       prune any unneeded version.
 
-   .. attention:: Be sure to replace "$quayHostname:8443$quayRoot" environment
-      variables with the real names. For example imageURL: would be set to
-      "mirror.lab.local:8443/mirror/ocp4".
-
    .. code-block:: yaml
-      :emphasize-lines: 5,10,12,14,16,18,20,24,41,58,75
+      :emphasize-lines: 6,8,10,12,14,16,20,37,54,71
 
       kind: ImageSetConfiguration
-      apiVersion: mirror.openshift.io/v1alpha2
-      storageConfig:
-        registry:
-          imageURL: $quayHostname:8443$quayRoot
-          skipTLS: false
+      apiVersion: mirror.openshift.io/v2alpha1
       mirror:
         platform:
           channels:
-          - name: stable-4.14
-            type: ocp
-            minVersion: 4.14.35
-            shortestPath: true
-          - name: stable-4.15
-            type: ocp
-            minVersion: 4.15.28
-            shortestPath: true
           - name: stable-4.16
             type: ocp
-            minVersion: 4.16.8
+            minVersion: 4.16.29
+            shortestPath: true
+          - name: stable-4.17
+            type: ocp
+            minVersion: 4.17.17
+            shortestPath: true
+          - name: stable-4.18
+            type: ocp
+            minVersion: 4.18.1
             shortestPath: true
           graph: true
         operators:
-        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.14
-          packages:
-          - name: advanced-cluster-management
-          - name: cincinnati-operator
-          - name: kubernetes-nmstate-operator
-          - name: kubevirt-hyperconverged
-          - name: local-storage-operator
-          - name: lvms-operator
-          - name: metallb-operator
-          - name: multicluster-engine
-          - name: nfd
-          - name: odf-operator
-          - name: openshift-gitops-operator
-          - name: quay-operator
-          - name: skupper-operator
-          - name: sriov-network-operator
-          - name: topology-aware-lifecycle-manager
-        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.15
-          packages:
-          - name: advanced-cluster-management
-          - name: cincinnati-operator
-          - name: kubernetes-nmstate-operator
-          - name: kubevirt-hyperconverged
-          - name: local-storage-operator
-          - name: lvms-operator
-          - name: metallb-operator
-          - name: multicluster-engine
-          - name: nfd
-          - name: odf-operator
-          - name: openshift-gitops-operator
-          - name: quay-operator
-          - name: skupper-operator
-          - name: sriov-network-operator
-          - name: topology-aware-lifecycle-manager
         - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.16
           packages:
           - name: advanced-cluster-management
@@ -283,7 +243,41 @@ Mirror Images to Local Registry
           - name: skupper-operator
           - name: sriov-network-operator
           - name: topology-aware-lifecycle-manager
-        - catalog: registry.redhat.io/redhat/certified-operator-index:v4.16
+        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.17
+          packages:
+          - name: advanced-cluster-management
+          - name: cincinnati-operator
+          - name: kubernetes-nmstate-operator
+          - name: kubevirt-hyperconverged
+          - name: local-storage-operator
+          - name: lvms-operator
+          - name: metallb-operator
+          - name: multicluster-engine
+          - name: nfd
+          - name: odf-operator
+          - name: openshift-gitops-operator
+          - name: quay-operator
+          - name: skupper-operator
+          - name: sriov-network-operator
+          - name: topology-aware-lifecycle-manager
+        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.18
+          packages:
+          - name: advanced-cluster-management
+          - name: cincinnati-operator
+          - name: kubernetes-nmstate-operator
+          - name: kubevirt-hyperconverged
+          - name: local-storage-operator
+          - name: lvms-operator
+          - name: metallb-operator
+          - name: multicluster-engine
+          - name: nfd
+          - name: odf-operator
+          - name: openshift-gitops-operator
+          - name: quay-operator
+          - name: skupper-operator
+          - name: sriov-network-operator
+          - name: topology-aware-lifecycle-manager
+        - catalog: registry.redhat.io/redhat/certified-operator-index:v4.18
           packages:
           - name: gpu-operator-certified
         additionalImages:
@@ -294,9 +288,9 @@ Mirror Images to Local Registry
         - name: registry.redhat.io/rhel8/support-tools:latest
         - name: registry.redhat.io/rhel9/support-tools:latest
         - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
-        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.14
-        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.15
         - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.16
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.17
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.18
         - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.16.1
         - name: ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:latest
         - name: quay.io/openshift-scale/etcd-perf:latest
@@ -317,34 +311,46 @@ Mirror Images to Local Registry
          # List package specific inormation for an operator
          oc mirror list operators --package sriov-network-operator --catalog registry.redhat.io/redhat/redhat-operator-index:v4.16
 
-#. Mirror the registry.
+#. Mirror images to registry.
 
-   .. attention:: oc-mirror requires OpenShift v4.9.x and later.
+   With oc-mirror v2 we have the option to mirror to disk first then mirror to
+   registry. It is possible to mirror directly to the registry as was the
+   default with v1 but I prefer the two step method. For disconnected
+   environments this is the best and only option.
 
-   .. note:: Ran into prunning errors. Tried "--skip-pruning" but not sure that
-      was helpful. Last tried "\-\-continue-on-error" and "\-\-ignore-history".
-      Noting here for reference.
+   .. warning:: Be patient! Each step of the process will take a lot of time.
 
-   .. code-block:: bash
+   .. tip:: Before step "B. Disk-to-Mirror" backup previously created tarball
+      and "cluster-resources" directory. The process will overwrite this file
+      with each attempt.
 
-      oc mirror --config=./imageset-config.yaml docker://$quayHostname:8443
+   .. important:: If you see missing images in the results at the end of each
+      step, re-run oc-mirror.
 
-   .. note:: Be patient this process will take some time to download all the
-      requested images.
+   A. Mirror-to-Disk.
 
-#. Make note of the following information upon completion. A new directory
-   "./oc-mirror-workspace/results-xxxxxxxxxx" with results and yaml files on
-   how to apply mirror to cluster are created.
+      .. code-block:: bash
 
-   .. image:: ./images/mirror-results.png
+         oc mirror --v2 -c ./imageset-config.yaml file://<directory_name>
+
+      .. image:: ./images/mirror-results.png
+
+   #. Disk-to-Mirror.
+
+      .. code-block:: bash
+
+         oc mirror --v2 -c ./imageset-config.yaml --from file://<directory_name> docker://$quayHostname:8443
+
+      .. image:: ./images/mirror-results2.png
+
+#. Make note of the information upon completion. Supporting yaml files can be
+   found in "<directory_name>/working-dir/cluster-resources". These files will
+   be applied to your running cluster.
 
 #. Connect and login to your mirror: `<https://$quayHostname:8443>`_
    You should see something similar to the following:
 
    .. image:: ./images/mirror-images.png
-
-Mirror Images to Local Registry v2
-----------------------------------
 
 Update Running Cluster
 ----------------------
@@ -382,23 +388,17 @@ To create a new cluster using the local mirror & registry see:
 
       oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=.dockerconfig.json
 
-   .. attention:: This will cause MCP to update all nodes
-
 #. Create configmap of quay-rootCA.
 
    .. code-block:: bash
 
       oc create configmap registry-config --from-file=$quayHostname..8443=$quayRoot/quay-rootCA/rootCA.pem -n openshift-config
 
-   .. attention:: This will cause MCP to update all nodes
-
 #. Add quay-rootCA to cluster.
 
    .. code-block:: bash
 
       oc patch --type merge images.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}'
-
-   .. attention:: This will cause MCP to update all nodes
 
 #. Apply the YAML files from the results directory to the cluster.
 
@@ -413,7 +413,7 @@ To create a new cluster using the local mirror & registry see:
 
    .. code-block:: bash
 
-      oc apply -f ./oc-mirror-workspace/results-xxxxxxxxxx/
+      oc apply -f <directory_name>/working-dir/cluster-resources/
 
 #. For disconnected upgrades via the "Openshift Update Service" (next section)
    the "release-signatures" will need to be applied to the cluster.
@@ -422,7 +422,7 @@ To create a new cluster using the local mirror & registry see:
 
    .. code-block:: bash
 
-      oc apply -f ./oc-mirror-workspace/results-xxxxxxxxx/release-signatures/
+      oc apply -f <directory_name>/working-dir/cluster-resources/signature-configmap.yaml
 
 #. The ability to install operators from the local mirror requires the default
    operator hub to be disabled.
