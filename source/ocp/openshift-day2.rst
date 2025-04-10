@@ -9,7 +9,41 @@ testing** the following procedure allows root privileges on a per project and
 deployment basis.
 
 .. attention:: For security reasons it's recommended to run as nonroot
-   (default).
+   (default) and update your container to work in this security context.
+
+Option 1
+^^^^^^^^
+
+#. Use the "scc-subject-review" subcommand to list all the security context
+   constraints that can overcome the limitations that hinder the container.
+
+   .. code-block:: bash
+
+      oc get deployment <deployment-name> -o yaml -n <project> | \
+      oc adm policy scc-subject-review -f -
+
+#. Create a service account in the namespace of your container.
+
+   .. code-block:: bash
+
+      oc create serviceaccount <service-account-name> -n <project>
+
+#. Associate the service account with an SCC
+
+   .. code-block:: bash
+
+      oc adm policy add-scc-to-user <scc-name> -z <service-account-name> \
+      -n <project>
+
+#. Update existing deployment with newly created service account
+
+   .. code-block:: bash
+
+      oc set serviceaccount deployment/<deployment-name> \
+      <service-account-name> -n <project>
+
+Option 2
+^^^^^^^^
 
 #. Update the "privileged" Security Context Constraints by adding the projects
    "default" service account.
