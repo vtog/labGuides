@@ -1,6 +1,165 @@
 Adding a New Node to the Cluster
 ================================
 
+Option 1 (Preferred)
+^^^^^^^^^^^^^^^^^^^^
+
+This option uses BareMetalHost and BMC for provisioning. Three objects need to
+be created:
+
+- Secret (BMC authentication)
+- Secret (NMState config)
+- BareMetalHost
+
+.. note:: All objects are created in the "openshift-machine-api" namespace.
+
+#. Create the BMC authentication secret.
+
+   .. important:: The username and password are generated with base64.
+
+      .. code-block:: bash
+
+         echo -n 'kni' | base64 -w0
+
+   .. code-block:: yaml
+      :emphasize-lines: 2,4,5,8,9
+
+      cat << EOF > ./host34-secret.yaml
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: bmc-secret-host34
+        namespace: openshift-machine-api
+      type: Opaque
+      data:
+        password: a25p
+        username: a25p
+      EOF
+
+#. Create the NMState config secret.
+
+   .. important:: Adjust nmstate interface config for the new node.
+
+   .. code-block:: yaml
+      :emphasize-lines: 2,4,5,10-12,14,15,18,19,24,25,31,33,37,38
+
+      cat << EOF > ./host34-nmstate.yaml
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: bmc-secret-nmstate-host34
+        namespace: openshift-machine-api
+      type: Opaque
+      stringData:
+       nmstate: |
+         interfaces:
+           - name: enp1s0
+             type: ethernet
+             mtu: 9000
+             state: up
+           - name: enp1s0.132
+             type: vlan
+             state: up
+             vlan:
+               base-iface: enp1s0
+               id: 132
+             ipv4:
+               enabled: true
+               dhcp: false
+               address:
+                 - ip: 192.168.132.34
+                   prefix-length: 24
+             ipv6:
+               enabled: false
+         dns-resolver:
+           config:
+             search:
+               - lab.local
+             server:
+               - 192.168.1.68
+         routes:
+           config:
+             - destination: 0.0.0.0/0
+               next-hop-address: 192.168.132.1
+               next-hop-interface: enp1s0.132
+               table-id: 254
+      EOF
+
+#. Create the BareMetalHost.
+
+   .. important:: The "credentialsName" and "preprovisioningNetworkDataName"
+      need to match the names used in the previous two steps.
+
+   .. code-block:: yaml
+      :emphasize-lines: 2,4,5,8,10-12,14,15
+
+      cat << EOF > ./host34-baremetal.yaml
+      apiVersion: metal3.io/v1alpha1
+      kind: BareMetalHost
+      metadata:
+        name: host34.lab.local
+        namespace: openshift-machine-api
+      spec:
+        online: true
+        bootMACAddress: 52:54:00:f4:16:34
+        bmc:
+          address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/f9f66728-9743-4568-b6b9-ef7b44ba65c8
+          credentialsName: bmc-secret-host34
+          disableCertificateVerification: true
+        rootDeviceHints:
+          deviceName: "/dev/vda"
+        preprovisioningNetworkDataName: bmc-secret-nmstate-host34
+      EOF
+
+#. Once the files are modified and ready create them:
+
+   .. code-block:: bash
+
+      oc create -f ./
+
+#. Follow the creation progress. The BareMetalHost should show "available" when
+   ready.
+
+   .. note:: Your metal3-baremenatel-operator pod will have a different hash.
+
+   .. code-block:: bash
+
+      oc logs metal3-baremetal-operator-8749b7fd5-krgw6 -n openshift-machine-api --follow
+
+      # and/or
+
+      ssh core@host34 journalctl -f
+
+   .. code-block:: bash
+
+      oc get bmh -n openshift-machine-api
+
+#. From the OpenShift console confirm new BMH is "Available:
+
+   Go to :menuselection:`Compute --> Bare Metal Hosts`
+
+   .. image:: ./images/bmh-available.png
+
+#. From the OpenShift console modify the MachineSet to add the "available" node
+   to the cluster:
+
+   Go to :menuselection:`Compute --> MachineSets`
+
+   .. image:: ./images/machineset-worker.png
+
+   .. image:: ./images/machineset-adjust-count.png
+
+   .. tip:: You can make this modification via the command line:
+
+      .. code-block:: bash
+
+         oc scale --replicas=<worker_nodes> machineset <machineset> -n openshift-machine-api
+
+         # oc scale --replicas=1 machineset ocp3-d5zw7-worker-0 -n openshift-machine-api
+
+Option 2 (Manual)
+^^^^^^^^^^^^^^^^^
+
 These steps are based on Red Hat documentation. For a deeper understand of each
 step see the following URL:
 `Adding worker nodes to single-node OpenShift clusters manually <https://docs.openshift.com/container-platform/4.12/nodes/nodes/nodes-sno-worker-nodes.html#sno-adding-worker-nodes-to-single-node-clusters-manually_add-workers>`_
@@ -157,8 +316,104 @@ for the addition of a new master or worker node, depending on how you set the
 
    .. image:: ./images/checknewnode.png
 
-Back-Up ETCD
-------------
+Associate Node with MachineSet
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After adding the new node you'll notice the new node is up and "Ready" for use
+but doesn't match the initial nodes in the cluster. The original nodes are part
+of a MachineSet and associated with bare metal host objects.
+
+.. note:: In older version of OCP the Node Overview via the console will show
+   errors.
+
+The following creates and associates the required objects for the new node and
+resolves any console errors.
+
+#. Log in to the local OCP console.
+
+#. Copy the MAC address of the newly created node to notepad.
+
+#. Go to :menuselection:`Compute --> MachineSets`
+
+   A. Edit the "worker" MachineSet
+   #. Increase the "Desired count" by +1
+
+#. Go To :menuselection:`Compute --> Machines` and copy the Name of newly
+   created machine to notepad.
+
+#. Go to :menuselection:`Compute --> Bare Metal Hosts`
+
+   A. Click :menuselection:`Add Host --> New from Dialog`
+   #. Add Name (ex. worker3)
+   #. Add Boot MAC Address (saved earlier when creating node step 2)
+   #. Disable "Enable power management"
+   #. Click Create
+
+#. Modify the newly created Bare Metal Hosts.
+
+   A. Before editing new object, copy "spec" section from an older BMH object.
+
+      .. code-block:: yaml
+         :emphasize-lines: 9, 19
+
+         spec:
+           hardwareProfile: unknown
+           automatedCleaningMode: metadata
+           online: true
+           userData:
+             name: master-user-data-managed
+             namespace: openshift-machine-api
+           bootMode: legacy
+           bootMACAddress: '52:54:00:f4:16:24'
+           bmc:
+             address: ''
+             credentialsName: ''
+           customDeploy:
+             method: install_coreos
+           externallyProvisioned: true
+           consumerRef:
+             apiVersion: machine.openshift.io/v1beta1
+             kind: Machine
+             name: mtu1-29n7r-master-2
+             namespace: openshift-machine-api
+
+   #. Edit new BMH object
+   #. Click YAML tab
+   #. Replace "spec" section with older BMH "spec" previously copied.
+   #. Be sure to use the new nodes "bootMACAddress:" saved in step 2 and
+      "consumerRef/name:" saved in step 4.
+   #. Click Save
+   #. Before exiting copy the "uid" to notepad.
+
+#. Go to :menuselection:`Compute --> Nodes`
+
+   A. Select/edit new Node
+   #. Click YAML tab
+   #. Add following annotation
+
+      .. code-block:: yaml
+
+         machine.openshift.io/machine: openshift-machine-api/<new machine name created in step 4>
+
+   #. Replace "spec" section with following "spec"
+
+      .. danger:: Making a mistake here can be catastrophic. You can't update
+         or change this "spec" once saved. Only option is to remove node and
+         rebuild it.
+
+      .. code-block:: yaml
+
+         spec:
+           providerID: >-
+             baremetalhost:///openshift-machine-api/<NODE_NAME>/<UID>
+
+   #. Click Save
+
+ETCD
+^^^^
+
+Back-Up
+-------
 
 OpenShift comes with scripts that will backup the etcd state. It's best
 practice to backup etcd before removing and replacing a control node.
@@ -215,8 +470,8 @@ practice to backup etcd before removing and replacing a control node.
 
    .. image:: ./images/backupetcd.png
 
-Clean-Up ETCD
--------------
+Clean-Up
+--------
 
 In the event of a control node failure the failed node must be removed from
 etcd. Before starting be sure to follow the previous section backing up etcd.
@@ -351,96 +606,3 @@ running and force a redeployment of this etcd member using the etcd operator.
    .. code-block:: bash
 
       oc patch etcd cluster -p='{"spec": {"forceRedeploymentReason": "single-master-recovery-'"$( date --rfc-3339=ns )"'"}}' --type=merge
-
-Associate Node with MachineSet
-------------------------------
-
-After adding the new node you'll notice the new node is up and "Ready" for use
-but doesn't match the initial nodes in the cluster. The original nodes are part
-of a MachineSet and associated with bare metal host objects.
-
-.. note:: In older version of OCP the Node Overview via the console will show
-   errors.
-
-The following creates and associates the required objects for the new node and
-resolves any console errors.
-
-#. Log in to the local OCP console.
-
-#. Copy the MAC address of the newly created node to notepad.
-
-#. Go to :menuselection:`Compute --> MachineSets`
-
-   A. Edit the "worker" MachineSet
-   #. Increase the "Desired count" by +1
-
-#. Go To :menuselection:`Compute --> Machines` and copy the Name of newly
-   created machine to notepad.
-
-#. Go to :menuselection:`Compute --> Bare Metal Hosts`
-
-   A. Click :menuselection:`Add Host --> New from Dialog`
-   #. Add Name (ex. worker3)
-   #. Add Boot MAC Address (saved earlier when creating node step 2)
-   #. Disable "Enable power management"
-   #. Click Create
-
-#. Modify the newly created Bare Metal Hosts.
-
-   A. Before editing new object, copy "spec" section from an older BMH object.
-
-      .. code-block:: yaml
-         :emphasize-lines: 9, 19
-
-         spec:
-           hardwareProfile: unknown
-           automatedCleaningMode: metadata
-           online: true
-           userData:
-             name: master-user-data-managed
-             namespace: openshift-machine-api
-           bootMode: legacy
-           bootMACAddress: '52:54:00:f4:16:24'
-           bmc:
-             address: ''
-             credentialsName: ''
-           customDeploy:
-             method: install_coreos
-           externallyProvisioned: true
-           consumerRef:
-             apiVersion: machine.openshift.io/v1beta1
-             kind: Machine
-             name: mtu1-29n7r-master-2
-             namespace: openshift-machine-api
-
-   #. Edit new BMH object
-   #. Click YAML tab
-   #. Replace "spec" section with older BMH "spec" previously copied.
-   #. Be sure to use the new nodes "bootMACAddress:" saved in step 2 and
-      "consumerRef/name:" saved in step 4.
-   #. Click Save
-   #. Before exiting copy the "uid" to notepad.
-
-#. Go to :menuselection:`Compute --> Nodes`
-
-   A. Select/edit new Node
-   #. Click YAML tab
-   #. Add following annotation
-
-      .. code-block:: yaml
-
-         machine.openshift.io/machine: openshift-machine-api/<new machine name created in step 4>
-
-   #. Replace "spec" section with following "spec"
-
-      .. danger:: Making a mistake here can be catastrophic. You can't update
-         or change this "spec" once saved. Only option is to remove node and
-         rebuild it.
-
-      .. code-block:: yaml
-
-         spec:
-           providerID: >-
-             baremetalhost:///openshift-machine-api/<NODE_NAME>/<UID>
-
-   #. Click Save
