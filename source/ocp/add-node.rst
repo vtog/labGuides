@@ -164,17 +164,14 @@ These steps are based on Red Hat documentation. For a deeper understand of each
 step see the following URL:
 `Adding worker nodes to single-node OpenShift clusters manually <https://docs.openshift.com/container-platform/4.12/nodes/nodes/nodes-sno-worker-nodes.html#sno-adding-worker-nodes-to-single-node-clusters-manually_add-workers>`_
 
-.. note:: I tested this on 4.12, 4.13, and 4.14.
+.. note:: I've tested this on 4.12 through 4.18.
 
-.. important:: Exactly three control plane nodes must be used for all
-   production deployments.
+.. warning:: Exactly three control plane nodes must be used for all
+   production deployments prior to 4.18. With 4.18 you can have more then
+   three.
 
-Control or Worker Node
-----------------------
-
-Steps to manually add a new **node** to an OpenShift cluster. These steps allow
-for the addition of a new master or worker node, depending on how you set the
-"NODE_TYPE" variable.
+.. important:: These steps allow for the addition of a new master or worker
+   node depending on how you set the "NODE_TYPE" variable.
 
 #. Set the environment variables. Be sure to use the variables that match your
    running version and architecture. Specify "master" or "worker" depending on
@@ -236,13 +233,13 @@ for the addition of a new master or worker node, depending on how you set the
 
    .. code-block:: bash
 
-      curl -k https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OCP_VERSION/openshift-install-linux.tar.gz > openshift-install-linux.tar.gz
+      curl -k https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OCP_VERSION/openshift-install-linux.tar.gz > openshift-install-linux-$OCP_VERSION.tar.gz
 
    Extract the installer
 
    .. code-block:: bash
 
-      tar -xzvf openshift-install-linux.tar.gz
+      tar -xzvf openshift-install-linux-$OCP_VERSION.tar.gz
 
 #. Discover the RHCOS ISO URL
 
@@ -317,7 +314,7 @@ for the addition of a new master or worker node, depending on how you set the
    .. image:: ./images/checknewnode.png
 
 Associate Node with MachineSet
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------
 
 After adding the new node you'll notice the new node is up and "Ready" for use
 but doesn't match the initial nodes in the cluster. The original nodes are part
