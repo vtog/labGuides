@@ -326,85 +326,129 @@ of a MachineSet and associated with bare metal host objects.
 The following creates and associates the required objects for the new node and
 resolves any console errors.
 
-#. Log in to the local OCP console.
+#. Set the variables needed to complete steps. Use the node name of the new
+   node. In my example "host35.lab.local"
 
-#. Copy the MAC address of the newly created node to notepad.
+   .. code-block:: bash
 
-#. Go to :menuselection:`Compute --> MachineSets`
+      NODENAME=host35.lab.local
+      NODEUID=$(oc get nodes $NODENAME --template='{{.metadata.uid}}')
 
-   A. Edit the "worker" MachineSet
-   #. Increase the "Desired count" by +1
+#. From the cli increase the MachineSet by +1.
 
-#. Go To :menuselection:`Compute --> Machines` and copy the Name of newly
-   created machine to notepad.
+   .. tip:: Check the current number of replicas first. This will ensure you
+      set the replicas to a proper number. The following command will show
+      "DESIRED" and "CURRENT".
 
-#. Go to :menuselection:`Compute --> Bare Metal Hosts`
+      .. code-block:: bash
 
-   A. Click :menuselection:`Add Host --> New from Dialog`
-   #. Add Name (ex. worker3)
-   #. Add Boot MAC Address (saved earlier when creating node step 2)
-   #. Disable "Enable power management"
-   #. Click Create
+         oc get machinesets -n openshift-machine-api
 
-#. Modify the newly created Bare Metal Hosts.
+   .. code-block:: bash
 
-   A. Before editing new object, copy "spec" section from an older BMH object.
+      oc scale --replicas=1 machineset ocp3-d5zw7-worker-0 -n openshift-machine-api
 
-      .. code-block:: yaml
-         :emphasize-lines: 9, 19
+#. Find the name of the newly created Machine. There should be a new name in
+   the "Provisioning" phase. Set that name to the variable MACHINENAME.
 
-         spec:
-           hardwareProfile: unknown
-           automatedCleaningMode: metadata
-           online: true
-           userData:
-             name: master-user-data-managed
-             namespace: openshift-machine-api
-           bootMode: legacy
-           bootMACAddress: '52:54:00:f4:16:24'
-           bmc:
-             address: ''
-             credentialsName: ''
-           customDeploy:
-             method: install_coreos
-           externallyProvisioned: true
-           consumerRef:
-             apiVersion: machine.openshift.io/v1beta1
-             kind: Machine
-             name: mtu1-29n7r-master-2
-             namespace: openshift-machine-api
+   .. code-block:: bash
 
-   #. Edit new BMH object
-   #. Click YAML tab
-   #. Replace "spec" section with older BMH "spec" previously copied.
-   #. Be sure to use the new nodes "bootMACAddress:" saved in step 2 and
-      "consumerRef/name:" saved in step 4.
-   #. Click Save
-   #. Before exiting copy the "uid" to notepad.
+      oc get machines -n openshift-machine-api
 
-#. Go to :menuselection:`Compute --> Nodes`
+      MACHINENAME=$(oc get machines | grep Provisioning | awk '{print $1}')
+      MACHINEUID=$(oc get machines $MACHINENAME --template='{{.metadata.uid}}')
 
-   A. Select/edit new Node
-   #. Click YAML tab
-   #. Add following annotation
+#. Add the new BareMetalHost by copy the following yaml and making the necesary
+   changes for you node.
 
-      .. code-block:: yaml
+   .. note:: Since this node was provsioned externally we need to add the
+      "externallyProvisioned: true" switch.
 
-         machine.openshift.io/machine: openshift-machine-api/<new machine name created in step 4>
+   .. code-block:: yaml
+      :emphasize-lines: 1,3,7,13-16,20,25
 
-   #. Replace "spec" section with following "spec"
+      cat << EOF > ./$NODENAME-baremetal.yaml
+      apiVersion: metal3.io/v1alpha1
+      kind: BareMetalHost
+      metadata:
+        name: $NODENAME
+        namespace: openshift-machine-api
+      spec:
+        architecture: x86_64
+        automatedCleaningMode: metadata
+        bmc:
+          address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/a3fce101-8d6c-4f74-9145-c8e79415cc84
+          credentialsName: bmc-secret-$NODENAME
+          disableCertificateVerification: true
+        bootMACAddress: 52:54:00:f4:16:35
+        consumerRef:
+          apiVersion: machine.openshift.io/v1beta1
+          kind: Machine
+          name: $MACHINENAME
+          namespace: openshift-machine-api
+        customDeploy:
+          method: install_coreos
+        online: true
+        externallyProvisioned: true
+        userData:
+          name: worker-user-data-managed
+          namespace: openshift-machine-api
+      EOF
 
-      .. danger:: Making a mistake here can be catastrophic. You can't update
-         or change this "spec" once saved. Only option is to remove node and
-         rebuild it.
+#. Add the new credentialName Secret for the BareMetalHost.
 
-      .. code-block:: yaml
+   .. important:: The username and password are generated with base64.
 
-         spec:
-           providerID: >-
-             baremetalhost:///openshift-machine-api/<NODE_NAME>/<UID>
+      .. code-block:: bash
 
-   #. Click Save
+         echo -n 'kni' | base64 -w0
+
+   .. code-block:: yaml
+      :emphasize-lines: 3,5,9,10
+
+      cat << EOF > ./$NODENAME-secret.yaml
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: bmc-secret-$NODENAME
+        namespace: openshift-machine-api
+      type: Opaque
+      data:
+        password: a25p
+        username: a25p
+      EOF
+
+#. Create the new objects.
+
+   .. code-block:: bash
+
+      oc create -f $NODENAME-secret.yaml
+
+      oc create -f $NODENAME-baremetal.yaml
+
+#. Find the new BMH UID
+
+   .. code-block:: bash
+
+      BMHUID=$(oc get bmh $NODENAME --template='{{.metadata.uid}}')
+
+#. Create the Node patch
+
+   .. code-block:: bash
+
+      cat << EOF > ./$NODENAME-patch.yaml
+      spec:
+        providerID: >-
+          baremetalhost:///openshift-machine-api/$NODENAME/$BMHUID
+      EOF
+
+#. Modify the node to associate it with the BareMetalHost.
+
+   .. code-block:: bash
+
+      oc patch node $NODENAME -p '{"metadata":{"annotations":{"machine.openshift.io/machine": "openshift-machine-api/'$MACHINENAME'"}}}'
+
+      oc patch node $NODENAME -p '{"spec":{"providerID":"baremetalhost:///openshift-machine-api/'$NODENAME'/'$BMHUID'"}}'
 
 ETCD
 ^^^^
