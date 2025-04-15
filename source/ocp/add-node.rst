@@ -332,7 +332,6 @@ resolves any console errors.
    .. code-block:: bash
 
       NODENAME=host35.lab.local
-      NODEUID=$(oc get nodes $NODENAME --template='{{.metadata.uid}}')
 
 #. From the cli increase the MachineSet by +1.
 
@@ -356,7 +355,6 @@ resolves any console errors.
       oc get machines -n openshift-machine-api
 
       MACHINENAME=$(oc get machines | grep Provisioning | awk '{print $1}')
-      MACHINEUID=$(oc get machines $MACHINENAME --template='{{.metadata.uid}}')
 
 #. Add the new BareMetalHost by copy the following yaml and making the necesary
    changes for you node.
@@ -431,16 +429,6 @@ resolves any console errors.
    .. code-block:: bash
 
       BMHUID=$(oc get bmh $NODENAME --template='{{.metadata.uid}}')
-
-#. Create the Node patch
-
-   .. code-block:: bash
-
-      cat << EOF > ./$NODENAME-patch.yaml
-      spec:
-        providerID: >-
-          baremetalhost:///openshift-machine-api/$NODENAME/$BMHUID
-      EOF
 
 #. Modify the node to associate it with the BareMetalHost.
 
