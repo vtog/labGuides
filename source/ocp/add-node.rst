@@ -33,7 +33,7 @@ be created:
          echo -n 'kni' | base64 -w0
 
    .. code-block:: yaml
-      :emphasize-lines: 2,4,5,8,9
+      :emphasize-lines: 1,3,5,6,9,10
 
       cat << EOF > ./$NODENAME-secret.yaml
       apiVersion: v1
@@ -52,7 +52,7 @@ be created:
    .. important:: Adjust nmstate interface config for the new node.
 
    .. code-block:: yaml
-      :emphasize-lines: 2,4,5,10-12,14,15,18,19,24,25,31,33,37,38
+      :emphasize-lines: 1,3,5,6,11-13,15,16,19,20,25,26,32,34,38,39
 
       cat << EOF > ./$NODENAME-nmstate.yaml
       apiVersion: v1
@@ -102,7 +102,7 @@ be created:
       need to match the names used in the previous two steps.
 
    .. code-block:: yaml
-      :emphasize-lines: 2,4,5,8,10-12,14,15
+      :emphasize-lines: 1,3,5,6,9,11-13,15,16
 
       cat << EOF > ./$NODENAME-baremetal.yaml
       apiVersion: metal3.io/v1alpha1
@@ -208,7 +208,7 @@ step see the following URL:
    host.
 
    .. code-block:: yaml
-      :emphasize-lines: 8,18
+      :emphasize-lines: 1,8,18
 
       cat << EOF > ./new-$NODE_TYPE.ign
       {
@@ -378,7 +378,7 @@ resolves any console errors.
       "externallyProvisioned: true" switch.
 
    .. code-block:: yaml
-      :emphasize-lines: 1,3,7,13-16,20,25
+      :emphasize-lines: 1,3,5,6,11-14,18,23
 
       cat << EOF > ./$NODENAME-baremetal.yaml
       apiVersion: metal3.io/v1alpha1
@@ -417,7 +417,7 @@ resolves any console errors.
          echo -n 'kni' | base64 -w0
 
    .. code-block:: yaml
-      :emphasize-lines: 3,5,9,10
+      :emphasize-lines: 1,3,5,6,9,10
 
       cat << EOF > ./$NODENAME-secret.yaml
       apiVersion: v1
