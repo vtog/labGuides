@@ -13,6 +13,8 @@ be created:
 
 .. note:: All objects are created in the "openshift-machine-api" namespace.
 
+.. tip:: This method supports Remote Worker Node.
+
 #. Create the BMC authentication secret.
 
    .. important:: The username and password are generated with base64.
@@ -326,18 +328,22 @@ of a MachineSet and associated with bare metal host objects.
 The following creates and associates the required objects for the new node and
 resolves any console errors.
 
-#. Set the variables needed to complete steps. Use the node name of the new
-   node. In my example "host35.lab.local"
+#. Set the variables needed to complete steps. These call come from the new
+   host.
 
    .. code-block:: bash
 
       NODENAME=host35.lab.local
+      NODEMAC=52:54:00:f4:16:35
+      NODEUUID=a3fce101-8d6c-4f74-9145-c8e79415cc84
 
 #. From the cli increase the MachineSet by +1.
 
-   .. tip:: Check the current number of replicas first. This will ensure you
-      set the replicas to a proper number. The following command will show
-      "DESIRED" and "CURRENT".
+   .. warning:: Check the current number of replicas first. This will ensure
+      you set the replicas to a proper number. The following command will show
+      "DESIRED" and "CURRENT". Be sure to increase the replicas by +1.
+
+      Not adjusting this correctly will delete existing objects.
 
       .. code-block:: bash
 
@@ -375,10 +381,10 @@ resolves any console errors.
         architecture: x86_64
         automatedCleaningMode: metadata
         bmc:
-          address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/a3fce101-8d6c-4f74-9145-c8e79415cc84
+          address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/$NODEUUID
           credentialsName: bmc-secret-$NODENAME
           disableCertificateVerification: true
-        bootMACAddress: 52:54:00:f4:16:35
+        bootMACAddress: $NODEMAC
         consumerRef:
           apiVersion: machine.openshift.io/v1beta1
           kind: Machine
@@ -429,6 +435,13 @@ resolves any console errors.
    .. code-block:: bash
 
       BMHUID=$(oc get bmh $NODENAME --template='{{.metadata.uid}}')
+
+   .. warning:: Do not attempt next step until the new BMH object state is
+      "provisioned" or "externally provisioned".
+
+      .. code-block:: bash
+
+         oc get bmh
 
 #. Modify the node to associate it with the BareMetalHost.
 
