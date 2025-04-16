@@ -15,6 +15,15 @@ be created:
 
 .. tip:: This method supports Remote Worker Node.
 
+#. Set the variables needed to complete steps. These all come from the new
+   host.
+
+   .. code-block:: bash
+
+      NODENAME=host35
+      NODEMAC=52:54:00:f4:16:35
+      NODEUUID=a3fce101-8d6c-4f74-9145-c8e79415cc84
+
 #. Create the BMC authentication secret.
 
    .. important:: The username and password are generated with base64.
@@ -26,11 +35,11 @@ be created:
    .. code-block:: yaml
       :emphasize-lines: 2,4,5,8,9
 
-      cat << EOF > ./host34-secret.yaml
+      cat << EOF > ./$NODENAME-secret.yaml
       apiVersion: v1
       kind: Secret
       metadata:
-        name: bmc-secret-host34
+        name: bmc-secret-$NODENAME
         namespace: openshift-machine-api
       type: Opaque
       data:
@@ -45,11 +54,11 @@ be created:
    .. code-block:: yaml
       :emphasize-lines: 2,4,5,10-12,14,15,18,19,24,25,31,33,37,38
 
-      cat << EOF > ./host34-nmstate.yaml
+      cat << EOF > ./$NODENAME-nmstate.yaml
       apiVersion: v1
       kind: Secret
       metadata:
-        name: bmc-secret-nmstate-host34
+        name: bmc-secret-nmstate-$NODENAME
         namespace: openshift-machine-api
       type: Opaque
       stringData:
@@ -69,7 +78,7 @@ be created:
                enabled: true
                dhcp: false
                address:
-                 - ip: 192.168.132.34
+                 - ip: 192.168.132.35
                    prefix-length: 24
              ipv6:
                enabled: false
@@ -95,22 +104,22 @@ be created:
    .. code-block:: yaml
       :emphasize-lines: 2,4,5,8,10-12,14,15
 
-      cat << EOF > ./host34-baremetal.yaml
+      cat << EOF > ./$NODENAME-baremetal.yaml
       apiVersion: metal3.io/v1alpha1
       kind: BareMetalHost
       metadata:
-        name: host34.lab.local
+        name: $NODENAME
         namespace: openshift-machine-api
       spec:
         online: true
-        bootMACAddress: 52:54:00:f4:16:34
+        bootMACAddress: $NODEMAC
         bmc:
-          address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/f9f66728-9743-4568-b6b9-ef7b44ba65c8
-          credentialsName: bmc-secret-host34
+          address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/$NODEUUID
+          credentialsName: bmc-secret-$NODENAME
           disableCertificateVerification: true
         rootDeviceHints:
           deviceName: "/dev/vda"
-        preprovisioningNetworkDataName: bmc-secret-nmstate-host34
+        preprovisioningNetworkDataName: bmc-secret-nmstate-$NODENAME
       EOF
 
 #. Once the files are modified and ready create them:
@@ -130,7 +139,7 @@ be created:
 
       # and/or
 
-      ssh core@host34 journalctl -f
+      ssh core@$NODENAME journalctl -f
 
    .. code-block:: bash
 
@@ -157,7 +166,7 @@ be created:
 
          oc scale --replicas=<worker_nodes> machineset <machineset> -n openshift-machine-api
 
-         # oc scale --replicas=1 machineset ocp3-d5zw7-worker-0 -n openshift-machine-api
+         # Example: oc scale --replicas=1 machineset ocp3-d5zw7-worker-0 -n openshift-machine-api
 
 Option 2 (Manual)
 ^^^^^^^^^^^^^^^^^
@@ -328,12 +337,12 @@ of a MachineSet and associated with bare metal host objects.
 The following creates and associates the required objects for the new node and
 resolves any console errors.
 
-#. Set the variables needed to complete steps. These call come from the new
+#. Set the variables needed to complete steps. These all come from the new
    host.
 
    .. code-block:: bash
 
-      NODENAME=host35.lab.local
+      NODENAME=host35
       NODEMAC=52:54:00:f4:16:35
       NODEUUID=a3fce101-8d6c-4f74-9145-c8e79415cc84
 
