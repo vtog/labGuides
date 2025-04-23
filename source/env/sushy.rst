@@ -6,6 +6,12 @@ Sushy is an emulator for Redfish, I'm using with KVM.
 Containerize Sushy-Tools
 ------------------------
 
+#. Get Sushy
+
+   .. code-block:: bash
+
+      sudo podman pull quay.io/metal3-io/sushy-tools:latest
+
 #. Configure Sushy conf defaults.
 
    .. code-block:: bash
