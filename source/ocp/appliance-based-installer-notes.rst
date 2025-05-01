@@ -36,7 +36,6 @@ Build the disk image
 
       cat << EOF > ./variables
 
-      #export APPLIANCE_IMAGE="registry.redhat.io/assisted/agent-preinstall-image-builder-rhel9:1.0-1714506949"
       export APPLIANCE_IMAGE="quay.io/edge-infrastructure/openshift-appliance:latest"
       export APPLIANCE_ASSETS="/home/vince/OCP/appliance-builder"
       EOF
