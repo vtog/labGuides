@@ -606,12 +606,24 @@ install time.
 
 #. Create machine config yaml.
 
+   .. note:: If needed:
+
+      .. code-block:: bash
+
+         curl -L https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/butane/latest/butane -o ~/.local/bin/butane
+         chmod +x ~/.local/bin/butane
+
    .. code-block:: bash
 
       butane 98-master-core-pass.bu -o 98-master-core-pass.yaml
 
 #. Copy the "yaml" output to your install "working" dir / sub dir "openshift".
    By default agent install consumes the machine config in this sub dir.
+
+   .. code-block:: bash
+
+      mkdir -p ./<workdir>/openshift
+      cp 98-master-core-pass.yam ./<workdir>/openshift
 
 Calico Example
 --------------
