@@ -473,13 +473,13 @@ Upgrade Fedora
 Upgrade RHEL
 ------------
 
-#. Update current system
+#. Update/Upgrade current running verion.
 
    .. code-block:: bash
 
       sudo dnf upgrade --refresh -y
 
-#. Download LEAPP
+#. Install LEAPP
 
    .. code-block:: bash
 
@@ -490,3 +490,21 @@ Upgrade RHEL
    .. code-block:: bash
 
       sudo leapp upgrade
+
+#. Reboot and confirm update
+
+   .. code-block:: bash
+
+      sudo reboot
+
+   .. code-block:: bash
+
+      cat /etc/redhat-release
+
+#. Cleanup environment
+
+   .. code-block:: bash
+
+      sudo dnf autoremove
+      sudo dnf clean all
+      sudo dnf update --refresh -y
