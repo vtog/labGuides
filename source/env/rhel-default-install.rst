@@ -483,10 +483,10 @@ Upgrade RHEL
 
    .. code-block:: bash
 
-      sudo dnf install leap leap-upgrade -y
+      sudo dnf install leapp leapp-upgrade -y
 
 #. Run LEAPP
 
    .. code-block:: bash
 
-      sudo leap upgrade
+      sudo leapp upgrade
