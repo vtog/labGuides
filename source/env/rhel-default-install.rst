@@ -441,13 +441,13 @@ Upgrade Fedora
 
    .. code-block:: bash
 
-      sudo dnf upgrade --refresh
+      sudo dnf upgrade --refresh -y
 
 #. Install the DNF-plugin-system-upgrade Package on Fedora.
 
    .. code-block:: bash
 
-      sudo dnf install dnf-plugin-system-upgrade
+      sudo dnf install dnf-plugin-system-upgrade -y
 
 #. Download desired Fedora release. In my example release 41.
 
@@ -469,3 +469,24 @@ Upgrade Fedora
    .. code-block:: bash
 
       cat /etc/redhat-release
+
+Upgrade RHEL
+------------
+
+#. Update current system
+
+   .. code-block:: bash
+
+      sudo dnf upgrade --refresh -y
+
+#. Download LEAPP
+
+   .. code-block:: bash
+
+      sudo dnf install leap leap-upgrade -y
+
+#. Run LEAPP
+
+   .. code-block:: bash
+
+      sudo leap upgrade
