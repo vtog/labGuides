@@ -421,6 +421,18 @@ Mirror Images to Local Registry (v2)
 
       .. image:: ./images/mirror-results.png
 
+      .. tip:: I created the following script to simplify the command:
+
+         .. code-block:: bash
+
+            #!/bin/bash
+
+            OCPV=4.18
+
+            echo "Mirroring $OCPV based on ./isc-$OCPV.yaml"
+            echo
+            oc mirror --v2 -c ./isc-$OCPV.yaml --since 2025-04-20 file:///mirror/oc-mirror/$OCPV
+
    #. Disk-to-Mirror.
 
       .. code-block:: bash
@@ -428,6 +440,18 @@ Mirror Images to Local Registry (v2)
          oc mirror --v2 -c ./imageset-config.yaml --from file://<directory_name> docker://$quayHostname:8443
 
       .. image:: ./images/mirror-results2.png
+
+      .. tip:: I created the following script to simplify the command:
+
+         .. code-block:: bash
+
+            #!/bin/bash
+
+            OCPV=4.18
+
+            echo "Mirroring $OCPV based on ./isc-$OCPV.yaml"
+            echo
+            oc mirror --v2 -c ./isc-$OCPV.yaml --from file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
 
 #. Make note of the information upon completion. Supporting yaml files can be
    found in "<directory_name>/working-dir/cluster-resources". These files will
