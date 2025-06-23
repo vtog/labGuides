@@ -429,8 +429,7 @@ Mirror Images to Local Registry (v2)
 
             OCPV=4.18
 
-            echo "Mirroring $OCPV based on ./isc-$OCPV.yaml"
-            echo
+            echo -e "\nMirroring $OCPV based on ./isc-$OCPV.yaml"
             oc mirror --v2 -c ./isc-$OCPV.yaml --since 2025-04-20 file:///mirror/oc-mirror/$OCPV
 
    #. Disk-to-Mirror.
@@ -449,8 +448,7 @@ Mirror Images to Local Registry (v2)
 
             OCPV=4.18
 
-            echo "Mirroring $OCPV based on ./isc-$OCPV.yaml"
-            echo
+            echo -e "\nMirroring $OCPV based on ./isc-$OCPV.yaml"
             oc mirror --v2 -c ./isc-$OCPV.yaml --from file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
 
 #. Make note of the information upon completion. Supporting yaml files can be
@@ -468,6 +466,19 @@ Delete Images from Local Registry (v2)
 With v2 the process no longer auto purges the older files. You have to use the
 following two step process.
 
+#. Create the DeleteImageSetConfiguration yaml
+
+   .. code-block:: yaml
+
+      kind: DeleteImageSetConfiguration
+      apiVersion: mirror.openshift.io/v2alpha1
+      delete:
+        platform:
+          channels:
+          - name: stable-4.18
+            minVersion: 4.18.9
+            maxVersion: 4.18.9
+
 #. Delete phase 1 (generate)
 
    .. code-block:: bash
@@ -479,6 +490,21 @@ following two step process.
    .. code-block:: bash
 
       oc mirror delete --v2 --delete-yaml-file <directory_name>/working-dir/delete/delete-images.yaml docker://$quayHostname:8443
+
+.. tip:: I created the following script to simplify the command:
+
+   .. code-block:: bash
+
+      #!/bin/bash
+
+      OCPV=4.18
+
+      echo -e "\nDeleting $OCPV images based on ./delete-isc-$OCPV.yaml"
+      echo -e "\nGenerating..."
+      oc mirror delete --v2 -c ./delete-isc-$OCPV.yaml --generate --workspace file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
+
+      echo -e "\nDeleting..."
+      oc mirror delete --v2 --delete-yaml-file ./$OCPV/working-dir/delete/delete-images.yaml docker://$quayHostname:8443
 
 Update Running Cluster
 ----------------------
