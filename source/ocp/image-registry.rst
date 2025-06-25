@@ -31,61 +31,72 @@ Configure the storage claim
 
    .. code-block:: bash
 
-      oc edit configs.imageregistry.operator.openshift.io cluster
+      oc patch configs.imageregistry.operator.openshift.io cluster --type merge --patch '{"spec":{"storage":{"pvc":{"claim":""}}}}'
 
       # Replace the "storage: {}" line with the following
+      #
+      # spec:
       #   storage:
       #     pvc:
       #       claim:
 
-#. Check pvc STATUS = "Bound"
+#. Check pvc STATUS = "Bound". This step may fail if not using a storage class
+   with RWX (ReadWriteMany) access mode.
 
    .. code-block:: bash
 
       oc get pvc
 
-#. When using the **Local Storage Operator NOT ODF**. The following step needs
-   to be taken. The previous steps will automatically create a pvc that needs
-   to be replaced.
+#. If the pvc is "Pending" due to the default storage class, the pvc will need
+   to be modified. The "accessModes" must match. Block type storage uses RWO
+   (ReadWriteOnce).
 
-   .. important:: The pvc needs to match the pv's "storageClassName",
-      "accessModes", and "storage".
+   .. important:: When using the **Local Storage Operator, NOT ODF**. This step
+      will need to be taken. The pvc needs to match the pv's
+      "storageClassName", "accessModes", and "storage".
 
-   A. First delete the pvc:
+   A. Copy the current pvc to yaml file.
 
       .. code-block:: bash
 
-         oc delete pvc image-registry-storage
+         oc get -n openshift-image-registry pvc image-registry-storage -o yaml > image-registry-storage.yaml
 
-   #. With vi create a new file called "imageregpvc.yaml". Copy & paste the
-      following yaml:
+   #. Delete the pvc.
+
+      .. code-block:: bash
+
+         oc delete -n openshift-image-registry pvc image-registry-storage
+
+   #. Edit the previously saved file "image-registry-storage.yaml".
 
       .. code-block:: yaml
-         :emphasize-lines: 11, 13, 16
+         :emphasize-lines: 14, 17, 18
 
          apiVersion: v1
          kind: PersistentVolumeClaim
          metadata:
            annotations:
              imageregistry.openshift.io: "true"
+             volume.beta.kubernetes.io/storage-provisioner: openshift-storage.rbd.csi.ceph.com
+             volume.kubernetes.io/storage-provisioner: openshift-storage.rbd.csi.ceph.com
            finalizers:
            - kubernetes.io/pvc-protection
            name: image-registry-storage
            namespace: openshift-image-registry
          spec:
-           storageClassName: lso-fs
            accessModes:
            - ReadWriteOnce
            resources:
              requests:
-               storage: 200Gi
+               storage: 100Gi
+           storageClassName: lso-fs
            volumeMode: Filesystem
 
    #. Create the new pvc:
 
       .. code-block:: bash
 
-         oc create -f imageregpvc.yaml
+         oc create -f image-registry-storage.yaml
 
 Set the default route
 ---------------------
@@ -113,7 +124,7 @@ Set the default route
 
    .. code-block:: bash
 
-      sudo update-ca-trust enable
+      sudo update-ca-trust
 
 #. Log in with podman using the default route. You'll need to login to your
    cluster with "kubeadmin" first in order to receive a user token.
