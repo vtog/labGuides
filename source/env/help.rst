@@ -39,6 +39,12 @@ Append rootCA to file indenting each line with two spaces.
    echo "additionalTrustBundle: |" >> install-config.yaml
    sed -e 's/^/  /' /mirror/ocp4/quay-rootCA/rootCA.pem >> install-config.yaml
 
+Force Reboot (Last Resort)
+
+.. code-block:: bash
+
+   sudo systemctl reboot --force --force
+
 Create auth key
 ---------------
 
