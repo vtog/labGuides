@@ -219,7 +219,8 @@ downloaded and mirrored to your disconnected registry.
 
       oc edit hco kubevirt-hyperconverged -n openshift-cnv
 
-   .. tip:: This should not be needed in a future step.
+   .. tip:: This step should not be needed in a future release. I'll update the
+      section as soon as the change is merged and found on a z-release.
 
    .. code-block:: yaml
 
@@ -234,7 +235,7 @@ downloaded and mirrored to your disconnected registry.
           spec:
             garbageCollect: Outdated
             managedDataSource: centos-stream10
-            schedule: 30 0/12 * * *
+            schedule: 0 12 * * *
             template:
               metadata: {}
               spec:
@@ -256,7 +257,7 @@ downloaded and mirrored to your disconnected registry.
           spec:
             garbageCollect: Outdated
             managedDataSource: centos-stream9
-            schedule: 30 0/12 * * *
+            schedule: 0 12 * * *
             template:
               metadata: {}
               spec:
@@ -278,7 +279,7 @@ downloaded and mirrored to your disconnected registry.
           spec:
             garbageCollect: Outdated
             managedDataSource: fedora
-            schedule: 30 0/12 * * *
+            schedule: 0 12 * * *
             template:
               metadata: {}
               spec:
