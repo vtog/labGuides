@@ -6,6 +6,7 @@ OpenShift Lab Guides
    :caption: Content:
 
    acm-notes
+   kubevirt
    agent-based-installer-notes
    appliance-based-installer-notes
    assisted-installer-notes
