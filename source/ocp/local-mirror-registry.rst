@@ -554,20 +554,38 @@ To create a new cluster using the local mirror & registry see:
 
       oc patch --type merge images.config.openshift.io/cluster --patch '{"spec":{"additionalTrustedCA":{"name":"registry-config"}}}'
 
+   .. tip:: You can confirm the node has the cert by checking the following
+      file.
+
+      .. code-block:: bash
+
+         ssh core@host11 ls -l /etc/docker/certs.d/
+         ssh core@host11 cat /etc/docker/certs.d/mirror.lab.local\:8443/ca.crt
+
 #. Apply the YAML files from the results directory to the cluster.
 
-   .. note:: Everytime you successfully run "oc mirror" a "results" dir is
-      created.
+   .. note:: Everytime you successfully run "oc mirror" a "cluster-resources"
+      dir is created. This contains all the yaml objects necessary to connect
+      to the disconnected registry.
 
-   .. important:: These results are not cumulative. They do NOT include the
-      previously succsessful result. Its VERY important to manaully combine
-      this information by diffing the old and new file. Without doing this the
+   .. important:: If you don't use the "\-\-since" switch when mirroring, the
+      results are not cumulative. I highly recommend using this switch. If you
+      don't, then the previously succsessful result will NOT be included. Its
+      VERY important to manaully combine these results by backing up the
+      original result and diffing the old and new files. Without doing this the
       running cluster will be missing references which are required to install
       and maintain operators and images.
 
    .. code-block:: bash
 
       oc apply -f <directory_name>/working-dir/cluster-resources/
+
+   .. tip:: You can confirm the node has the changes by checking the following
+      file.
+
+      .. code-block:: bash
+
+         ssh core@host11 cat /etc/containers/registries.conf
 
 #. For disconnected upgrades via the "Openshift Update Service" (next section)
    the "release-signatures" will need to be applied to the cluster.
