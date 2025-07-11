@@ -187,24 +187,28 @@ downloaded and mirrored to your disconnected registry.
       oc create -f mirror-secret.yaml -n openshift-virtualization-os-images
       oc create -f mirror-secret.yaml -n openshift-cnv
 
-#. The TLS cert needs to be added as well. You can manage this in two ways.
+#. The TLS cert needs to be added as well. You can accomplish this in two ways.
    First, create configmap with the cert. Be sure to do this in the namespace
-   where you plan on importing images. Second, patching the hyperconverged
+   where you plan on importing images. Second, patch your hyperconverged
    environment to ignore insecure certs. I'll show both options:
 
-   A. ConfigMap:
+   .. seealso:: A better explanation of this and the previous step can be found
+      here: `Creating a registry image with a VM disk
+      <https://github.com/kubevirt/containerized-data-importer/blob/main/doc/image-from-registry.md>`_
+
+   A. Create ConfigMap:
 
       .. important:: This certificate needs to be in the openshift-cnv and any other
          namespace you plan on importing images to.
 
       .. important:: The cert name within the configmap must end in ".crt".
 
-      .. code-block:: yaml
+      .. code-block:: bash
 
          oc create configmap mirror-rootca --from-file=rootCA.crt=./rootCA.pem -n openshift-virtualization-os-images
          oc create configmap mirror-rootca --from-file=rootCA.crt=./rootCA.pem -n openshift-cnv
 
-   B. Patch hyperconverged:
+   #. Patch HyperConverged:
 
       .. code-block:: bash
 
