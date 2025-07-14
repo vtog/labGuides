@@ -214,88 +214,95 @@ downloaded and mirrored to your disconnected registry.
 
          oc patch hco kubevirt-hyperconverged -n openshift-cnv --type merge -p '{"spec": {"storageImport": {"insecureRegistries": ["mirror.lab.local:8443"]}}}'
 
-#. Update the dataImportCronTemplates to use the disconnected registry. Add the
-   following yaml to the "spec:" section of your hyperconverged system. Each
-   image requires this metadata. In my example below I'm updating all three
-   missing references.
+#. Update the dataImportCronTemplates to use the disconnected registry. Patch
+   the following yaml of the "spec:" section of your hyperconverged system.
+   Each image requires this metadata. In my example below I'm merging all
+   three missing references.
 
-   .. code-block:: bash
+   .. note:: This step should not be needed in a future release. I'll update
+      the section as soon as the change is merged and found on a z-release.
 
-      oc edit hco kubevirt-hyperconverged -n openshift-cnv
+   A. Create the following yaml file:
 
-   .. tip:: This step should not be needed in a future release. I'll update the
-      section as soon as the change is merged and found on a z-release.
+      .. code-block:: batch
+         :emphasize-lines: 9,12,13,19-21,25,31,34,35,41-43,47,53,56,57,63-65,69
 
-   .. code-block:: yaml
+         cat << EOF > ./kubevirt-hco-PATCH.yaml
+         spec:
+           dataImportCronTemplates:
+           - metadata:
+               annotations:
+                 cdi.kubevirt.io/storage.bind.immediate.requested: "true"
+               labels:
+                 kubevirt.io/dynamic-credentials-support: "true"
+               name: centos-stream10-image-cron
+             spec:
+               garbageCollect: Outdated
+               managedDataSource: centos-stream10
+               schedule: 0 12 * * *
+               template:
+                 metadata: {}
+                 spec:
+                   source:
+                     registry:
+                       secretRef: mirror-secret
+                       certConfigMap: mirror-rootca
+                       url: docker://mirror.lab.local:8443/containerdisks/centos-stream:10
+                   storage:
+                     resources:
+                       requests:
+                         storage: 30Gi
+           - metadata:
+               annotations:
+                 cdi.kubevirt.io/storage.bind.immediate.requested: "true"
+               labels:
+                 kubevirt.io/dynamic-credentials-support: "true"
+               name: centos-stream9-image-cron
+             spec:
+               garbageCollect: Outdated
+               managedDataSource: centos-stream9
+               schedule: 0 12 * * *
+               template:
+                 metadata: {}
+                 spec:
+                   source:
+                     registry:
+                       secretRef: mirror-secret
+                       certConfigMap: mirror-rootca
+                       url: docker://mirror.lab.local:8443/containerdisks/centos-stream:9
+                   storage:
+                     resources:
+                       requests:
+                         storage: 30Gi
+           - metadata:
+               annotations:
+                 cdi.kubevirt.io/storage.bind.immediate.requested: "true"
+               labels:
+                 kubevirt.io/dynamic-credentials-support: "true"
+               name: fedora-image-cron
+             spec:
+               garbageCollect: Outdated
+               managedDataSource: fedora
+               schedule: 0 12 * * *
+               template:
+                 metadata: {}
+                 spec:
+                   source:
+                     registry:
+                       secretRef: mirror-secret
+                       certConfigMap: mirror-rootca
+                       url: docker://mirror.lab.local:8443/containerdisks/fedora:latest
+                   storage:
+                     resources:
+                       requests:
+                         storage: 30Gi
+         EOF
 
-      spec:
-        dataImportCronTemplates:
-        - metadata:
-            annotations:
-              cdi.kubevirt.io/storage.bind.immediate.requested: "true"
-            labels:
-              kubevirt.io/dynamic-credentials-support: "true"
-            name: centos-stream10-image-cron
-          spec:
-            garbageCollect: Outdated
-            managedDataSource: centos-stream10
-            schedule: 0 12 * * *
-            template:
-              metadata: {}
-              spec:
-                source:
-                  registry:
-                    secretRef: mirror-secret
-                    certConfigMap: mirror-rootca
-                    url: docker://mirror.lab.local:8443/containerdisks/centos-stream:10
-                storage:
-                  resources:
-                    requests:
-                      storage: 30Gi
-        - metadata:
-            annotations:
-              cdi.kubevirt.io/storage.bind.immediate.requested: "true"
-            labels:
-              kubevirt.io/dynamic-credentials-support: "true"
-            name: centos-stream9-image-cron
-          spec:
-            garbageCollect: Outdated
-            managedDataSource: centos-stream9
-            schedule: 0 12 * * *
-            template:
-              metadata: {}
-              spec:
-                source:
-                  registry:
-                    secretRef: mirror-secret
-                    certConfigMap: mirror-rootca
-                    url: docker://mirror.lab.local:8443/containerdisks/centos-stream:9
-                storage:
-                  resources:
-                    requests:
-                      storage: 30Gi
-        - metadata:
-            annotations:
-              cdi.kubevirt.io/storage.bind.immediate.requested: "true"
-            labels:
-              kubevirt.io/dynamic-credentials-support: "true"
-            name: fedora-image-cron
-          spec:
-            garbageCollect: Outdated
-            managedDataSource: fedora
-            schedule: 0 12 * * *
-            template:
-              metadata: {}
-              spec:
-                source:
-                  registry:
-                    secretRef: mirror-secret
-                    certConfigMap: mirror-rootca
-                    url: docker://mirror.lab.local:8443/containerdisks/fedora:latest
-                storage:
-                  resources:
-                    requests:
-                      storage: 30Gi
+   #. Patch hco kubevirt-hyperconverged:
+
+      .. code-block:: bash
+
+         oc patch hco kubevirt-hyperconverged --type merge --patch-file ./kubevirt-hco-PATCH.yaml -n openshift-cnv
 
 #. Example of creating a bootable data volume. This can be done via the console
    or cli. In either case the following yaml is a good start.
