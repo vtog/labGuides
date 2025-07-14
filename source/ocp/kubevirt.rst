@@ -222,6 +222,10 @@ downloaded and mirrored to your disconnected registry.
    .. note:: This step should not be needed in a future release. I'll update
       the section as soon as the change is merged and found on a z-release.
 
+   .. warning:: If you modify this to add additonal templates be sure to
+      include the previous data not just the new date. This will overwrite the
+      section with only the file contents.
+
    A. Create the following yaml file:
 
       .. code-block:: batch
