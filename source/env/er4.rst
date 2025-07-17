@@ -9,6 +9,9 @@ IPv6
 
 .. note:: AT&T assigns a /60 for home use.
 
+.. note:: Grayson Telecom Does NOT support IPv6. I did discover they have
+   ASN: AS20042 and 2607:5d80::/32 assigned.
+
 The following uses the CLI; SSH to ER4.
 
 #. Configure IPv6 for WAN int eth0.0 and eth1
@@ -19,7 +22,7 @@ The following uses the CLI; SSH to ER4.
 
       configure
 
-      edit interfaces ethernet eth0 vif 0
+      edit interfaces ethernet eth0
 
       set dhcpv6-pd pd 0 prefix-length /60
       set dhcpv6-pd pd 0 interface eth1 host-address ::1
@@ -36,7 +39,7 @@ The following uses the CLI; SSH to ER4.
 
       configure
 
-      edit interfaces ethernet eth0 vif 0
+      edit interfaces ethernet eth0
 
       set dhcpv6-pd pd 0 prefix-length /60
       set dhcpv6-pd pd 0 interface eth1.122 host-address ::1
