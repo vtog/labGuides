@@ -22,26 +22,23 @@ Simple BIND Config
           192.168.132.0/24;
           2600:1702:4c73:f110::/64;
           2600:1702:4c73:f111::/64;
-
       };
 
       # Under "options" change/add the following
       options {
-        listen-on port 53 { any; };
-        allow-query     { trusted; };
+        listen-on port 53 { 192.168.1.68; };
+        listen-on-v6 port 53 { 2600:1702:4c73:f110::68; };
+        allow-query { trusted; };
 
         # Enable/disable logging (see final step below)
         querylog no;
 
         recursion yes;
 
-        forwarders {
-              192.168.1.53;
-        };
+        forwarders { 192.168.1.53; };
+      };
 
-      }
-
-      # Add the following "include" to the end of the file
+      # Add the following "include" to the end of the file for local zones
       include "/etc/named/named.conf.local";
 
 #. Create directory structure
@@ -79,7 +76,6 @@ Simple BIND Config
           type master;
           file "/etc/named/zones/db.2600.1702.4c73.f111";
       };
-
       EOF
 
 #. Create forward zone file
@@ -88,62 +84,62 @@ Simple BIND Config
 
       cat << EOF | sudo tee /etc/named/zones/db.lab.local
       \$TTL    604800
-      @       IN      SOA     ns1.lab.local. admin.lab.local. (
+      @     IN     SOA     ns1.lab.local. admin.lab.local. (
                               3         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
-                         604800 )       ; Negative Cache TTL
+                         604800         ; Negative Cache TTL
+                         )
 
       ; name servers - NS records
-              IN      NS      ns1.lab.local.
+            IN     NS      ns1.lab.local.
 
       ; name servers - A records
-      ns1.lab.local.                 IN      A       192.168.1.68
-                                     IN      AAAA    2600:1702:4c73:f110::68
+      ns1                 IN      A       192.168.1.68
+                          IN      AAAA    2600:1702:4c73:f110::68
 
       ; 192.168.1.0/24 - A records
-      bfg.lab.local.                 IN      A       192.168.1.72
-      bfg.lab.local.                 IN      AAAA    2600:1702:4c73:f110::72
-      mirror.lab.local.              IN      A       192.168.1.72
-      mirror.lab.local.              IN      AAAA    2600:1702:4c73:f110::72
+      bfg                 IN      A       192.168.1.72
+      bfg                 IN      AAAA    2600:1702:4c73:f110::72
+      mirror              IN      A       192.168.1.72
+      mirror              IN      AAAA    2600:1702:4c73:f110::72
 
       ; 192.168.122.0/24 - A records
-      rhel7-bastion.lab.local.       IN      A       192.168.122.7
-      rhel7-bastion.lab.local.       IN      AAAA    600:1702:4c73:f111::7
-      rhel8-bastion.lab.local.       IN      A       192.168.122.8
-      rhel8-bastion.lab.local.       IN      AAAA    600:1702:4c73:f111::8
-      rhel9-bastion.lab.local.       IN      A       192.168.122.9
-      rhel9-bastion.lab.local.       IN      AAAA    600:1702:4c73:f111::9
+      rhel7-bastion       IN      A       192.168.122.7
+      rhel7-bastion       IN      AAAA    600:1702:4c73:f111::7
+      rhel8-bastion       IN      A       192.168.122.8
+      rhel8-bastion       IN      AAAA    600:1702:4c73:f111::8
+      rhel9-bastion       IN      A       192.168.122.9
+      rhel9-bastion       IN      AAAA    600:1702:4c73:f111::9
 
-      api.ocp1.lab.local.            IN      A       192.168.122.110
-      api.ocp1.lab.local.            IN      AAAA    2600:1702:4c73:f111::110
-      api-int.ocp1.lab.local.        IN      A       192.168.122.140
-      api-int.ocp1.lab.local.        IN      AAAA    2600:1702:4c73:f111::110
-      *.apps.ocp1.lab.local.         IN      A       192.168.122.111
-      *.apps.ocp1.lab.local.         IN      AAAA    2600:1702:4c73:f111::111
+      api.ocp1            IN      A       192.168.122.110
+      api.ocp1            IN      AAAA    2600:1702:4c73:f111::110
+      api-int.ocp1        IN      A       192.168.122.140
+      api-int.ocp1        IN      AAAA    2600:1702:4c73:f111::110
+      *.apps.ocp1         IN      A       192.168.122.111
+      *.apps.ocp1         IN      AAAA    2600:1702:4c73:f111::111
 
-      api.ocp2.lab.local.            IN      A       192.168.122.120
-      api.ocp2.lab.local.            IN      AAAA    2600:1702:4c73:f111::120
-      api-int.ocp2.lab.local.        IN      A       192.168.122.140
-      api-int.ocp2.lab.local.        IN      AAAA    2600:1702:4c73:f111::120
-      *.apps.ocp2.lab.local.         IN      A       192.168.122.121
-      *.apps.ocp2.lab.local.         IN      AAAA    2600:1702:4c73:f111::121
+      api.ocp2            IN      A       192.168.122.120
+      api.ocp2            IN      AAAA    2600:1702:4c73:f111::120
+      api-int.ocp2        IN      A       192.168.122.140
+      api-int.ocp2        IN      AAAA    2600:1702:4c73:f111::120
+      *.apps.ocp2         IN      A       192.168.122.121
+      *.apps.ocp2         IN      AAAA    2600:1702:4c73:f111::121
 
-      api.ocp3.lab.local.            IN      A       192.168.122.130
-      api.ocp3.lab.local.            IN      AAAA    2600:1702:4c73:f111::130
-      api-int.ocp3.lab.local.        IN      A       192.168.122.140
-      api-int.ocp3.lab.local.        IN      AAAA    2600:1702:4c73:f111::130
-      *.apps.ocp3.lab.local.         IN      A       192.168.122.131
-      *.apps.ocp3.lab.local.         IN      AAAA    2600:1702:4c73:f111::131
+      api.ocp3            IN      A       192.168.122.130
+      api.ocp3            IN      AAAA    2600:1702:4c73:f111::130
+      api-int.ocp3        IN      A       192.168.122.140
+      api-int.ocp3        IN      AAAA    2600:1702:4c73:f111::130
+      *.apps.ocp3         IN      A       192.168.122.131
+      *.apps.ocp3         IN      AAAA    2600:1702:4c73:f111::131
 
-      api.ocp4.lab.local.            IN      A       192.168.122.140
-      api.ocp4.lab.local.            IN      AAAA    2600:1702:4c73:f111::140
-      api-int.ocp4.lab.local.        IN      A       192.168.122.140
-      api-int.ocp4.lab.local.        IN      AAAA    2600:1702:4c73:f111::140
-      *.apps.ocp4.lab.local.         IN      A       192.168.122.141
-      *.apps.ocp4.lab.local.         IN      AAAA    2600:1702:4c73:f111::141
-
+      api.ocp4            IN      A       192.168.122.140
+      api.ocp4            IN      AAAA    2600:1702:4c73:f111::140
+      api-int.ocp4        IN      A       192.168.122.140
+      api-int.ocp4        IN      AAAA    2600:1702:4c73:f111::140
+      *.apps.ocp4         IN      A       192.168.122.141
+      *.apps.ocp4         IN      AAAA    2600:1702:4c73:f111::141
       EOF
 
 #. Create reverse zone file
@@ -152,15 +148,16 @@ Simple BIND Config
 
       cat << EOF | sudo tee /etc/named/zones/db.192.168.1
       \$TTL    604800
-      @       IN      SOA     ns1.lab.local. admin.lab.local. (
+      @     IN     SOA     ns1.lab.local. admin.lab.local. (
                                     3         ; Serial
                                604800         ; Refresh
                                 86400         ; Retry
                               2419200         ; Expire
-                               604800 )       ; Negative Cache TTL
+                               604800         ; Negative Cache TTL
+                               )
 
       ; name servers - NS records
-              IN      NS      ns1.lab.local.
+            IN     NS      ns1.lab.local.
 
       ; PTR Records
       68      IN      PTR      ns1.lab.local.                   ; 192.168.1.68
@@ -176,22 +173,22 @@ Simple BIND Config
       42      IN      PTR      host42.ocp4.lab.local.
       43      IN      PTR      host43.ocp4.lab.local.
       44      IN      PTR      host44.ocp4.lab.local.
-
       EOF
 
    .. code-block:: bash
 
       cat << EOF | sudo tee /etc/named/zones/db.192.168.122
       \$TTL    604800
-      @       IN      SOA     ns1.lab.local. admin.lab.local. (
+      @     IN     SOA     ns1.lab.local. admin.lab.local. (
                                     3         ; Serial
                                604800         ; Refresh
                                 86400         ; Retry
                               2419200         ; Expire
-                               604800 )       ; Negative Cache TTL
+                               604800         ; Negative Cache TTL
+                               )
 
       ; name servers - NS records
-              IN      NS      ns1.lab.local.
+            IN     NS      ns1.lab.local.
 
       ; PTR Records
       7        IN      PTR      rhel7-bastion.lab.local.  ; 192.168.122.7
@@ -206,65 +203,77 @@ Simple BIND Config
       130      IN      PTR      api-int.ocp3.lab.local.   ; 192.168.122.130
       140      IN      PTR      api.ocp4.lab.local.       ; 192.168.122.140
       140      IN      PTR      api-int.ocp4.lab.local.   ; 192.168.122.140
-
       EOF
 
    .. code-block:: bash
 
       cat << EOF | sudo tee /etc/named/zones/db.192.168.132
       \$TTL    604800
-      @       IN      SOA     ns1.lab.local. admin.lab.local. (
+      @     IN     SOA     ns1.lab.local. admin.lab.local. (
                                     3         ; Serial
                                604800         ; Refresh
                                 86400         ; Retry
                               2419200         ; Expire
-                               604800 )       ; Negative Cache TTL
+                               604800         ; Negative Cache TTL
+                               )
 
       ; name servers - NS records
-              IN      NS      ns1.lab.local.
+            IN     NS      ns1.lab.local.
 
       ; PTR Records
+      7        IN      PTR      rhel7-bastion.lab.local.  ; 192.168.132.7
+      8        IN      PTR      rhel8-bastion.lab.local.  ; 192.168.132.8
+      9        IN      PTR      rhel9-bastion.lab.local.  ; 192.168.132.9
 
+      110      IN      PTR      api.ocp1.lab.local.       ; 192.168.132.110
+      110      IN      PTR      api-int.ocp1.lab.local.   ; 192.168.132.110
+      120      IN      PTR      api.ocp2.lab.local.       ; 192.168.132.120
+      120      IN      PTR      api-int.ocp2.lab.local.   ; 192.168.132.120
+      130      IN      PTR      api.ocp3.lab.local.       ; 192.168.132.130
+      130      IN      PTR      api-int.ocp3.lab.local.   ; 192.168.132.130
+      140      IN      PTR      api.ocp4.lab.local.       ; 192.168.132.140
+      140      IN      PTR      api-int.ocp4.lab.local.   ; 192.168.132.140
       EOF
 
    .. code-block:: bash
 
       cat << EOF | sudo tee /etc/named/zones/db.2600.1702.4c73.f110
       \$TTL    604800
-      @       IN      SOA     ns1.lab.local. admin.lab.local. (
+      @     IN     SOA     ns1.lab.local. admin.lab.local. (
                                     3         ; Serial
                                604800         ; Refresh
                                 86400         ; Retry
                               2419200         ; Expire
-                               604800 )       ; Negative Cache TTL
+                               604800         ; Negative Cache TTL
+                               )
 
       ; name servers - NS records
-              IN      NS      ns1.lab.local.
+            IN     NS      ns1.lab.local.
 
-      $ORIGIN 0.0.0.0.0.0.0.0.0.0.0.0.0.1.1.f.3.7.c.4.2.0.7.1.0.0.6.2.ip6.arpa.
+      $ORIGIN 0.0.0.0.0.0.0.0.0.0.0.0
 
       ; PTR Records
       2.7.0.0  IN      PTR      ns1.lab.local.
       2.7.0.0  IN      PTR      bfg.lab.local.
       2.7.0.0  IN      PTR      mirror.lab.local.
-
       EOF
 
    .. code-block:: bash
 
       cat << EOF | sudo tee /etc/named/zones/db.2600.1702.4c73.f111
       \$TTL    604800
-      @       IN      SOA     ns1.lab.local. admin.lab.local. (
+      @     IN     SOA     ns1.lab.local. admin.lab.local. (
                                     3         ; Serial
                                604800         ; Refresh
                                 86400         ; Retry
                               2419200         ; Expire
-                               604800 )       ; Negative Cache TTL
+                               604800         ; Negative Cache TTL
+                               )
 
       ; name servers - NS records
-              IN      NS      ns1.lab.local.
+            IN     NS      ns1.lab.local.
 
-      $ORIGIN 0.0.0.0.0.0.0.0.0.0.0.0.1.1.1.f.3.7.c.4.2.0.7.1.0.0.6.2.ip6.arpa.
+      $ORIGIN 0.0.0.0.0.0.0.0.0.0.0.0
 
       ; PTR Records
       7.0.0.0      IN      PTR      rhel7-bastion.lab.local.
@@ -279,7 +288,6 @@ Simple BIND Config
       0.3.1.0      IN      PTR      api-int.ocp3.lab.local.
       0.4.1.0      IN      PTR      api.ocp4.lab.local.
       0.4.1.0      IN      PTR      api-int.ocp4.lab.local.
-
       EOF
 
 #. Start named
@@ -296,8 +304,7 @@ Simple BIND Config
       sudo firewall-cmd --reload
       sudo firewall-cmd --list-all
 
-#. Add logging. Edit /etc/named.conf and update the "logging" section to look
-   like the following.
+#. To enable logging edit "/etc/named.conf" and add the "logging" section.
 
    .. code-block:: bash
 
