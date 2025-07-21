@@ -347,7 +347,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
    .. code-block:: bash
       :emphasize-lines: 12
 
-      sudo vim /etc/gai.conf
+      sudo bash -c 'cat << EOF > /etc/gai.conf
 
       label  ::1/128       0
       label  ::/0          1
@@ -359,6 +359,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       precedence  2002::/16     30
       precedence ::/96          20
       precedence ::ffff:0:0/96  60      # <=== Change this from 10 to 60 or higher
+      EOF'
 
 #. Install brave (I prefer this to the "Software" store)
 
