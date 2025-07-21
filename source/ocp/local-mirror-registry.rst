@@ -42,6 +42,8 @@ Prerequisites
 
       sudo mkdir /mirror
 
+      sudo chown -R vince: /mirror
+
 #. Identify and create the **Hostname** and **Directory** session variables. In
    my case I'm using the following for my lab:
 
@@ -71,10 +73,9 @@ Create Local Registry
 
 #. Run the following command to install the registry pods as root.
 
-   .. important:: The registry services will be run as root. You can see the
-      pods with ``sudo podman ps``
-
-   .. warning:: Installing as "root" will force IPv4 only listener.
+   .. warning:: Installing as “sudo” will force IPv4 only listener. If IPv6
+      is required install as a normal user and see next step. I recommend not
+      installing as root.
 
    .. tip:: The registry uses port 8443 by default. This can be changed by
       adding :port to $quayHostname when installing. Be sure to add that port
@@ -82,19 +83,28 @@ Create Local Registry
 
    .. code-block:: bash
 
-      sudo ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot \
+      ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot \
       --quayStorage $quayStorage --sqliteStorage $sqliteStorage --initPassword $initPassword
 
    If ran correctly should see a similar ansible recap.
 
    .. image:: ./images/mirror-reg-install.png
 
-   .. tip:: Upgrade running registry
+#. If **IPv6** is required. Add switch ``FEATURE_LISTEN_IP_VERSION: IPv6`` to
+   the config file, "/mirror/ocp4/quay-config/config.yaml" and restart
+   quay-app.
 
-      .. code-block:: bash
+   .. code-block:: bash
 
-         sudo ./mirror-registry upgrade --quayHostname $quayHostname --quayRoot $quayRoot \
-         --quayStorage $quayStorage --sqliteStorage $sqliteStorage
+      systemctl --user restart quay-app.service
+
+   Check the results with the following curl commands:
+
+   .. code-block:: bash
+
+      curl -4 -k https://mirror.lab.local:8443/health/instance
+
+      curl -6 -k https://mirror.lab.local:8443/health/instance
 
 #. Copy newly created root CA, update trust, and open firewall port.
 
@@ -108,22 +118,29 @@ Create Local Registry
 #. Test mirror availability via cli. The following command should return
    "Login Succeeded!" if everything is working.
 
+   .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
+
    .. code-block:: bash
 
        podman login -u init -p $initPassword $quayHostname:8443
 
-   .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
-
 #. Access mirror via browser at `<https://$quayHostname:8443>`_
 
    .. hint:: Username = "init" / Password = "password"
+
+.. tip:: Upgrade running registry
+
+   .. code-block:: bash
+
+      ./mirror-registry upgrade --quayHostname $quayHostname --quayRoot $quayRoot \
+      --quayStorage $quayStorage --sqliteStorage $sqliteStorage
 
 .. tip:: If something went wrong, the following command will **UNINSTALL** the
    registry.
 
    .. code-block:: bash
 
-      sudo ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage \
+      ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage \
       --sqliteStorage $sqliteStorage
 
 Mirror Images to Local Registry (v2)
