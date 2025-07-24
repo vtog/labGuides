@@ -208,10 +208,9 @@ Mirror Images to Local Registry (v2)
         }
       }
 
-#. Create the following ImageSetConfig yaml files. In these examples I'm
-   using seperate files for each channel. You could combine them but I
-   found it easier to manage with speration. This also includes an example of
-   some additional images I find useful.
+#. Create the following ImageSetConfiguration files. In my lab I broke down the
+   process by platform, operators, and additionalImages. You could combine them
+   but I found it easier to manage the process with speration.
 
    .. tip:: **"graph: true"** mirror's the graph data to the disconnected
       registry. This information enables the disconnected cluster, via the
@@ -223,114 +222,8 @@ Mirror Images to Local Registry (v2)
       prune any unneeded version.
 
    .. code-block:: yaml
-      :caption: ImageSetConfiguration **4.16** yaml
-      :emphasize-lines: 1,8,10,11,15,43,46
-
-      kind: ImageSetConfiguration
-      apiVersion: mirror.openshift.io/v2alpha1
-      mirror:
-        platform:
-          architectures:
-          - "amd64"
-          channels:
-          - name: stable-4.16
-            type: ocp
-            minVersion: 4.16.40
-            maxVersion: 4.16.40
-            shortestPath: true
-          graph: true
-        operators:
-        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.16
-          packages:
-          - name: advanced-cluster-management
-          - name: cincinnati-operator
-          - name: kubernetes-nmstate-operator
-          - name: kubevirt-hyperconverged
-          - name: local-storage-operator
-          - name: lvms-operator
-          - name: metallb-operator
-          - name: multicluster-engine
-          - name: nfd
-          - name: odf-operator
-          - name: cephcsi-operator
-          - name: mcg-operator
-          - name: ocs-client-operator
-          - name: ocs-operator
-          - name: odf-csi-addons-operator
-          - name: odf-dependencies
-          - name: odf-multicluster-orchestrator
-          - name: odf-prometheus-operator
-          - name: recipe
-          - name: rook-ceph-operator
-          - name: openshift-gitops-operator
-          - name: ptp-operator
-          - name: quay-operator
-          - name: skupper-operator
-          - name: sriov-network-operator
-          - name: topology-aware-lifecycle-manager
-        - catalog: registry.redhat.io/redhat/certified-operator-index:v4.16
-          packages:
-          - name: gpu-operator-certified
-        additionalImages:
-        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.16
-        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.16
-
-   .. code-block:: yaml
-      :caption: ImageSetConfiguration **4.17** yaml
-      :emphasize-lines: 1,8,10,11,15,43,46
-
-      kind: ImageSetConfiguration
-      apiVersion: mirror.openshift.io/v2alpha1
-      mirror:
-        platform:
-          architectures:
-          - "amd64"
-          channels:
-          - name: stable-4.17
-            type: ocp
-            minVersion: 4.17.30
-            maxVersion: 4.17.30
-            shortestPath: true
-          graph: true
-        operators:
-        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.17
-          packages:
-          - name: advanced-cluster-management
-          - name: cincinnati-operator
-          - name: kubernetes-nmstate-operator
-          - name: kubevirt-hyperconverged
-          - name: local-storage-operator
-          - name: lvms-operator
-          - name: metallb-operator
-          - name: multicluster-engine
-          - name: nfd
-          - name: odf-operator
-          - name: cephcsi-operator
-          - name: mcg-operator
-          - name: ocs-client-operator
-          - name: ocs-operator
-          - name: odf-csi-addons-operator
-          - name: odf-dependencies
-          - name: odf-multicluster-orchestrator
-          - name: odf-prometheus-operator
-          - name: recipe
-          - name: rook-ceph-operator
-          - name: openshift-gitops-operator
-          - name: ptp-operator
-          - name: quay-operator
-          - name: skupper-operator
-          - name: sriov-network-operator
-          - name: topology-aware-lifecycle-manager
-        - catalog: registry.redhat.io/redhat/certified-operator-index:v4.17
-          packages:
-          - name: gpu-operator-certified
-        additionalImages:
-        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.17
-        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.17
-
-   .. code-block:: yaml
-      :caption: ImageSetConfiguration **4.18** yaml
-      :emphasize-lines: 1,8,10,11,15,43,46
+      :caption: isc-4.18.yaml
+      :emphasize-lines: 1,4,8,10,11
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
@@ -341,10 +234,18 @@ Mirror Images to Local Registry (v2)
           channels:
           - name: stable-4.18
             type: ocp
-            minVersion: 4.18.13
-            maxVersion: 4.18.13
-            shortestPath: true
-          graph: true
+            minVersion: 4.18.19
+            maxVersion: 4.18.19
+            shortestPath: false
+          graph: false
+
+   .. code-block:: yaml
+      :caption: isc-4.18-operators.yaml
+      :emphasize-lines: 1,4,5,33,37,38
+
+      kind: ImageSetConfiguration
+      apiVersion: mirror.openshift.io/v2alpha1
+      mirror:
         operators:
         - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.18
           packages:
@@ -382,7 +283,7 @@ Mirror Images to Local Registry (v2)
         - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.18
 
    .. code-block:: yaml
-      :caption: ImageSetConfiguration **additional images** yaml
+      :caption: isc-additional-images.yaml
       :emphasize-lines: 1,4
 
       kind: ImageSetConfiguration
@@ -402,6 +303,12 @@ Mirror Images to Local Registry (v2)
         - name: docker.io/f5devcentral/f5-hello-world:latest
         - name: docker.io/library/httpd:latest
         - name: docker.io/library/nginx:latest
+        - name: registry.redhat.io/rhel10/rhel-guest-image:latest
+        - name: registry.redhat.io/rhel9/rhel-guest-image:latest
+        - name: registry.redhat.io/rhel8/rhel-guest-image:latest
+        - name: quay.io/containerdisks/fedora:latest
+        - name: quay.io/containerdisks/centos-stream:9
+        - name: quay.io/containerdisks/centos-stream:10
 
    .. tip:: To discover operators by their package name, applicable channels,
       and versions use the following commands.
@@ -423,6 +330,10 @@ Mirror Images to Local Registry (v2)
 
    .. note:: Be patient! Each step of the process will take a lot of time.
 
+   .. note:: The directive "\-\-cache-dir" will ensure all the images are
+      written to a directory with the necessary space.  Without this it will
+      default $HOME.
+
    .. tip:: The process of mirroring to disk will overwrite the cluster
       resources directory with each attempt. To include the previous results
       use the "--since" switch.
@@ -434,7 +345,7 @@ Mirror Images to Local Registry (v2)
 
       .. code-block:: bash
 
-         oc mirror --v2 -c ./imageset-config.yaml --since 2025-04-20 file://<directory_name>
+         oc mirror --v2 -c ./imageset-config.yaml --since 2025-03-12 --cache-dir <directory_name> file://<directory_name>
 
       .. image:: ./images/mirror-results.png
 
@@ -447,13 +358,14 @@ Mirror Images to Local Registry (v2)
             OCPV=4.18
 
             echo -e "\nMirroring $OCPV based on ./isc-$OCPV.yaml"
-            oc mirror --v2 -c ./isc-$OCPV.yaml --since 2025-04-20 file:///mirror/oc-mirror/$OCPV
+            oc mirror --v2 -c ./isc-$OCPV.yaml --since 2025-03-12 \
+              --cache-dir /mirror/oc-mirror/$OCPV file:///mirror/oc-mirror/$OCPV
 
    #. Disk-to-Mirror.
 
       .. code-block:: bash
 
-         oc mirror --v2 -c ./imageset-config.yaml --from file://<directory_name> docker://$quayHostname:8443
+         oc mirror --v2 -c ./imageset-config.yaml --cache-dir <directory_name> --from file://<directory_name> docker://$quayHostname:8443
 
       .. image:: ./images/mirror-results2.png
 
@@ -466,7 +378,8 @@ Mirror Images to Local Registry (v2)
             OCPV=4.18
 
             echo -e "\nMirroring $OCPV based on ./isc-$OCPV.yaml"
-            oc mirror --v2 -c ./isc-$OCPV.yaml --from file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
+            oc mirror --v2 -c ./isc-$OCPV.yaml --cache-dir /mirror/oc-mirror/$OCPV \
+              --from file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
 
 #. Make note of the information upon completion. Supporting yaml files can be
    found in "<directory_name>/working-dir/cluster-resources". These files will
@@ -483,18 +396,91 @@ Delete Images from Local Registry (v2)
 With v2 the process no longer auto purges the older files. You have to use the
 following two step process.
 
-#. Create the DeleteImageSetConfiguration yaml
+#. Create the DeleteImageSetConfiguration yaml files. In my lab I broke down
+   the process by platform, operators, and additionalImages.
 
    .. code-block:: yaml
+      :caption: isc-4.18.yaml
 
       kind: DeleteImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
       delete:
         platform:
+          architectures:
+          - "amd64"
           channels:
           - name: stable-4.18
-            minVersion: 4.18.9
-            maxVersion: 4.18.9
+            minVersion: 4.18.19
+            maxVersion: 4.18.19
+
+   .. code-block:: yaml
+      :caption: isc-4.18-operators.yaml
+
+      kind: DeleteImageSetConfiguration
+      apiVersion: mirror.openshift.io/v2alpha1
+      delete:
+        operators:
+        - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.18
+          packages:
+          - name: advanced-cluster-management
+          - name: cincinnati-operator
+          - name: kubernetes-nmstate-operator
+          - name: kubevirt-hyperconverged
+          - name: local-storage-operator
+          - name: lvms-operator
+          - name: metallb-operator
+          - name: multicluster-engine
+          - name: nfd
+          - name: odf-operator
+          - name: cephcsi-operator
+          - name: mcg-operator
+          - name: ocs-client-operator
+          - name: ocs-operator
+          - name: odf-csi-addons-operator
+          - name: odf-dependencies
+          - name: odf-multicluster-orchestrator
+          - name: odf-prometheus-operator
+          - name: recipe
+          - name: rook-ceph-operator
+          - name: openshift-gitops-operator
+          - name: ptp-operator
+          - name: quay-operator
+          - name: skupper-operator
+          - name: sriov-network-operator
+          - name: topology-aware-lifecycle-manager
+        - catalog: registry.redhat.io/redhat/certified-operator-index:v4.18
+          packages:
+          - name: gpu-operator-certified
+        additionalImages:
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.18
+        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.18
+
+   .. code-block:: yaml
+      :caption: isc-additional-images.yaml
+
+      kind: ImageSetConfiguration
+      apiVersion: mirror.openshift.io/v2alpha1
+      mirror:
+        additionalImages:
+        - name: registry.redhat.io/ubi8/ubi:latest
+        - name: registry.redhat.io/ubi9/ubi:latest
+        - name: registry.redhat.io/ubi9/httpd-24:latest
+        - name: registry.redhat.io/ubi9/nginx-122:latest
+        - name: registry.redhat.io/rhel8/support-tools:latest
+        - name: registry.redhat.io/rhel9/support-tools:latest
+        - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
+        - name: ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:latest
+        - name: quay.io/openshift-scale/etcd-perf:latest
+        - name: docker.io/centos/tools:latest
+        - name: docker.io/f5devcentral/f5-hello-world:latest
+        - name: docker.io/library/httpd:latest
+        - name: docker.io/library/nginx:latest
+        - name: registry.redhat.io/rhel10/rhel-guest-image:latest
+        - name: registry.redhat.io/rhel9/rhel-guest-image:latest
+        - name: registry.redhat.io/rhel8/rhel-guest-image:latest
+        - name: quay.io/containerdisks/fedora:latest
+        - name: quay.io/containerdisks/centos-stream:9
+        - name: quay.io/containerdisks/centos-stream:10
 
 #. Delete phase 1 (generate)
 
@@ -518,10 +504,12 @@ following two step process.
 
       echo -e "\nDeleting $OCPV images based on ./delete-isc-$OCPV.yaml"
       echo -e "\nGenerating..."
-      oc mirror delete --v2 -c ./delete-isc-$OCPV.yaml --generate --workspace file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
+      oc mirror delete --v2 -c ./delete-isc-$OCPV.yaml --generate --workspace \
+        file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
 
       echo -e "\nDeleting..."
-      oc mirror delete --v2 --delete-yaml-file ./$OCPV/working-dir/delete/delete-images.yaml docker://$quayHostname:8443
+      oc mirror delete --v2 --delete-yaml-file ./$OCPV/working-dir/delete/delete-images.yaml \
+        docker://$quayHostname:8443
 
 Update Running Cluster
 ----------------------
