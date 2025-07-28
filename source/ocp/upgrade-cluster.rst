@@ -153,3 +153,71 @@ disconnected registry and the "cincinnati" operator.
    display Current version and Update status
 
    .. image:: images/updatesvcclustersettings.png
+
+Create Release Signature
+------------------------
+
+In some instances it may be necessary to manual create the release signature
+config map. These files are typically created when mirroring to the
+disconnected registry and can be found in the
+``<working_dir/cluster_resource>`` directory.
+
+#. Create the following environment variables:
+
+   A. OCP Release Version
+
+      .. code-block:: bash
+
+         OCP_RELEASE_VERSION=4.18.19
+
+   #. ARCHITECTURE
+
+      .. code-block:: bash
+
+         OCP_ARCHITECTURE=x86_64
+
+   #. DIGEST
+
+      .. code-block:: bash
+
+         DIGEST="$(oc adm release info quay.io/openshift-release-dev/ocp-release:${OCP_RELEASE_VERSION}-${OCP_ARCHITECTURE} | sed -n 's/Pull From: .*@//p')"
+
+   #. DIGEST Algorithm
+
+      .. code-block:: bash
+
+         DIGEST_ALGO="${DIGEST%%:*}"
+
+   #. DIGEST Signature
+
+      .. code-block:: bash
+
+         DIGEST_ENCODED="${DIGEST#*:}"
+
+   #. Image Signature
+
+      .. code-block:: bash
+
+         SIGNATURE_BASE64=$(curl -s "https://mirror.openshift.com/pub/openshift-v4/signatures/openshift/release/${DIGEST_ALGO}=${DIGEST_ENCODED}/signature-1" | base64 -w0 && echo)
+
+#. Create the config map
+
+   .. code-block:: bash
+
+      cat >signature-${OCP_RELEASE_VERSION}.yaml <<EOF
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: release-image-${OCP_RELEASE_VERSION}
+        namespace: openshift-config-managed
+        labels:
+          release.openshift.io/verification-signatures: ""
+      binaryData:
+        ${DIGEST_ALGO}-${DIGEST_ENCODED}: ${SIGNATURE_BASE64}
+      EOF
+
+#. Apply config map to cluster
+
+   .. code-block:: bash
+
+      oc apply -f signature-${OCP_RELEASE_VERSION}.yaml
