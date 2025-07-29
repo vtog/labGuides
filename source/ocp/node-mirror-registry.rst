@@ -202,7 +202,8 @@ Create Node Host Mirror Registry
 
        podman login -u init -p password $quayHostname:8443
 
-   .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
+   .. hint:: Use the ``--tls-verify=false`` if not adding the rootCA to the
+      trust.
 
 #. Access mirror via browser at `<https://node_IP:8443>`_
 

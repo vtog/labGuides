@@ -18,7 +18,7 @@ The easiest way to update a disconnected cluster is via the cli.
 
       .. image:: images/pull-by-digest.png
 
-#. From the CLI start the upgrade. Use the "\-\-to-image=" switch and the image
+#. From the CLI start the upgrade. Use the ``--to-image=`` switch and the image
    identified in the previous steps.
 
    .. note:: Be sure to only use the url and release. You can remove "podman

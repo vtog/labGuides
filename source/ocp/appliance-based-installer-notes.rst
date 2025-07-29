@@ -156,7 +156,7 @@ Build the disk image
    .. tip:: If needed you can rebuild the disk image with another version
       or updated or additional manifests but you must first "clean" the assets
       directory first. The clean command keeps the cache folder under assets
-      intact. To clean the entire cache as well, add the **\-\-cache** flag
+      intact. To clean the entire cache as well, add the ``--cache`` flag
       with the clean command.
 
       .. code-block:: bash

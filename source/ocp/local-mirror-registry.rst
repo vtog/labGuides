@@ -118,7 +118,7 @@ Create Local Registry
 #. Test mirror availability via cli. The following command should return
    "Login Succeeded!" if everything is working.
 
-   .. hint:: Use the "\-\-tls-verify=false" if not adding the rootCA to the trust.
+   .. hint:: Use the ''--tls-verify=false'' if not adding the rootCA to the trust.
 
    .. code-block:: bash
 
@@ -330,13 +330,13 @@ Mirror Images to Local Registry (v2)
 
    .. note:: Be patient! Each step of the process will take a lot of time.
 
-   .. note:: The directive "\-\-cache-dir" will ensure all the images are
+   .. note:: The directive ``--cache-dir`` will ensure all the images are
       written to a directory with the necessary space.  Without this it will
       default $HOME.
 
    .. tip:: The process of mirroring to disk will overwrite the cluster
       resources directory with each attempt. To include the previous results
-      use the "--since" switch.
+      use the ``--since`` switch.
 
    .. important:: If you see missing images/errors at the end of each step,
       re-run the oc-mirror command.
@@ -490,6 +490,9 @@ following two step process.
 
 #. Delete phase 2 (delete)
 
+   .. note:: The directive ``--force-cache-delete`` will remove the images from
+      the local cache directory.
+
    .. code-block:: bash
 
       oc mirror delete --v2 --delete-yaml-file <directory_name>/working-dir/delete/delete-images.yaml docker://$quayHostname:8443
@@ -504,12 +507,12 @@ following two step process.
 
       echo -e "\nDeleting $OCPV images based on ./delete-isc-$OCPV.yaml"
       echo -e "\nGenerating..."
-      oc mirror delete --v2 -c ./delete-isc-$OCPV.yaml --generate --workspace \
-        file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
+      oc mirror delete --v2 -c ./delete-isc-$OCPV.yaml --cache-dir /mirror/oc-mirror/$OCPV \
+        --generate --workspace file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
 
       echo -e "\nDeleting..."
-      oc mirror delete --v2 --delete-yaml-file ./$OCPV/working-dir/delete/delete-images.yaml \
-        docker://$quayHostname:8443
+      oc mirror delete --v2 --cache-dir /mirror/oc-mirror/$OCPV --force-cache-delete \
+        --delete-yaml-file ./$OCPV/working-dir/delete/delete-images.yaml docker://$quayHostname:8443
 
 Update Running Cluster
 ----------------------
@@ -573,7 +576,7 @@ To create a new cluster using the local mirror & registry see:
       dir is created. This contains all the yaml objects necessary to connect
       to the disconnected registry.
 
-   .. important:: If you don't use the "\-\-since" switch when mirroring, the
+   .. important:: If you don't use the ''--since`` switch when mirroring, the
       results are not cumulative. I highly recommend using this switch. If you
       don't, then the previously succsessful result will NOT be included. Its
       VERY important to manaully combine these results by backing up the
