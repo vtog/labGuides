@@ -935,3 +935,24 @@ Tech Preview
 
 .. seealso:: `Enabling features using feature gates
    <https://docs.openshift.com/container-platform/4.16/nodes/clusters/nodes-cluster-enabling-features.html>`_
+
+Pod Disruption Budget
+---------------------
+
+Found this nice custom command to check PDB across the cluster and isolate
+potential issues.
+
+.. code-block:: bash
+
+   oc get pdb -A -o custom-columns='NAMESPACE:metadata.namespace,NAME:metadata.name,MINAVAILABLE:spec.minAvailable,MAXUNAVIALABLE:spec.maxUnavailable,CURRHEALTHY:status.currentHealthy,DESIREDHEALTHY:status.desiredHealthy,EXPECTED:status.expectedPods,DISRUPTIONS:status.disruptionsAllowed' \
+
+Quick App Deployment & Route
+------------------------------
+
+.. code-block:: bash
+
+   oc new-app --name httpd-1 --image mirror.lab.local:8443/ubi9/httpd-24:latest -n default
+
+.. code-block:: bash
+
+   oc expose service httpd-1 -n default
