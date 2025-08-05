@@ -46,37 +46,52 @@ MACVLAN w/ Network DHCP
 The DHCP CNI plugin uses the networks DHCP server to assign IP addr's to the
 assigned interfaces.
 
-#. Update the network operator with a "dhcp-shim". When using network
-   attachment definitions this "shim" is required for DHCP to properly work.
+#. Update the network operator with a "dhcp-shim".
 
-   .. code-block:: bash
+   .. important:: When using network attachment definitions this "shim" is
+      required for DHCP to properly work.
 
-      oc edit networks.operator.openshift.io cluster
+   A. Create the yaml patch
 
-   Add the following to the "spec:" section
+      .. code-block:: yaml
 
-   .. code-block:: yaml
+         cat << EOF > ./net-op-cluster-PATCH.yaml
+         spec:
+           additionalNetworks:
+           - name: dhcp-shim
+             namespace: default
+             type: Raw
+             rawCNIConfig: |-
+               {
+                 "name": "dhcp-shim",
+                 "cniVersion": "0.3.1",
+                 "type": "bridge",
+                 "ipam": {
+                   "type": "dhcp"
+                 }
+               }
+         EOF
 
-      additionalNetworks:
-      - name: dhcp-shim
-        namespace: default
-        type: Raw
-        rawCNIConfig: |-
-          {
-            "name": "dhcp-shim",
-            "cniVersion": "0.3.1",
-            "type": "bridge",
-            "ipam": {
-              "type": "dhcp"
-            }
-          }
+   #. Apply the patch
+
+      .. code-block:: bash
+
+         oc patch networks.operator.openshift.io cluster --type merge \
+           --patch-file ./net-op-cluster-PATCH.yaml
+
+   #. Verify changes
+
+      .. code-block:: bash
+
+         oc get network-attachment-definitions -n default
 
 #. Create the following Network Attachment Definition yaml file for the
-   project.
+   project / namespace.
 
    .. code-block:: yaml
-      :emphasize-lines: 4,5,15
+      :emphasize-lines: 5,6,16
 
+      cat << EOF > ./macvlan-dhcp.yaml
       apiVersion: k8s.cni.cncf.io/v1
       kind: NetworkAttachmentDefinition
       metadata:
@@ -94,21 +109,19 @@ assigned interfaces.
               "type": "dhcp"
             }
           }
+      EOF
 
    .. code-block:: bash
 
-      oc create -f macvlan-dhcp.yaml
+      oc create -f ./macvlan-dhcp.yaml
 
 #. Add the annotation to the deployment.
 
-   .. code-block:: yaml
-      :emphasize-lines: 5
+   .. code-block:: bash
 
-      spec:
-        template:
-          metadata:
-            annotations:
-              k8s.v1.cni.cncf.io/networks: macvlan-dhcp
+      oc patch deployment <deployment_name> -n <name_space> \
+        --type merge -p '{"spec": {"template": {"metadata": {"annotations": \
+        {"k8s.v1.cni.cncf.io/networks": "macvlan-dhcp"}}}}}'
 
 MACVLAN w/ Whereabouts
 ----------------------
@@ -116,38 +129,52 @@ MACVLAN w/ Whereabouts
 The Whereabouts CNI plugin allows the dynamic assignment of an IP address to an
 additional network without the use of a network DHCP server.
 
-#. Update the network operator with a "whereabouts-shim". When using network
-   attachment definitions this "shim" is required for whereabouts to properly
-   work.
+#. Update the network operator with a "whereabouts-shim".
 
-   .. code-block:: bash
+   .. important:: When using network attachment definitions this "shim" is
+      required for whereabouts to properly work.
 
-      oc edit networks.operator.openshift.io cluster
+   A. Create the yaml patch
 
-   Add the following to the "spec:" section
+      .. code-block:: yaml
 
-   .. code-block:: yaml
+         cat << EOF > ./net-op-cluster-PATCH.yaml
+         spec:
+           additionalNetworks:
+           - name: whereabouts-shim
+             namespace: default
+             type: Raw
+             rawCNIConfig: |-
+               {
+                 "name": "whereabouts-shim",
+                 "cniVersion": "0.3.1",
+                 "type": "bridge",
+                 "ipam": {
+                   "type": "whereabouts"
+                 }
+               }
+         EOF
 
-      additionalNetworks:
-      - name: whereabouts-shim
-        namespace: default
-        type: Raw
-        rawCNIConfig: |-
-          {
-            "name": "whereabouts-shim",
-            "cniVersion": "0.3.1",
-            "type": "bridge",
-            "ipam": {
-              "type": "whereabouts"
-            }
-          }
+   #. Apply the patch
+
+      .. code-block:: bash
+
+         oc patch networks.operator.openshift.io cluster --type merge \
+           --patch-file ./net-op-cluster-PATCH.yaml
+
+   #. Verify changes
+
+      .. code-block:: bash
+
+         oc get network-attachment-definitions -n default
 
 #. Create the following Network Attachment Definition yaml file for the
    project.
 
    .. code-block:: yaml
-      :emphasize-lines: 4,5,15
+      :emphasize-lines: 5,6,16
 
+      cat << EOF > ./macvlan-whereabouts.yaml
       apiVersion: k8s.cni.cncf.io/v1
       kind: NetworkAttachmentDefinition
       metadata:
@@ -172,17 +199,19 @@ additional network without the use of a network DHCP server.
               ]
             }
           }
+      EOF
+
+   .. code-block:: bash
+
+      oc create -f ./macvlan-whereabouts.yaml
 
 #. Add the annotation to the deployment.
 
-   .. code-block:: yaml
-      :emphasize-lines: 5
+   .. code-block:: bash
 
-      spec:
-        template:
-          metadata:
-            annotations:
-              k8s.v1.cni.cncf.io/networks: macvlan-whereabouts
+      oc patch deployment <deployment_name> -n <name_space> \
+        --type merge -p '{"spec": {"template": {"metadata": {"annotations": \
+        {"k8s.v1.cni.cncf.io/networks": "macvlan-whereabouts"}}}}}'
 
 #. Check all ip reservations
 
@@ -202,8 +231,9 @@ Statically allocate an IP for the container.
    project.
 
    .. code-block:: yaml
-      :emphasize-lines: 4,5,15
+      :emphasize-lines: 5,6,16
 
+      cat << EOF > ./macvlan-static.yaml
       apiVersion: k8s.cni.cncf.io/v1
       kind: NetworkAttachmentDefinition
       metadata:
@@ -230,14 +260,16 @@ Statically allocate an IP for the container.
               ]
             }
           }
+      EOF
+
+   .. code-block:: bash
+
+      oc create -f ./macvlan-static.yaml
 
 #. Add the annotation to the deployment.
 
-   .. code-block:: yaml
-      :emphasize-lines: 5
+   .. code-block:: bash
 
-      spec:
-        template:
-          metadata:
-            annotations:
-              k8s.v1.cni.cncf.io/networks: macvlan-static
+      oc patch deployment <deployment_name> -n <name_space> \
+        --type merge -p '{"spec": {"template": {"metadata": {"annotations": \
+        {"k8s.v1.cni.cncf.io/networks": "macvlan-static"}}}}}'
