@@ -11,12 +11,6 @@ I found the following helpful as well:
 .. important:: At this time you can NOT create a service with this additional
    interface. Only the primary CNI interface will be used.
 
-.. note:: I'm only focusing on MACVLAN, as I think this is the most common use
-   case. There are other options and if I run across the need I will add them.
-
-.. attention:: Do not use DHCP with IPVLAN. This will not work as interfaces
-   share the MAC address with the host interface.
-
 .. tip:: Fun with for loops
 
    .. code-block:: bash
@@ -40,8 +34,20 @@ I found the following helpful as well:
       do echo ims-$i-bond$j && ssh core@ims-$i nmcli con sh | grep bond$j | wc -l; \
       done; done;
 
+User Defined Networks
+---------------------
+
+Network Attached Definitions
+----------------------------
+
+.. note:: I'm only focusing on MACVLAN, as I think this is the most common use
+   case. There are other options and if I run across the need I will add them.
+
+.. attention:: Do not use DHCP with IPVLAN. This will not work as interfaces
+   share the MAC address with the host interface.
+
 MACVLAN w/ Network DHCP
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 The DHCP CNI plugin uses the networks DHCP server to assign IP addr's to the
 assigned interfaces.
@@ -124,7 +130,7 @@ assigned interfaces.
         {"k8s.v1.cni.cncf.io/networks": "macvlan-dhcp"}}}}}'
 
 MACVLAN w/ Whereabouts
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 The Whereabouts CNI plugin allows the dynamic assignment of an IP address to an
 additional network without the use of a network DHCP server.
@@ -220,7 +226,7 @@ additional network without the use of a network DHCP server.
       oc get overlappingrangeipreservations.whereabouts.cni.cncf.io -A
 
 MACVLAN w/ Static IP
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 Statically allocate an IP for the container.
 
