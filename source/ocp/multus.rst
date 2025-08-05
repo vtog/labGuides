@@ -9,7 +9,7 @@ I found the following helpful as well:
 `CNI Plugins <https://www.cni.dev/plugins/current/>`_
 
 .. important:: At this time you can NOT create a service with this additional
-   interface. Only the primary CNI interface will be used.
+   endpoint. Only the default Network IP / endpoint will be used.
 
 .. tip:: Fun with for loops
 
