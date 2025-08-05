@@ -3,7 +3,7 @@ Additional OCP Networks (Multus)
 
 Demonstrate how to add interfaces for deployed containers. For a deeper
 understanding see the official documentation:
-`Multiple networks <https://docs.openshift.com/container-platform/4.12/networking/multiple_networks/understanding-multiple-networks.html>`_
+`Multiple networks <https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/multiple_networks/understanding-multiple-networks>`_
 
 I found the following helpful as well:
 `CNI Plugins <https://www.cni.dev/plugins/current/>`_
