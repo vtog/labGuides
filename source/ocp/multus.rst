@@ -103,8 +103,7 @@ assigned interfaces.
    .. code-block:: bash
 
       oc patch deployment <deployment_name> -n <name_space> \
-        --type merge -p '{"spec": {"template": {"metadata": {"annotations": \
-        {"k8s.v1.cni.cncf.io/networks": "macvlan-dhcp"}}}}}'
+        --type merge -p '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-dhcp"}}}}}'
 
 MACVLAN w/ Whereabouts
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -193,8 +192,7 @@ additional network without the use of a network DHCP server.
    .. code-block:: bash
 
       oc patch deployment <deployment_name> -n <name_space> \
-        --type merge -p '{"spec": {"template": {"metadata": {"annotations": \
-        {"k8s.v1.cni.cncf.io/networks": "macvlan-whereabouts"}}}}}'
+        --type merge -p '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-whereabouts"}}}}}'
 
 #. Check all ip reservations
 
@@ -254,5 +252,4 @@ Statically allocate an IP for the container.
    .. code-block:: bash
 
       oc patch deployment <deployment_name> -n <name_space> \
-        --type merge -p '{"spec": {"template": {"metadata": {"annotations": \
-        {"k8s.v1.cni.cncf.io/networks": "macvlan-static"}}}}}'
+        --type merge -p '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-static"}}}}}'
