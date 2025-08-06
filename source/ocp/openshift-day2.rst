@@ -934,7 +934,7 @@ Tech Preview
 ------------
 
 .. seealso:: `Enabling features using feature gates
-   <https://docs.openshift.com/container-platform/4.16/nodes/clusters/nodes-cluster-enabling-features.html>`_
+   <https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/nodes/working-with-clusters#nodes-cluster-enabling>`_
 
 Pod Disruption Budget
 ---------------------

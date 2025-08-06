@@ -9,7 +9,8 @@ I found the following helpful as well:
 `CNI Plugins <https://www.cni.dev/plugins/current/>`_
 
 .. important:: At this time you can NOT create a service with this additional
-   endpoint. Only the default Network IP / endpoint will be used.
+   endpoint. Only the default Network IP / endpoint is used. The multus-service
+   project is deprecated. Will update when a viable solution is available.
 
 User Defined Networks
 ---------------------
