@@ -960,7 +960,8 @@ Quick App Deployment & Route
 Manually Add VLANs
 ------------------
 
-Created the following for loops to create several bonded vlan interfaces.
+Created the following for loops to create, delete, and check several bonded
+vlan interfaces.
 
 .. note:: Should be able to handle this with nmstate today. At the time, v4.12,
    it was defaulting to the wrong vlan flag "0" and nmstate could not change
