@@ -226,7 +226,7 @@ If MCP gets stuck try forcing the update to unstuck it.
 
    .. code-block:: bash
 
-      ssh core@host11.lab.local sudo touch /run/machine-config-daemon-force
+      ssh core@host11 sudo touch /run/machine-config-daemon-force
 
 #. Edit node annotations
 
@@ -248,7 +248,7 @@ If MCP gets stuck try forcing the update to unstuck it.
 
    .. code-block:: yaml
 
-      ssh core@host11.lab.local sudo reboot
+      ssh core@host11 sudo reboot
 
 MCP and Performance Profile
 ---------------------------
@@ -948,7 +948,8 @@ potential issues.
 
 .. code-block:: bash
 
-   oc get pdb -A -o custom-columns='NAMESPACE:metadata.namespace,NAME:metadata.name,MINAVAILABLE:spec.minAvailable,MAXUNAVIALABLE:spec.maxUnavailable,CURRHEALTHY:status.currentHealthy,DESIREDHEALTHY:status.desiredHealthy,EXPECTED:status.expectedPods,DISRUPTIONS:status.disruptionsAllowed'
+   oc get pdb -A -o custom-columns='NAMESPACE:metadata.namespace,NAME:metadata.name,MINAVAILABLE:spec.minAvailable,MAXUNAVIALABLE:spec.maxUnavailable,CURRHEALTHY:status.currentHealthy,DESIREDHEALTHY:status.desiredHealthy,EXPECTED:status.expectedPods,DISRUPTIONS:status.disruptionsAllowed' | \
+   awk 'NR==1; $8==0'
 
 Quick App Deployment & Route
 ------------------------------
