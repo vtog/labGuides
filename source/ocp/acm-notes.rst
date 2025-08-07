@@ -58,7 +58,8 @@ Host inventory (Connected)
 
    .. code-block:: bash
 
-      oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
+      oc patch provisioning provisioning-configuration --type merge \
+        --patch '{"spec":{"watchAllNamespaces": true }}'
 
 #. From the console select :menuselection:`Infrastructure --> Host Inventory`.
    Click :menuselection:`Configure host inventory settings`.
@@ -90,7 +91,8 @@ Host inventory (Disconnected)
 
    .. code-block:: bash
 
-      oc patch provisioning provisioning-configuration --type merge -p '{"spec":{"watchAllNamespaces": true }}'
+      oc patch provisioning provisioning-configuration --type merge \
+        --patch '{"spec":{"watchAllNamespaces": true }}'
 
 #. Create the following configmap referencing your disconnected registry.
 

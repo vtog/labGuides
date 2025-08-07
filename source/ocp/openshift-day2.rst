@@ -20,7 +20,7 @@ Option 1
    .. code-block:: bash
 
       oc get deployment <deployment-name> -o yaml -n <project> | \
-      oc adm policy scc-subject-review -f -
+        oc adm policy scc-subject-review -f -
 
 #. Create a service account in the namespace of your container.
 
@@ -33,14 +33,14 @@ Option 1
    .. code-block:: bash
 
       oc adm policy add-scc-to-user <scc-name> -z <service-account-name> \
-      -n <project>
+        -n <project>
 
 #. Update existing deployment with newly created service account
 
    .. code-block:: bash
 
       oc set serviceaccount deployment/<deployment-name> \
-      <service-account-name> -n <project>
+        <service-account-name> -n <project>
 
 Option 2
 ^^^^^^^^
@@ -196,13 +196,15 @@ Schedule Control Nodes
 
    .. code-block:: bash
 
-      oc patch schedulers.config.openshift.io/cluster --type merge -p '{"spec":{"mastersSchedulable":true}}'
+      oc patch schedulers.config.openshift.io/cluster --type merge \
+        --patch '{"spec":{"mastersSchedulable":true}}'
 
 #. Disable
 
    .. code-block:: bash
 
-      oc patch schedulers.config.openshift.io/cluster --type merge -p '{"spec":{"mastersSchedulable":false}}'
+      oc patch schedulers.config.openshift.io/cluster --type merge \
+        --patch '{"spec":{"mastersSchedulable":false}}'
 
 Pause MCP
 ---------
@@ -213,7 +215,7 @@ single reboot. Set "paused" to "true", when finished set back to "false".
 
 .. code-block:: bash
 
-   oc patch mcp master --type=merge -p '{"spec": {"paused": true}}'
+   oc patch mcp master --type merge --patch '{"spec": {"paused": true}}'
 
 Force MCP to Update
 -------------------
@@ -382,13 +384,14 @@ BMH Example
 
 .. code-block:: bash
 
-   oc patch bmh <BMH_NAME> --type merge -p '{"metadata":{"finalizers":null}}'
+   oc patch bmh <BMH_NAME> --type merge --patch '{"metadata":{"finalizers":null}}'
 
 .. tip:: for-loop-example
 
    .. code-block:: bash
 
-      for i in $(oc get bmh | grep -v NAME | awk '{print $1}'); do oc patch bmh $i --type merge -p '{"metadata":{"finalizers":null}}'; done
+      for i in $(oc get bmh | grep -v NAME | awk '{print $1}'); do oc patch bmh $i \
+        --type merge --patch '{"metadata":{"finalizers":null}}'; done
 
 Start toolbox (node)
 --------------------
@@ -522,7 +525,8 @@ following commands you can confirm expired certs and resolve the issue.
 
    .. code-block:: yaml
 
-      oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs --no-run-if-empty oc adm certificate approve
+      oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | \
+        xargs --no-run-if-empty oc adm certificate approve
 
    .. important:: **Repeat this step until all pending CSR's are approved!**
 
@@ -740,8 +744,8 @@ getting this right at install time. The following is based on:
 
    .. code-block:: bash
 
-      oc patch Network.operator.openshift.io cluster --type=merge --patch \
-      '{"spec": { "migration": { "mtu": { "network": { "from": 1400, "to": 8900 } , "machine": { "to" : 9000 } } } } }'
+      oc patch Network.operator.openshift.io cluster --type merge \
+        --patch '{"spec": { "migration": { "mtu": { "network": { "from": 1400, "to": 8900 } , "machine": { "to" : 9000 } } } } }'
 
 #. Verify MCP has completed its changes via "watch".
 
@@ -791,8 +795,8 @@ getting this right at install time. The following is based on:
 
    .. code-block:: bash
 
-      oc patch Network.operator.openshift.io cluster --type=merge --patch \
-      '{"spec": { "migration": null, "defaultNetwork":{ "ovnKubernetesConfig": { "mtu": 8900 }}}}'
+      oc patch Network.operator.openshift.io cluster --type merge --patch \
+        '{"spec": { "migration": null, "defaultNetwork":{ "ovnKubernetesConfig": { "mtu": 8900 }}}}'
 
 #. Verify MCP has completed its changes via "watch".
 
@@ -828,16 +832,16 @@ SRIOV Unsupported NIC
 
    .. code-block:: bash
 
-      oc patch sriovoperatorconfig default --type=merge \
-      -n openshift-sriov-network-operator \
-      --patch '{ "spec": { "enableOperatorWebhook": false } }'
+      oc patch sriovoperatorconfig default --type merge \
+        -n openshift-sriov-network-operator \
+        --patch '{ "spec": { "enableOperatorWebhook": false } }'
 
 #. Enable "DEV_MODE" on the sriov subscription.
 
    .. code-block:: bash
 
       oc patch subscription sriov-network-operator -n openshift-sriov-network-operator \
-      --type=merge -p '{"spec": {"config": {"env": [{"name": "DEV_MODE", "value": "TRUE"}]}}}'
+        --type merge --patch '{"spec": {"config": {"env": [{"name": "DEV_MODE", "value": "TRUE"}]}}}'
 
 #. After operator and config-daemon pods restart verify dev mode.
 
@@ -944,7 +948,7 @@ potential issues.
 
 .. code-block:: bash
 
-   oc get pdb -A -o custom-columns='NAMESPACE:metadata.namespace,NAME:metadata.name,MINAVAILABLE:spec.minAvailable,MAXUNAVIALABLE:spec.maxUnavailable,CURRHEALTHY:status.currentHealthy,DESIREDHEALTHY:status.desiredHealthy,EXPECTED:status.expectedPods,DISRUPTIONS:status.disruptionsAllowed' \
+   oc get pdb -A -o custom-columns='NAMESPACE:metadata.namespace,NAME:metadata.name,MINAVAILABLE:spec.minAvailable,MAXUNAVIALABLE:spec.maxUnavailable,CURRHEALTHY:status.currentHealthy,DESIREDHEALTHY:status.desiredHealthy,EXPECTED:status.expectedPods,DISRUPTIONS:status.disruptionsAllowed'
 
 Quick App Deployment & Route
 ------------------------------
@@ -972,18 +976,18 @@ vlan interfaces.
    # Create vlan interfaces on two different bonds across several nodes
 
    for i in {07..29}; do for j in {1..2}; do for k in {200..229}; \
-   do ssh core@ims-$i sudo nmcli con add type vlan con-name bond$j.$k dev bond$j id $k \
-   connection.interface-name bond$j.$k flags 1 ipv4.method disabled ipv6.method disabled; \
-   done; done; done;
+     do ssh core@ims-$i sudo nmcli con add type vlan con-name bond$j.$k dev bond$j id $k \
+     connection.interface-name bond$j.$k flags 1 ipv4.method disabled ipv6.method disabled; \
+     done; done; done;
 
    # Delete vlan interfaces
 
    for i in {07..29}; do for j in {1..2}; do for k in {200..229}; \
-   do ssh core@ims-$i sudo nmcli con delete bond$j.$k; \
-   done; done; done;
+     do ssh core@ims-$i sudo nmcli con delete bond$j.$k; \
+     done; done; done;
 
    # Count vlan interfaces for consistency
 
    for i in {07..29}; do for j in {1..2}; \
-   do echo ims-$i-bond$j && ssh core@ims-$i nmcli con sh | grep bond$j | wc -l; \
-   done; done;
+     do echo ims-$i-bond$j && ssh core@ims-$i nmcli con sh | grep bond$j | wc -l; \
+     done; done;

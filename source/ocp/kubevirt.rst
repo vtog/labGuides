@@ -212,7 +212,8 @@ downloaded and mirrored to your disconnected registry.
 
       .. code-block:: bash
 
-         oc patch hco kubevirt-hyperconverged -n openshift-cnv --type merge -p '{"spec": {"storageImport": {"insecureRegistries": ["mirror.lab.local:8443"]}}}'
+         oc patch hco kubevirt-hyperconverged -n openshift-cnv --type merge \
+           --patch '{"spec": {"storageImport": {"insecureRegistries": ["mirror.lab.local:8443"]}}}'
 
 #. Update the dataImportCronTemplates to use the disconnected registry. Patch
    the following yaml of the "spec:" section of your hyperconverged system.

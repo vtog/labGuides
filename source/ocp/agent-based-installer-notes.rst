@@ -736,7 +736,7 @@ installer will consume the new informantion.
    .. code-block:: bash
 
       wget -qO- https://github.com/projectcalico/calico/releases/download/v3.27.0/ocp.tgz | \
-      tar xvz --strip-components=1 -C ./workdir/openshift
+        tar xvz --strip-components=1 -C ./workdir/openshift
 
 #. Create the ISO
 

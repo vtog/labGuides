@@ -84,7 +84,7 @@ Create Local Registry
    .. code-block:: bash
 
       ./mirror-registry install --quayHostname $quayHostname --quayRoot $quayRoot \
-      --quayStorage $quayStorage --sqliteStorage $sqliteStorage --initPassword $initPassword
+        --quayStorage $quayStorage --sqliteStorage $sqliteStorage --initPassword $initPassword
 
    If ran correctly should see a similar ansible recap.
 
@@ -133,7 +133,7 @@ Create Local Registry
    .. code-block:: bash
 
       ./mirror-registry upgrade --quayHostname $quayHostname --quayRoot $quayRoot \
-      --quayStorage $quayStorage --sqliteStorage $sqliteStorage
+        --quayStorage $quayStorage --sqliteStorage $sqliteStorage
 
 .. tip:: If something went wrong, the following command will **UNINSTALL** the
    registry.
@@ -141,7 +141,7 @@ Create Local Registry
    .. code-block:: bash
 
       ./mirror-registry uninstall --quayRoot $quayRoot --quayStorage $quayStorage \
-      --sqliteStorage $sqliteStorage
+        --sqliteStorage $sqliteStorage
 
 Mirror Images to Local Registry (v2)
 ------------------------------------

@@ -456,9 +456,9 @@ resolves any console errors.
 
    .. code-block:: bash
 
-      oc patch node $NODENAME -p '{"metadata":{"annotations":{"machine.openshift.io/machine": "openshift-machine-api/'$MACHINENAME'"}}}'
+      oc patch node $NODENAME --patch '{"metadata":{"annotations":{"machine.openshift.io/machine": "openshift-machine-api/'$MACHINENAME'"}}}'
 
-      oc patch node $NODENAME -p '{"spec":{"providerID":"baremetalhost:///openshift-machine-api/'$NODENAME'/'$BMHUID'"}}'
+      oc patch node $NODENAME --patch '{"spec":{"providerID":"baremetalhost:///openshift-machine-api/'$NODENAME'/'$BMHUID'"}}'
 
 ETCD
 ^^^^
@@ -656,4 +656,5 @@ running and force a redeployment of this etcd member using the etcd operator.
 
    .. code-block:: bash
 
-      oc patch etcd cluster -p='{"spec": {"forceRedeploymentReason": "single-master-recovery-'"$( date --rfc-3339=ns )"'"}}' --type=merge
+      oc patch etcd cluster --type merge \
+        --patch '{"spec": {"forceRedeploymentReason": "single-master-recovery-'"$( date --rfc-3339=ns )"'"}}'

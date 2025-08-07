@@ -117,8 +117,8 @@ Set the default route
 
    .. code-block:: bash
 
-      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' \
-      | base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${REGROUTE}.crt  > /dev/null
+      oc get secret -n openshift-ingress router-certs-default -o go-template='{{index .data "tls.crt"}}' | \
+        base64 -d | sudo tee /etc/pki/ca-trust/source/anchors/${REGROUTE}.crt  > /dev/null
 
 #. Update the clients local ca-trust
 
@@ -188,15 +188,16 @@ Upload Image
 
       .. code-block:: bash
 
-         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep localhost | sed 's/^localhost\///'); \
-         do podman tag $image $REGROUTE/default/$image; done
+         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | \
+           grep localhost | sed 's/^localhost\///'); \
+           do podman tag $image $REGROUTE/default/$image; done
 
       Remove new tags
 
       .. code-block:: bash
 
-         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v localhost); \
-         do podman rmi $image; done
+         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | \
+           grep -v localhost); do podman rmi $image; done
 
 #. Push local image to OCP registry
 
@@ -211,8 +212,8 @@ Upload Image
 
       .. code-block:: bash
 
-         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | grep -v localhost); \
-         do podman push $image; done
+         for image in $(podman images --format "{{.Repository}}:{{.Tag}}" | \
+           grep -v localhost); do podman push $image; done
 
 #. View image on OCP registry
 
