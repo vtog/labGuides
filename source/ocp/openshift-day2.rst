@@ -410,7 +410,7 @@ has several network tools to help troubleshoot the cluster/node.
 
       cat << EOF > ./.toolboxrc
       REGISTRY=mirror.lab.local:8443
-      IMAGE=rhel9/support-tools
+      IMAGE=rhel10/support-tools:latest
       #IMAGE=centos/tools:latest
       EOF
 
