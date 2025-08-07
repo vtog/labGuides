@@ -32,7 +32,8 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
    .. code-block:: bash
 
       sudo dnf install zsh git rsync NetworkManager-tui firewall-config \
-      cockpit cockpit-machines cockpit-composer util-linux-user
+      cockpit cockpit-machines cockpit-composer util-linux-user \
+      cronie cronie-anacron
 
 #. Enable/start and open firewall for "cockpit" service
 
