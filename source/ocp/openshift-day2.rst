@@ -954,13 +954,59 @@ potential issues.
 Quick App Deployment & Route
 ------------------------------
 
-.. code-block:: bash
+#. Create the new app
 
-   oc new-app --name httpd-1 --image mirror.lab.local:8443/ubi9/httpd-24:latest -n default
+   .. code-block:: bash
 
-.. code-block:: bash
+      oc new-app --name httpd-1 --image mirror.lab.local:8443/ubi10/httpd-24:latest -n default
 
-   oc expose service httpd-1 -n default
+#. Expose the service
+
+   A. ClusterIP
+
+      .. note:: "new-app" automagically created the ClusterIP service. This
+         command will create an OpenShift route.
+
+      .. code-block:: bash
+
+         oc expose service httpd-1 -n default
+
+      .. code-block:: bash
+
+         oc get routes -n default
+
+   #. NodePort
+
+      .. code-block:: bash
+
+         oc expose deployment httpd-1 --name httpd-1-nodeport --type NodePort -n default
+
+      .. code-block:: bash
+
+         oc get svc httpd-1-nodeport -o wide
+
+   #. LoadBalancer
+
+      .. code-block:: bash
+
+         oc expose deployment httpd-1 --name httpd-1-loadbalancer --type LoadBalancer -n default
+
+      .. code-block:: bash
+
+         oc get svc httpd-1-loadbalancer -o wide
+
+#. Confirm app is running and responding
+
+   .. code-block:: bash
+
+      oc run curl -n default -it --rm --image mirror.lab.local:8443/curl/curl:latest -- /bin/sh
+
+   .. code-block:: bash
+
+      curl <service_IP>:8080
+      curl <service_Name>:8080
+      curl <external_IP>:8080
+      curl <node_IP>:NodePort
 
 Manually Add VLANs
 ------------------
