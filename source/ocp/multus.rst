@@ -15,6 +15,177 @@ I found the following helpful as well:
 User Defined Networks
 ---------------------
 
+Two new CRDs:
+
+- Namespace scoped UserDefinedNetwork (UDN):
+  Tenant owners who want to create a network that isolates their namespace
+  from other namespaces.
+
+- Cluster scoped ClusterUserDefinedNetwork (CUDN):
+  Cluster administrator who want to join multiple namespaces as part of the
+  same network.
+
+Each of these CRDs has a field called **topology** which supports three
+options:
+
+- Layer3: OVN-Kubernetes will create a layer3 type logical network topology.
+  Can be created as primary or secondary network roles for a pod.
+
+- Layer2: OVN-Kubernetes will create a layer2 type logical network topology.
+  Can be created as primary or secondary network roles for a pod.
+
+- Localnet: OVN-Kubernetes will create a localnet type logical network
+  topology. Can be created only as a secondary network role for a pod.
+
+Each of these CRDs has a field called **role** which supports two options:
+
+- Primary:
+  The network will act as the primary network for the pod and all default
+  traffic will pass through this interface.
+
+- Secondary:
+  The network will act as only a secondary network for the pod and only pod
+  traffic that is part of the secondary network may be routed through this
+  interface.
+
+Namespace Scope
+~~~~~~~~~~~~~~~
+
+.. important:: Choose the topology and role that fits your needs. In my
+   examples I'm using a **Primary Layer3** interface.
+
+#. Create the namespace with the **mandatory label**.
+
+   .. code-block:: yaml
+      :emphasize-lines: 5,7
+
+      cat << EOF > ./ns-udn1.yaml
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: udn1
+        labels:
+          k8s.ovn.org/primary-user-defined-network: ""
+      EOF
+
+   .. code-block:: bash
+
+      oc create -f ./ns-udn1.yaml
+
+#. Create a user defined network.
+
+   .. code-block:: yaml
+      :emphasize-lines: 3,5,6,8-10,12,13
+
+      cat << EOF > ./udn-udn1.yaml
+      apiVersion: k8s.ovn.org/v1
+      kind: UserDefinedNetwork
+      metadata:
+        name: udn1
+        namespace: udn1
+      spec:
+        topology: Layer3
+        layer3:
+          role: Primary
+          subnets:
+          - cidr: 10.100.0.0/16
+            hostSubnet: 24
+      EOF
+
+   .. code-block:: bash
+
+      oc create -f ./udn-udn1.yaml
+
+Cluster Scope
+~~~~~~~~~~~~~
+
+.. important:: Choose the topology and role that fits your needs. In my
+   examples I'm using a **Primary Layer3** interface.
+
+#. Create one or more namespace's with the **mandatory label**.
+
+   .. code-block:: yaml
+      :emphasize-lines: 5,7,12,14
+
+      cat << EOF > ./ns-udns.yaml
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: udn1
+        labels:
+          k8s.ovn.org/primary-user-defined-network: ""
+      ---
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: udn2
+        labels:
+          k8s.ovn.org/primary-user-defined-network: ""
+      EOF
+
+   .. code-block:: bash
+
+      oc create -f ./ns-udns.yaml
+
+#. Create **Cluster** User Defined Network
+
+   .. code-block:: yaml
+      :emphasize-lines: 3,5,11,13-15,17,18
+
+      cat << EOF > ./cudn-cudn1.yaml
+      apiVersion: k8s.ovn.org/v1
+      kind: ClusterUserDefinedNetwork
+      metadata:
+        name: cudn1
+      spec:
+        namespaceSelector:
+          matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values: ["udn1", "udn2"]
+        network:
+          topology: Layer3
+          layer3:
+            role: Primary
+            subnets:
+            - cidr: 10.200.0.0/16
+              hostSubnet: 24
+      EOF
+
+   .. code-block:: bash
+
+      oc create -f ./cudn-cudn1.yaml
+
+Localnet Topology
+~~~~~~~~~~~~~~~~~
+
+.. warning:: **Unfinished - Work in Progress**
+
+.. important:: For Localnet the **Role** must be **Secondary**.
+
+#. Localnet
+
+   .. code-block:: yaml
+      :emphasize-lines: 3,5,11,13-15
+
+      cat << EOF > ./cudn-localnet1.yaml
+      apiVersion: k8s.ovn.org/v1
+      kind: ClusterUserDefinedNetwork
+      metadata:
+        name: localnet1
+      spec:
+        namespaceSelector:
+          matchExpressions:
+          - key: kubernetes.io/metadata.name
+            operator: In
+            values: ["udn1", "udn2"]
+        network:
+          topology: Localnet
+          localnet:
+            role: Secondary
+            physicalNetworkName: enp9s0
+      EOF
+
 Network Attached Definitions
 ----------------------------
 
@@ -104,7 +275,7 @@ assigned interfaces.
    .. code-block:: bash
 
       oc patch deployment <deployment_name> -n <name_space> \
-        --type merge -p '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-dhcp"}}}}}'
+        --type merge --patch '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-dhcp"}}}}}'
 
 MACVLAN w/ Whereabouts
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -193,7 +364,7 @@ additional network without the use of a network DHCP server.
    .. code-block:: bash
 
       oc patch deployment <deployment_name> -n <name_space> \
-        --type merge -p '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-whereabouts"}}}}}'
+        --type merge --patch '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-whereabouts"}}}}}'
 
 #. Check all ip reservations
 
@@ -253,4 +424,4 @@ Statically allocate an IP for the container.
    .. code-block:: bash
 
       oc patch deployment <deployment_name> -n <name_space> \
-        --type merge -p '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-static"}}}}}'
+        --type merge --patch '{"spec": {"template": {"metadata": {"annotations": {"k8s.v1.cni.cncf.io/networks": "macvlan-static"}}}}}'
