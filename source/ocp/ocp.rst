@@ -20,5 +20,6 @@ OpenShift Lab Guides
    local-mirror-registry
    node-mirror-registry
    multus
+   metallb
    nfs
    sriov
