@@ -54,7 +54,7 @@ disconnected registry and can be found in the
 
       .. code-block:: bash
 
-         DIGEST="$(oc adm release info quay.io/openshift-release-dev/ocp-release:${OCP_RELEASE_VERSION}-${OCP_ARCHITECTURE} | s
+         DIGEST=$(oc adm release info quay.io/openshift-release-dev/ocp-release:${OCP_RELEASE_VERSION}-${OCP_ARCHITECTURE} | sed -n 's/Pull From: .*@//p')
 
    #. DIGEST Algorithm
 
@@ -72,13 +72,13 @@ disconnected registry and can be found in the
 
       .. code-block:: bash
 
-         SIGNATURE_BASE64=$(curl -s "https://mirror.openshift.com/pub/openshift-v4/signatures/openshift/release/${DIGEST_ALGO}=
+         SIGNATURE_BASE64=$(curl -s "https://mirror.openshift.com/pub/openshift-v4/signatures/openshift/release/${DIGEST_ALGO}=${DIGEST_ENCODED}/signature-1" | base64 -w0 && echo)
 
 #. Create the config map
 
-   .. code-block:: bash
+   .. code-block:: yaml
 
-      cat << EOF > signature-${OCP_RELEASE_VERSION}.yaml
+      cat << EOF | oc create -f -
       apiVersion: v1
       kind: ConfigMap
       metadata:
@@ -89,12 +89,6 @@ disconnected registry and can be found in the
       binaryData:
         ${DIGEST_ALGO}-${DIGEST_ENCODED}: ${SIGNATURE_BASE64}
       EOF
-
-#. Apply config map to cluster
-
-   .. code-block:: bash
-
-      oc apply -f signature-${OCP_RELEASE_VERSION}.yaml
 
 Configure Openshift Update Service
 ----------------------------------
