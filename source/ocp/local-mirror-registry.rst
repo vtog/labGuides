@@ -223,7 +223,7 @@ Mirror Images to Local Registry (v2)
 
    .. code-block:: yaml
       :caption: isc-4.18.yaml
-      :emphasize-lines: 1,4,8,10,11
+      :emphasize-lines: 1,4,8,10,11,14
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
@@ -238,10 +238,14 @@ Mirror Images to Local Registry (v2)
             maxVersion: 4.18.19
             shortestPath: false
           graph: false
+        additionalImages:
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.18
+        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.18
+        - name: registry.redhat.io/openshift4/dpdk-base-rhel9:v4.18
 
    .. code-block:: yaml
       :caption: isc-4.18-operators.yaml
-      :emphasize-lines: 1,4,5,33,37,38
+      :emphasize-lines: 1,4,5,33
 
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
@@ -278,9 +282,6 @@ Mirror Images to Local Registry (v2)
         - catalog: registry.redhat.io/redhat/certified-operator-index:v4.18
           packages:
           - name: gpu-operator-certified
-        additionalImages:
-        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.18
-        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.18
 
    .. code-block:: yaml
       :caption: isc-additional-images.yaml
@@ -290,25 +291,21 @@ Mirror Images to Local Registry (v2)
       apiVersion: mirror.openshift.io/v2alpha1
       mirror:
         additionalImages:
-        - name: registry.redhat.io/ubi8/ubi:latest
-        - name: registry.redhat.io/ubi9/ubi:latest
-        - name: registry.redhat.io/ubi9/httpd-24:latest
-        - name: registry.redhat.io/ubi9/nginx-122:latest
-        - name: registry.redhat.io/rhel8/support-tools:latest
-        - name: registry.redhat.io/rhel9/support-tools:latest
-        - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
+        - name: registry.redhat.io/ubi10/ubi:latest
+        - name: registry.redhat.io/ubi10/httpd-24:latest
+        - name: registry.redhat.io/ubi10/nginx-126:latest
+        - name: registry.redhat.io/rhel10/support-tools:latest
         - name: ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:latest
         - name: quay.io/openshift-scale/etcd-perf:latest
         - name: docker.io/centos/tools:latest
         - name: docker.io/f5devcentral/f5-hello-world:latest
-        - name: docker.io/library/httpd:latest
-        - name: docker.io/library/nginx:latest
         - name: registry.redhat.io/rhel10/rhel-guest-image:latest
         - name: registry.redhat.io/rhel9/rhel-guest-image:latest
         - name: registry.redhat.io/rhel8/rhel-guest-image:latest
         - name: quay.io/containerdisks/fedora:latest
         - name: quay.io/containerdisks/centos-stream:9
         - name: quay.io/containerdisks/centos-stream:10
+        - name: quay.io/curl/curl:latest
 
    .. tip:: To discover operators by their package name, applicable channels,
       and versions use the following commands.
