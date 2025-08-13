@@ -8,9 +8,11 @@ understanding see the official documentation:
 I found the following helpful as well:
 `CNI Plugins <https://www.cni.dev/plugins/current/>`_
 
-.. important:: At this time you can NOT create a service with this additional
-   endpoint. Only the default Network IP / endpoint is used. The multus-service
-   project is deprecated. Will update when a viable solution is available.
+.. important:: You can NOT use a ClusterIP service with these endpoints. Only
+   the default Network IP can be exposed with a Route.
+
+   For external access use NodePort and LoadBalancer service to expose the
+   endpoint.
 
 User Defined Networks
 ---------------------
