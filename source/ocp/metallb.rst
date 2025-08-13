@@ -38,7 +38,7 @@ L2
 
    .. code-block:: yaml
 
-      cat << EOF > ./ipaddrpool-v132.yaml
+      cat << EOF | oc create -f -
       apiVersion: metallb.io/v1beta1
       kind: IPAddressPool
       metadata:
@@ -49,15 +49,11 @@ L2
         - 192.168.132.225-192.168.132.229
       EOF
 
-   .. code-block:: bash
-
-      oc create -f ./ipaddrpool-v132.yaml
-
 #. Create the L2 Advertisement
 
    .. code-block:: yaml
 
-      cat << EOF > ./l2-adv-v132.yaml
+      cat << EOF | oc create -f -
       kind: L2Advertisement
       apiVersion: metallb.io/v1beta1
       metadata:
@@ -68,10 +64,6 @@ L2
         - ipaddrpool-v132
       EOF
 
-   .. code-block:: bash
-
-      oc create -f ./l2-adv-v132.yaml
-
 BGP
 ---
 
@@ -81,7 +73,7 @@ BGP
 
    .. code-block:: yaml
 
-      cat << EOF > ./ipaddrpool-v245.yaml
+      cat << EOF | oc create -f -
       apiVersion: metallb.io/v1beta1
       kind: IPAddressPool
       metadata:
@@ -92,15 +84,11 @@ BGP
         - 192.168.245.201-192.168.245.225
       EOF
 
-   .. code-block:: bash
-
-      oc create -f ./ipaddrpool-v245.yaml
-
 #. Create the BGP Peer
 
    .. code-block:: yaml
 
-      cat << EOF > ./bgp-peer-v245
+      cat << EOF | oc create -f -
       kind: BGPPeer
       apiVersion: metallb.io/v1beta2
       metadata:
@@ -112,15 +100,11 @@ BGP
         peerAddress: 192.168.132.1
       EOF
 
-   .. code-block:: bash
-
-      oc create -f ./bgp-peer-v245
-
 #. Creat the BGP Advertisement
 
    .. code-block:: yaml
 
-      cat << EOF > ./bgp-adv-v245
+      cat << EOF | oc create -f -
       kind: BGPAdvertisement
       apiVersion: metallb.io/v1beta1
       metadata:
@@ -132,7 +116,3 @@ BGP
         peers:
         - bgp-peer-v245
       EOF
-
-   .. code-block:: bash
-
-      oc create -f ./bgp-adv-v245

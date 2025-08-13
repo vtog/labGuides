@@ -17,7 +17,7 @@ Create the PV
    .. code-block:: bash
       :emphasize-lines: 5, 8, 11-13
 
-      cat << EOF > ./pv-bfg-nfs.yaml
+      cat << EOF | oc create -f -
       apiVersion: v1
       kind: PersistentVolume
       metadata:
@@ -32,12 +32,6 @@ Create the PV
           server: 192.168.1.72
         persistentVolumeReclaimPolicy: Retain
       EOF
-
-#. Create the new PV
-
-   .. code-block:: bash
-
-      oc create -f pv-bfg-nfs1.yaml
 
 #. Verify the PV
 
@@ -58,7 +52,7 @@ Create the PVC
    .. code-block:: bash
       :emphasize-lines: 13, 16
 
-      cat << EOF > ./pvc-image-registry-storage.yaml
+      cat << EOF | oc create -f -
       apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
@@ -76,12 +70,6 @@ Create the PVC
             storage: 200Gi
         volumeMode: Filesystem
       EOF
-
-#. Create the new PVC
-
-   .. code-block:: bash
-
-      oc create -f pvc-image-registry-storage.yaml
 
 #. Verifiy the PVC
 

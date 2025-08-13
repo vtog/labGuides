@@ -59,7 +59,7 @@ Namespace Scope
    .. code-block:: yaml
       :emphasize-lines: 5,7
 
-      cat << EOF > ./ns-udn1.yaml
+      cat << EOF | oc create -f -
       apiVersion: v1
       kind: Namespace
       metadata:
@@ -68,16 +68,12 @@ Namespace Scope
           k8s.ovn.org/primary-user-defined-network: ""
       EOF
 
-   .. code-block:: bash
-
-      oc create -f ./ns-udn1.yaml
-
 #. Create a user defined network.
 
    .. code-block:: yaml
       :emphasize-lines: 3,5,6,8-10,12,13
 
-      cat << EOF > ./udn-udn1.yaml
+      cat << EOF | oc create -f -
       apiVersion: k8s.ovn.org/v1
       kind: UserDefinedNetwork
       metadata:
@@ -92,10 +88,6 @@ Namespace Scope
             hostSubnet: 24
       EOF
 
-   .. code-block:: bash
-
-      oc create -f ./udn-udn1.yaml
-
 Cluster Scope
 ~~~~~~~~~~~~~
 
@@ -107,7 +99,7 @@ Cluster Scope
    .. code-block:: yaml
       :emphasize-lines: 5,7,12,14
 
-      cat << EOF > ./ns-udns.yaml
+      cat << EOF | oc create -f -
       apiVersion: v1
       kind: Namespace
       metadata:
@@ -123,16 +115,12 @@ Cluster Scope
           k8s.ovn.org/primary-user-defined-network: ""
       EOF
 
-   .. code-block:: bash
-
-      oc create -f ./ns-udns.yaml
-
 #. Create **Cluster** User Defined Network
 
    .. code-block:: yaml
       :emphasize-lines: 3,5,11,13-15,17,18
 
-      cat << EOF > ./cudn-cudn1.yaml
+      cat << EOF | oc create -f -
       apiVersion: k8s.ovn.org/v1
       kind: ClusterUserDefinedNetwork
       metadata:
@@ -152,10 +140,6 @@ Cluster Scope
               hostSubnet: 24
       EOF
 
-   .. code-block:: bash
-
-      oc create -f ./cudn-cudn1.yaml
-
 Localnet Topology
 ~~~~~~~~~~~~~~~~~
 
@@ -168,7 +152,7 @@ Localnet Topology
    .. code-block:: yaml
       :emphasize-lines: 3,5,11,13-15
 
-      cat << EOF > ./cudn-localnet1.yaml
+      cat << EOF | oc create -f -
       apiVersion: k8s.ovn.org/v1
       kind: ClusterUserDefinedNetwork
       metadata:
@@ -246,7 +230,7 @@ assigned interfaces.
    .. code-block:: yaml
       :emphasize-lines: 5,6,16
 
-      cat << EOF > ./macvlan-dhcp.yaml
+      cat << EOF | oc create -f -
       apiVersion: k8s.cni.cncf.io/v1
       kind: NetworkAttachmentDefinition
       metadata:
@@ -265,10 +249,6 @@ assigned interfaces.
             }
           }
       EOF
-
-   .. code-block:: bash
-
-      oc create -f ./macvlan-dhcp.yaml
 
 #. Add the annotation to the deployment.
 
@@ -328,7 +308,7 @@ additional network without the use of a network DHCP server.
    .. code-block:: yaml
       :emphasize-lines: 5,6,16
 
-      cat << EOF > ./macvlan-whereabouts.yaml
+      cat << EOF | oc create -f -
       apiVersion: k8s.cni.cncf.io/v1
       kind: NetworkAttachmentDefinition
       metadata:
@@ -354,10 +334,6 @@ additional network without the use of a network DHCP server.
             }
           }
       EOF
-
-   .. code-block:: bash
-
-      oc create -f ./macvlan-whereabouts.yaml
 
 #. Add the annotation to the deployment.
 
@@ -386,7 +362,7 @@ Statically allocate an IP for the container.
    .. code-block:: yaml
       :emphasize-lines: 5,6,16
 
-      cat << EOF > ./macvlan-static.yaml
+      cat << EOF | oc create -f -
       apiVersion: k8s.cni.cncf.io/v1
       kind: NetworkAttachmentDefinition
       metadata:
@@ -414,10 +390,6 @@ Statically allocate an IP for the container.
             }
           }
       EOF
-
-   .. code-block:: bash
-
-      oc create -f ./macvlan-static.yaml
 
 #. Add the annotation to the deployment.
 
