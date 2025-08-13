@@ -60,13 +60,13 @@ disconnected registry and can be found in the
 
       .. code-block:: bash
 
-         DIGEST_ALGO="${DIGEST%%:*}"
+         DIGEST_ALGO=${DIGEST%%:*}
 
    #. DIGEST Signature
 
       .. code-block:: bash
 
-         DIGEST_ENCODED="${DIGEST#*:}"
+         DIGEST_ENCODED=${DIGEST#*:}
 
    #. Image Signature
 
