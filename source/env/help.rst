@@ -45,6 +45,17 @@ Force Reboot (Last Resort)
 
    sudo systemctl reboot --force --force
 
+Mount CIFS
+
+.. code-block:: bash
+
+   sudo dnf install cifs-utils
+
+.. code-block:: bash
+
+   sudo mount -t cifs -o file_mode=0777,dir_mode=0777,rw,username=administrator,password=<passwd> \
+   //192.168.1.190/share /mnt/win2k25
+
 Create auth key
 ---------------
 
