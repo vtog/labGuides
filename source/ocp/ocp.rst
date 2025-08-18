@@ -5,21 +5,21 @@ OpenShift Lab Guides
    :maxdepth: 1
    :caption: Content:
 
+   add-node
+   multus
    acm-notes
-   kubevirt
    agent-based-installer-notes
    appliance-based-installer-notes
    assisted-installer-notes
-   ipi-notes
-   add-node
-   upgrade-cluster
-   openshift-day2
-   lso-quick-start
-   odf-quick-start
-   image-registry
-   local-mirror-registry
-   node-mirror-registry
-   multus
-   metallb
-   nfs
    sriov
+   nfs
+   image-registry
+   ipi-notes
+   local-mirror-registry
+   lso-quick-start
+   metallb
+   node-mirror-registry
+   odf-quick-start
+   openshift-day2
+   kubevirt
+   upgrade-cluster

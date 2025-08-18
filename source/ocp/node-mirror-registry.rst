@@ -1,9 +1,11 @@
 Node Mirror & Registry
 ======================
 
-.. warning:: This guide is unsupported and post 4.14.x unnecessary. Currently
-   in tech preview, "OpenShift-based Appliance Builder" is the way forward.
-   See my lab guide and official documentation.
+.. warning:: **DEPRECATED**
+
+   This guide is **unsupported** and post 4.14.x **unnecessary**.
+   Currently in tech preview, "OpenShift-based Appliance Builder" is the way
+   forward. See my lab guide and official documentation.
 
    `Appliance-Based Install Notes <../ocp/appliance-based-installer-notes.html>`_
 
