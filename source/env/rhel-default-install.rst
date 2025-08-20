@@ -423,18 +423,14 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       # Create Zsh Shell Completion
       sudo cp extra/completions/_alacritty /usr/share/zsh/site-functions
 
-Broken Defaults
----------------
+.. tip:: I ran into an issue where the default /tmp size caused an issue with
+   oc mirror, needing more space. Removing this default puts /tmp back in root.
 
-#. Disable automatic mounting of tmpfs to /tmp by systemd.
+   Disable automatic mounting of tmpfs to /tmp by systemd.
 
-   .. note:: I ran into an issue where the default /tmp size caused an issue
-      with oc mirror. Needed more space. Removing this default puts /tmp back
-      in root.
+   .. code-block:: bash
 
-  .. code-block:: bash
-
-     systemctl mask tmp.mount
+      systemctl mask tmp.mount
 
 Upgrade Fedora
 --------------
@@ -510,3 +506,105 @@ Upgrade RHEL
       sudo dnf autoremove
       sudo dnf clean all
       sudo dnf update --refresh -y
+
+Logical Volume Management
+-------------------------
+
+Create the logical volume
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Create the physical volume.
+
+   .. code-block:: bash
+
+      sudo pvcreate /dev/nvme1n1 /dev/nvme2n1
+
+   Show newly created pv's
+
+   .. code-block:: bash
+
+      sudo pvs
+
+#. Create the volume group.
+
+   .. tip:: Use ``-s`` to set physicalextentsize Size[m|UNIT]
+
+   .. code-block:: bash
+
+      sudo vgcreate <VG_NAME> /dev/nvme1n1 /dev/nvme2n1
+
+   Show newly created vg's
+
+   .. code-block:: bash
+
+      sudo vgs
+
+#. Create the logical volume.
+
+   .. tip:: Use ``-L`` to set Size[m|UNIT] or ``-l 100%FREE`` for percentage
+
+   .. code-block:: bash
+
+      sudo lvcreate -l 100%FREE --name <LV_NAME> <VG_NAME>
+
+   Show newly created lv's
+
+   .. code-block:: bash
+
+      sudo lvs
+
+#. Create the filesystem.
+
+   .. tip:: Add mount to ``/etc/fstab``
+
+   .. code-block:: bash
+
+      mkfs.xfs /dev/<VG_NAME>/<LV_NAME>
+
+      mount /dev/<VG_NAME>/<LV_NAME> <MOUNT_POINT>
+
+Extend the logical volume
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Create the physical volume.
+
+   .. code-block:: bash
+
+      sudo pvcreate /dev/nvme3n1
+
+#. Extend the volume group.
+
+   .. code-block:: bash
+
+      sudo vgextend <VG_NAME> /dev/nvme3n1
+
+#. Extend the logical volume.
+
+   .. tip:: Use ``-L`` to set Size[m|UNIT] or ``-l 100%FREE`` for percentage
+
+      If filesystem use ``-r`` to resizefs
+
+   .. code-block:: bash
+
+      sudo lvextend -l +100%FREE /dev/<VG_NAME>/<LV_NAME>
+
+Remove the logical volume
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Remove the logical volume.
+
+   .. code-block:: bash
+
+      sudo lvremove /dev/<VG_NAME>/<LV_NAME>
+
+#. Remove the volume group.
+
+   .. code-block:: bash
+
+      sudo vgremove <VG_NAME>
+
+#. Remove the physical volume.
+
+   .. code-block:: bash
+
+      sudo pvremove /dev/nvme1n1 /dev/nvme2n1
