@@ -223,8 +223,9 @@ Mirror Images to Local Registry (v2)
 
    .. code-block:: yaml
       :caption: isc-4.18.yaml
-      :emphasize-lines: 1,4,8,10,11,14
+      :emphasize-lines: 2,4,5,8-12,15
 
+      cat << EOF > /mirror/oc-mirror/isc-4.18.yaml
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
       mirror:
@@ -242,11 +243,13 @@ Mirror Images to Local Registry (v2)
         - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.18
         - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.18
         - name: registry.redhat.io/openshift4/dpdk-base-rhel9:v4.18
+      EOF
 
    .. code-block:: yaml
       :caption: isc-4.18-operators.yaml
-      :emphasize-lines: 1,4,5,33
+      :emphasize-lines: 2,4-6,34
 
+      cat << EOF > /mirror/oc-mirror/isc-4.18-operators.yaml
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
       mirror:
@@ -282,11 +285,13 @@ Mirror Images to Local Registry (v2)
         - catalog: registry.redhat.io/redhat/certified-operator-index:v4.18
           packages:
           - name: gpu-operator-certified
+      EOF
 
    .. code-block:: yaml
       :caption: isc-additional-images.yaml
-      :emphasize-lines: 1,4
+      :emphasize-lines: 2,4,5
 
+      cat << EOF > /mirror/oc-mirror/isc-additional-images.yaml
       kind: ImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
       mirror:
@@ -306,6 +311,7 @@ Mirror Images to Local Registry (v2)
         - name: quay.io/containerdisks/centos-stream:9
         - name: quay.io/containerdisks/centos-stream:10
         - name: quay.io/curl/curl:latest
+      EOF
 
    .. tip:: To discover operators by their package name, applicable channels,
       and versions use the following commands.
@@ -397,8 +403,10 @@ following two step process.
    the process by platform, operators, and additionalImages.
 
    .. code-block:: yaml
-      :caption: isc-4.18.yaml
+      :caption: delete-isc-4.18.yaml
+      :emphasize-lines: 2,4,5,8-12,15
 
+      cat << EOF > /mirror/oc-mirror/delete-isc-4.18.yaml
       kind: DeleteImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
       delete:
@@ -409,10 +417,17 @@ following two step process.
           - name: stable-4.18
             minVersion: 4.18.19
             maxVersion: 4.18.19
+        additionalImages:
+        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.18
+        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.18
+        - name: registry.redhat.io/openshift4/dpdk-base-rhel9:v4.18
+      EOF
 
    .. code-block:: yaml
-      :caption: isc-4.18-operators.yaml
+      :caption: delete-isc-4.18-operators.yaml
+      :emphasize-lines: 2,4-6,34
 
+      cat << EOF > /mirror/oc-mirror/delete-isc-4.18-operators.yaml
       kind: DeleteImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
       delete:
@@ -448,36 +463,33 @@ following two step process.
         - catalog: registry.redhat.io/redhat/certified-operator-index:v4.18
           packages:
           - name: gpu-operator-certified
-        additionalImages:
-        - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.18
-        - name: registry.redhat.io/openshift4/ztp-site-generate-rhel8:v4.18
+      EOF
 
    .. code-block:: yaml
-      :caption: isc-additional-images.yaml
+      :caption: delete-isc-additional-images.yaml
+      :emphasize-lines: 2,4,5
 
-      kind: ImageSetConfiguration
+      cat << EOF > /mirror/oc-mirror/delete-isc-additional-images.yaml
+      kind: DeleteImageSetConfiguration
       apiVersion: mirror.openshift.io/v2alpha1
-      mirror:
+      delete:
         additionalImages:
-        - name: registry.redhat.io/ubi8/ubi:latest
-        - name: registry.redhat.io/ubi9/ubi:latest
-        - name: registry.redhat.io/ubi9/httpd-24:latest
-        - name: registry.redhat.io/ubi9/nginx-122:latest
-        - name: registry.redhat.io/rhel8/support-tools:latest
-        - name: registry.redhat.io/rhel9/support-tools:latest
-        - name: registry.redhat.io/openshift4/dpdk-base-rhel8:latest
+        - name: registry.redhat.io/ubi10/ubi:latest
+        - name: registry.redhat.io/ubi10/httpd-24:latest
+        - name: registry.redhat.io/ubi10/nginx-126:latest
+        - name: registry.redhat.io/rhel10/support-tools:latest
         - name: ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:latest
         - name: quay.io/openshift-scale/etcd-perf:latest
         - name: docker.io/centos/tools:latest
         - name: docker.io/f5devcentral/f5-hello-world:latest
-        - name: docker.io/library/httpd:latest
-        - name: docker.io/library/nginx:latest
         - name: registry.redhat.io/rhel10/rhel-guest-image:latest
         - name: registry.redhat.io/rhel9/rhel-guest-image:latest
         - name: registry.redhat.io/rhel8/rhel-guest-image:latest
         - name: quay.io/containerdisks/fedora:latest
         - name: quay.io/containerdisks/centos-stream:9
         - name: quay.io/containerdisks/centos-stream:10
+        - name: quay.io/curl/curl:latest
+      EOF
 
 #. Delete phase 1 (generate)
 
