@@ -61,7 +61,6 @@ Server
 
       sudo firewall-cmd --add-service=nfs --permanent
       sudo firewall-cmd --reload
-
       sudo firewall-cmd --list-all
 
    .. note:: For older nfs clients you may need to open the following ports

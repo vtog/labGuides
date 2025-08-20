@@ -114,6 +114,7 @@ Create Local Registry
       sudo update-ca-trust extract
       sudo firewall-cmd --add-port=8443/tcp --permanent
       sudo firewall-cmd --reload
+      sudo firewall-cmd --list-all
 
 #. Test mirror availability via cli. The following command should return
    "Login Succeeded!" if everything is working.

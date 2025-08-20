@@ -63,6 +63,7 @@ Containerize Sushy-Tools
 
       sudo firewall-cmd --add-port=8000/tcp --permanent
       sudo firewall-cmd --reload
+      sudo firewall-cmd --list-all
 
 #. Test connectivity
 

@@ -111,6 +111,7 @@ network booting.
       sudo firewall-cmd --add-port=10809/tcp --permanent
       sudo firewall-cmd --add-port=26000/tcp --permanent
       sudo firewall-cmd --reload
+      sudo firewall-cmd --list-all
 
 Simulate Latency
 ----------------
