@@ -94,6 +94,9 @@ Create Local Registry
    the config file, "/mirror/ocp4/quay-config/config.yaml" and restart
    quay-app.
 
+   .. tip:: You can also enable dual stack with
+      ``FEATURE_LISTEN_IP_VERSION: dual-stack``
+
    .. code-block:: bash
 
       systemctl --user restart quay-app.service
