@@ -134,7 +134,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
             interfaces:
               - name: enp1s0
                 type: ethernet
-                mtu: 9000
+                mtu: 1500
                 state: up
                 ipv4:
                   enabled: true
@@ -179,7 +179,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
             interfaces:
               - name: enp1s0
                 type: ethernet
-                mtu: 9000
+                mtu: 1500
                 state: up
               - name: enp1s0.122
                 type: vlan
@@ -232,15 +232,15 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
             interfaces:
               - name: enp1s0
                 type: ethernet
-                mtu: 9000
+                mtu: 1500
                 state: up
               - name: enp2s0
                 type: ethernet
-                mtu: 9000
+                mtu: 1500
                 state: up
               - name: bond0
                 type: bond
-                mtu: 9000
+                mtu: 1500
                 state: up
                 link-aggregation:
                   mode: active-backup
@@ -698,7 +698,7 @@ installer will consume the new informantion.
             interfaces:
               - name: enp1s0
                 type: ethernet
-                mtu: 9000
+                mtu: 1500
                 state: up
               - name: enp1s0.122
                 type: vlan
@@ -825,7 +825,7 @@ IPv6 Only Example
          interfaces:
            - name: enp1s0
              type: ethernet
-             mtu: 9000
+             mtu: 1500
              state: up
            - name: enp1s0.122
              type: vlan

@@ -159,7 +159,7 @@ The following are static network configurations when manually configuring
    interfaces:
    - name: enp1s0
      type: ethernet
-     mtu: 9000
+     mtu: 1500
      state: up
      ipv4:
        enabled: true
@@ -189,7 +189,7 @@ The following are static network configurations when manually configuring
    interfaces:
    - name: enp1s0
      type: ethernet
-     mtu: 9000
+     mtu: 1500
      state: up
    - name: enp1s0.122
      type: vlan
@@ -225,15 +225,15 @@ The following are static network configurations when manually configuring
    interfaces:
    - name: enp1s0
      type: ethernet
-     mtu: 9000
+     mtu: 1500
      state: up
    - name: enp2s0
      type: ethernet
-     mtu: 9000
+     mtu: 1500
      state: up
    - name: bond0
      type: bond
-     mtu: 9000
+     mtu: 1500
      state: up
      link-aggregation:
        mode: active-backup

@@ -8,8 +8,8 @@ install-config.yaml I used with KVM.
 
 .. important:: I truncated the yaml example. Be sure to add all the hosts.
 
-#. Download the latest v4.12.x openshift-install utility found here:
-   `OpenShift mirror site <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest>`_
+#. Download the latest openshift-install utility found here:
+   `OpenShift mirror site <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/>`_
 
 #. Extract install utility
 
@@ -77,7 +77,7 @@ install-config.yaml I used with KVM.
                   - name: enp1s0
                     type: ethernet
                     state: up
-                    mtu: 9000
+                    mtu: 1500
                     ipv4:
                       enabled: true
                       dhcp: false
@@ -183,7 +183,7 @@ Remote Worker Node Example
                - name: enp1s0
                  type: ethernet
                  state: up
-                 mtu: 9000
+                 mtu: 1500
                - name: enp1s0.122
                  type: vlan
                  state: up
@@ -225,7 +225,7 @@ Remote Worker Node Example
                - name: enp1s0
                  type: ethernet
                  state: up
-                 mtu: 9000
+                 mtu: 1500
                - name: enp1s0.122
                  type: vlan
                  state: up
@@ -267,7 +267,7 @@ Remote Worker Node Example
                - name: enp1s0
                  type: ethernet
                  state: up
-                 mtu: 9000
+                 mtu: 1500
                - name: enp1s0.122
                  type: vlan
                  state: up
@@ -309,7 +309,7 @@ Remote Worker Node Example
                - name: enp1s0
                  type: ethernet
                  state: up
-                 mtu: 9000
+                 mtu: 1500
                - name: enp1s0.132
                  type: vlan
                  state: up
@@ -351,7 +351,7 @@ Remote Worker Node Example
                - name: enp1s0
                  type: ethernet
                  state: up
-                 mtu: 9000
+                 mtu: 1500
                - name: enp1s0.132
                  type: vlan
                  state: up

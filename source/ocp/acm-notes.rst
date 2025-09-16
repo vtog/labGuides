@@ -446,7 +446,7 @@ Together it creates three objects in the "output" directory.
           interfaces:
             - name: enp1s0
               type: ethernet
-              mtu: 9000
+              mtu: 1500
               state: up
             - name: enp1s0.122
               type: vlan
@@ -744,7 +744,7 @@ cluster. When finished you'll have a SNO cluster running.
        interfaces:
          - name: enp1s0
            type: ethernet
-           mtu: 9000
+           mtu: 1500
            state: up
          - name: enp1s0.132
            type: vlan
