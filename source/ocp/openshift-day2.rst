@@ -1014,9 +1014,10 @@ Manually Add VLANs
 Created the following for loops to create, delete, and check several bonded
 vlan interfaces.
 
-.. note:: Should be able to handle this with nmstate today. At the time, v4.12,
-   it was defaulting to the wrong vlan flag "0" and nmstate could not change
-   the setting. Manually building the vlans was the only option.
+.. note:: Should be able to handle this with nmstate today (see example below).
+   At the time, v4.12, it was defaulting to the wrong vlan flag "0" and
+   nmstate could not change the setting. Manually building the vlans was the
+   only option.
 
 .. code-block:: bash
 
@@ -1038,3 +1039,47 @@ vlan interfaces.
    for i in {07..29}; do for j in {1..2}; \
      do echo ims-$i-bond$j && ssh core@ims-$i nmcli con sh | grep bond$j | wc -l; \
      done; done;
+
+.. code-block:: yaml
+
+   apiVersion: nmstate.io/v1
+   kind: NodeNetworkConfigurationPolicy
+   metadata:
+     name: worker-nncp
+   spec:
+     machineConfigPoolSelector:
+       pools.operator.machineconfiguration.openshift.io/worker: ""
+     nodeSelector:
+       node-role.kubernetes.io/worker: ""
+     desiredState:
+       interfaces:
+       - name: bond1
+         type: bond
+         state: up
+         mtu: 9216
+         copy-mac-from: ens1f0np0
+         ipv4:
+           dhcp: false
+           enabled: false
+         ipv6:
+           dhcp: false
+           enabled: false
+         link-aggregation:
+           mode: balance-rr
+           options:
+             miimon: '140'
+           port:
+           - ens1f0np0
+           - ens1f1np1
+       - name: bond1.200
+         type: vlan
+         state: up
+         ipv4:
+           dhcp: false
+           enabled: false
+         ipv6:
+           dhcp: false
+           enabled: false
+         vlan:
+           base-iface: bond1
+           id: 200
