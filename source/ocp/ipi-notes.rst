@@ -4,9 +4,16 @@ IPI Install Notes
 Using IPI with redfish has some automation benefits. Here's the
 install-config.yaml I used with KVM.
 
-.. attention:: I added dual stack example.
+.. warning:: By default two bridged networks are used, ``provisioner`` and
+   ``baremetal``. I'm disabling the provisioner bridge with the parameter
+   ``provisioningNetwork: Disabled``. The ``baremetal`` network is required
+   and must be be a bridged interface. By default its name is "baremetal". Use
+   the ``externalBridge: <name>`` parameter to change the default name.
 
-.. important:: I truncated the yaml example. Be sure to add all the hosts.
+.. note:: This is a dual stack example.
+
+   The hosts section is truncated, be sure to add and identify all the required
+   hosts.
 
 #. Download the latest openshift-install utility found here:
    `OpenShift mirror site <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/latest/>`_
@@ -31,11 +38,11 @@ install-config.yaml I used with KVM.
       apiVersion: v1
       basedomain: lab.local
       metadata:
-        name: ocp4
+        name: ocp5
       networking:
         machineNetwork:
-        - cidr: 192.168.1.0/24
-        - cidr: 2600:1702:4c73:f110::0/64
+        - cidr: 192.168.122.0/24
+        - cidr: 2600:1702:4c73:f111::0/64
         clusterNetwork:
         - cidr: 10.128.0.0/14
           hostPrefix: 23
@@ -55,21 +62,23 @@ install-config.yaml I used with KVM.
           baremetal: {}
       platform:
         baremetal:
+          provisioningNetwork: Disabled
+          externalBridge: baremetal
           apiVIPs:
-            - 192.168.1.140
-            - 2600:1702:4c73:f110::140
+            - 192.168.122.150
+            - 2600:1702:4c73:f111::150
           ingressVIPs:
-            - 192.168.1.141
-            - 2600:1702:4c73:f110::141
+            - 192.168.122.151
+            - 2600:1702:4c73:f111::151
           hosts:
-            - name: host40.ocp4.lab.local
+            - name: host51.lab.local
               role: master
               bmc:
                 address: redfish-virtualmedia+http://192.168.1.72:8000/redfish/v1/Systems/940a6eaa-4b4f-4297-8182-e24cbfc64460
                 username: kni
                 password: kni
                 disableCertificateVerification: True
-              bootMACAddress: 52:54:00:f7:cf:4f
+              bootMACAddress: 52:54:00:f4:16:51
               rootDeviceHints:
                 deviceName: "/dev/vda"
               networkConfig:
@@ -82,13 +91,13 @@ install-config.yaml I used with KVM.
                       enabled: true
                       dhcp: false
                       address:
-                        - ip: 192.168.1.40
+                        - ip: 192.168.122.51
                           prefix-length: 24
                     ipv6:
                       enabled: true
                       dhcp: false
                       address:
-                        - ip: 2600:1702:4c73:f110::40
+                        - ip: 2600:1702:4c73:f111::51
                           prefix-length: 64
                 dns-resolver:
                   config:
@@ -96,21 +105,20 @@ install-config.yaml I used with KVM.
                       - lab.local
                     server:
                       - 192.168.1.68
-                      - 2600:1702:4c73:f110::68
+                      - 2600:1702:4c73:f111::68
                 routes:
                   config:
                     - destination: 0.0.0.0/0
-                      next-hop-address: 192.168.1.1
+                      next-hop-address: 192.168.122.1
                       next-hop-interface: enp1s0
-                      table-id: 254
                     - destination: '::/0'
-                      next-hop-address: '2600:1702:4c73:f110::1'
+                      next-hop-address: '2600:1702:4c73:f111::1'
                       next-hop-interface: enp1s0
 
       pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
       sshKey: |
         ssh-rsa AAAAB3NzaC1yc2EAAAADAQA...
-      imageDigestSources:
+      imageContentSources:
       - mirrors:
         - mirror.lab.local:8443/openshift/release
         source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
