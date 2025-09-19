@@ -4,10 +4,15 @@ IPI Install Notes
 Using IPI with redfish has some automation benefits. Here's the
 install-config.yaml I used with KVM.
 
+.. important:: When doing dual-stack both machineNetworks need to be routable.
+   The install will NOT proceed unless the bootstrap VM recieves an IPv6
+   address from DHCP6. In my example below I'm manually adding the IPv4 address
+   but doing the same for IPv6 is currently NOT possible.
+
 .. warning:: By default two bridged networks are used, ``provisioner`` and
    ``baremetal``. I'm disabling the provisioner bridge with the parameter
    ``provisioningNetwork: Disabled``. The ``baremetal`` network is required
-   and must be be a bridged interface. By default its name is "baremetal". Use
+   and must be be a bridged interface. By default its name is ``baremetal``. Use
    the ``externalBridge: <name>`` parameter to change the default name.
 
 .. note:: This is a dual stack example.
@@ -41,7 +46,7 @@ install-config.yaml I used with KVM.
         name: ocp5
       networking:
         machineNetwork:
-        - cidr: 192.168.122.0/24
+        - cidr: 192.168.1.0/24
         - cidr: 2600:1702:4c73:f111::0/64
         clusterNetwork:
         - cidr: 10.128.0.0/14
@@ -63,12 +68,15 @@ install-config.yaml I used with KVM.
       platform:
         baremetal:
           provisioningNetwork: Disabled
-          externalBridge: baremetal
+          externalBridge: br-enp4s0f0
+          bootstrapExternalStaticIP: 192.168.1.222
+          bootstrapExternalStaticGateway: 192.168.1.1
+          bootstrapExternalStaticDNS: 192.168.1.68
           apiVIPs:
-            - 192.168.122.150
+            - 192.168.1.150
             - 2600:1702:4c73:f111::150
           ingressVIPs:
-            - 192.168.122.151
+            - 192.168.1.151
             - 2600:1702:4c73:f111::151
           hosts:
             - name: host51.lab.local
@@ -91,7 +99,7 @@ install-config.yaml I used with KVM.
                       enabled: true
                       dhcp: false
                       address:
-                        - ip: 192.168.122.51
+                        - ip: 192.168.1.51
                           prefix-length: 24
                     ipv6:
                       enabled: true
@@ -109,7 +117,7 @@ install-config.yaml I used with KVM.
                 routes:
                   config:
                     - destination: 0.0.0.0/0
-                      next-hop-address: 192.168.122.1
+                      next-hop-address: 192.168.1.1
                       next-hop-interface: enp1s0
                     - destination: '::/0'
                       next-hop-address: '2600:1702:4c73:f111::1'
