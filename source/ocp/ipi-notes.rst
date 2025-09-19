@@ -38,6 +38,7 @@ install-config.yaml I used with KVM.
 #. Create "install-config.yaml" and save in ./workdir
 
    .. code-block:: yaml
+      :emphasize-lines: 7-8,28-32,34-35,37-38
       :linenos:
 
       apiVersion: v1
@@ -398,7 +399,7 @@ Remote Worker Node Example
    pullSecret: '{"auths":{"mirror.lab.local:8443":{"auth":"aW5pdDpwYXNzd29yZA=="}}}'
    sshKey: |
      ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDE
-   imageDigestSources:
+   imageContentSources:
    - mirrors:
      - mirror.lab.local:8443/openshift/release
      source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
