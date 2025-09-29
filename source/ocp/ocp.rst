@@ -18,6 +18,7 @@ OpenShift Lab Guides
    local-mirror-registry
    lso-quick-start
    metallb
+   microshift
    node-mirror-registry
    odf-quick-start
    openshift-day2
