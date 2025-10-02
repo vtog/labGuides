@@ -1083,3 +1083,26 @@ vlan interfaces.
          vlan:
            base-iface: bond1
            id: 200
+
+Register Cluster
+----------------
+
+.. important:: Be sure to have an Red Hat account with available OCP subs for
+   support.
+
+When building a disconnected cluster you'll manually need to register your
+cluster for support.
+
+#. Retrieve cluster-id
+
+   .. code-block:: bash
+
+      oc get clusterversion -o jsonpath='{.items[].spec.clusterID}{"\n"}'
+
+#. Go to https://console.redhat.com/openshift
+
+   A. Click "Cluster List"
+   #. Click "Register cluster"
+   #. Fill in fields and click "Registery cluster"
+
+      .. image:: ./images/register-disconnnected-cluster.png
