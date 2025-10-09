@@ -589,13 +589,14 @@ To create a new cluster using the local mirror & registry see:
       dir is created. This contains all the yaml objects necessary to connect
       to the disconnected registry.
 
-   .. important:: If you don't use the ''--since`` switch when mirroring, the
-      results are not cumulative. I highly recommend using this switch. If you
-      don't, then the previously succsessful result will NOT be included. Its
-      VERY important to manaully combine these results by backing up the
-      original result and diffing the old and new files. Without doing this the
-      running cluster will be missing references which are required to install
-      and maintain operators and images.
+   .. important:: If you don't use the ``--since`` switch when mirroring, the
+      results are not cumulative. I highly recommend using this switch.
+
+      If you don't include this switch the previously succsessful result will
+      NOT be included. It will be necessary to manaully combine the results by
+      backing up the original result and diffing the old and new files. Without
+      doing this the running cluster will be missing references which are
+      required to install and maintain operators and images.
 
    .. code-block:: bash
 
