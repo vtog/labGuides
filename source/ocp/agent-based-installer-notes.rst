@@ -6,7 +6,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 "agent-config.yaml".
 
 .. seealso:: For more detail: `Preparing to install with the Agent-based installer
-   <https://docs.openshift.com/container-platform/4.12/installing/installing_with_agent_based_installer/preparing-to-install-with-agent-based-installer.html>`_
+   <https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/installing_an_on-premise_cluster_with_the_agent-based_installer/preparing-to-install-with-agent-based-installer>`_
 
 .. tip:: Check disk performance for etcd with "fio". It's critical to have a
    high performing disk drive for OCP / etcd.
@@ -48,7 +48,7 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
 #. Create "install-config.yaml" and save in ./workdir
 
    .. tip:: In resource-constrained environments, you can use
-      `workload partitioning <https://docs.openshift.com/container-platform/4.14/scalability_and_performance/enabling-workload-partitioning.html>`_
+      `workload partitioning <https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/scalability_and_performance/enabling-workload-partitioning>`_
       to isolate OpenShift Container Platform services, cluster management
       workloads, and infrastructure pods to run on a reserved set of CPUs.
 

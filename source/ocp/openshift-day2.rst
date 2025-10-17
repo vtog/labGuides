@@ -682,7 +682,7 @@ Change Cluster Network MTU
 It's possible to change the interface MTU post deployment but I recommend
 getting this right at install time. The following is based on:
 `Changing the MTU for the cluster network
-<https://docs.openshift.com/container-platform/4.12/networking/changing-cluster-network-mtu.html>`_
+<https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/advanced_networking/changing-cluster-network-mtu>`_
 
 .. note:: In the OCP doc they use a machine config to change the nodes
    interface MTU. I found this did NOT work. I simply used nmcli to change the

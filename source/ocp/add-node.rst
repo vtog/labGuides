@@ -173,7 +173,8 @@ Option 2 (Manual)
 
 These steps are based on Red Hat documentation. For a deeper understand of each
 step see the following URL:
-`Adding worker nodes to single-node OpenShift clusters manually <https://docs.openshift.com/container-platform/4.12/nodes/nodes/nodes-sno-worker-nodes.html#sno-adding-worker-nodes-to-single-node-clusters-manually_add-workers>`_
+`Adding worker nodes to single-node OpenShift clusters manually
+<https://docs.redhat.com/en/documentation/openshift_container_platform/4.18/html/nodes/worker-nodes-for-single-node-openshift-clusters#sno-adding-worker-nodes-to-single-node-clusters-manually_add-workers>`_
 
 .. note:: I've tested this on 4.12 through 4.18.
 
