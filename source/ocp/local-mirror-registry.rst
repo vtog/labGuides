@@ -227,7 +227,7 @@ Mirror Images to Local Registry (v2)
 
    .. code-block:: yaml
       :caption: isc-4.18.yaml
-      :emphasize-lines: 2,4,5,8-12,15
+      :emphasize-lines: 2,4,5,9,11-12,15
 
       cat << EOF > /mirror/oc-mirror/isc-4.18.yaml
       kind: ImageSetConfiguration
@@ -241,7 +241,7 @@ Mirror Images to Local Registry (v2)
             type: ocp
             minVersion: 4.18.19
             maxVersion: 4.18.19
-            shortestPath: false
+            shortestPath: true
           graph: false
         additionalImages:
         - name: registry.redhat.io/openshift4/ose-cluster-node-tuning-rhel9-operator:v4.18
@@ -283,6 +283,7 @@ Mirror Images to Local Registry (v2)
           - name: openshift-gitops-operator
           - name: ptp-operator
           - name: quay-operator
+          - name: rhods-operator
           - name: skupper-operator
           - name: sriov-network-operator
           - name: topology-aware-lifecycle-manager
@@ -302,7 +303,10 @@ Mirror Images to Local Registry (v2)
         additionalImages:
         - name: registry.redhat.io/ubi10/ubi:latest
         - name: registry.redhat.io/ubi10/httpd-24:latest
+        - name: registry.redhat.io/rhel10/httpd-24:latest
         - name: registry.redhat.io/ubi10/nginx-126:latest
+        - name: registry.redhat.io/rhel10/nginx-126:latest
+        - name: registry.redhat.io/rhel9/support-tools:latest
         - name: registry.redhat.io/rhel10/support-tools:latest
         - name: ghcr.io/k8snetworkplumbingwg/sriov-network-device-plugin:latest
         - name: quay.io/openshift-scale/etcd-perf:latest
@@ -408,7 +412,7 @@ following two step process.
 
    .. code-block:: yaml
       :caption: delete-isc-4.18.yaml
-      :emphasize-lines: 2,4,5,8-12,15
+      :emphasize-lines: 2,4,5,10-12
 
       cat << EOF > /mirror/oc-mirror/delete-isc-4.18.yaml
       kind: DeleteImageSetConfiguration
