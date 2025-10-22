@@ -174,7 +174,8 @@ Host inventory (Disconnected)
 
       .. code-block:: bash
 
-         curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OCP_VERSION/openshift-install-linux.tar.gz -o openshift-install-linux-$OCP_VERSION.tar.gz
+         curl -L -k https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OCP_VERSION/openshift-install-linux.tar.gz \
+         -o openshift-install-linux-$OCP_VERSION.tar.gz
 
    #. Extract the installer.
 

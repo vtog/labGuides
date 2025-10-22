@@ -109,7 +109,8 @@ Prepare Hosts
 #. Run ``butane 100-worker-vfiopci.bu -o 100-worker-vfiopci.yaml``
 
    .. note:: If needed "butane" can be downloaded here:
-      `<https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/butane/latest/>`_
+
+      `<https://mirror.openshift.com/pub/openshift-v4/amd64/clients/butane/latest/butane>`_
 
 #. Run ``oc apply -f 100-worker-vfiopci.yaml``
 

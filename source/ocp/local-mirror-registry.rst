@@ -9,18 +9,19 @@ Prerequisites
 
 #. Download the following files and copy to the destination server.
 
-   `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-client-linux.tar.gz>`_
+   `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/latest/openshift-client-linux.tar.gz>`_
+
+   `Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/latest/oc-mirror.tar.gz>`_
 
    `Mirror Registry for OpenShift <https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz>`_
 
-   `Openshift Client Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/oc-mirror.tar.gz>`_
-
    `Your Pull Secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
-   .. attention:: These links point to the most recent versions. Typically
-      you'll want a specific version. You can find those here:
+   .. attention:: These links point to the latest version. Typically you'll
+      want a specific version. You can find those here by browsing to the
+      version specific directory:
 
-      `<https://access.redhat.com/downloads/content/290/>`_
+      `<https://https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/>`_
 
 #. SSH to the target server and run the following commands to place the
    binaries in their respective directories.

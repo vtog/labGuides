@@ -1,6 +1,39 @@
 OpenShift Day 2
 ===============
 
+Get deployment and management tools
+-----------------------------------
+
+1. Set environment/version
+
+   .. code-block:: bash
+
+      OCP_VERSION=4.20.0
+
+#. Get install tool
+
+   .. code-block:: bash
+
+      curl -L -k https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OCP_VERSION/openshift-install-linux.tar.gz \
+      -o openshift-install-linux-$OCP_VERSION.tar.gz
+
+#. Get client tool
+
+   .. code-block:: bash
+
+      curl -L -k https://mirror.openshift.com/pub/openshift-v4/clients/ocp/$OCP_VERSION/openshift-client-linux.tar.gz \
+      -o openshift-client-linux-$OCP_VERSION.tar.gz
+
+#. Get butane
+
+   .. code-block:: bash
+
+      curl -L -k https://mirror.openshift.com/pub/openshift-v4/amd64/clients/butane/latest/butane \
+      -o butane
+
+#. Download pull secret by browsing to following url
+   `<https://console.redhat.com/openshift/install/pull-secret>`_
+
 Privileged Deployment (root)
 ----------------------------
 

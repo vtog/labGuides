@@ -24,14 +24,15 @@ installer. Two files are required to build the ISO, "install-config.yaml" and
    environments that don't have an NTP server, you can set up a time source on
    the local bastion server.
 
-#. Download the latest openshift-install utility found here:
+#. Download the latest openshift-install tool found here:
 
-   `OpenShift for x86_64 Installer <https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/ocp/stable/openshift-install-linux.tar.gz>`_
+   `OpenShift Installer <https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux.tar.gz>`_
 
-   .. attention:: The link points to the most recent version. Typically you'll
-      want a specific version. You can find that here:
+   .. attention:: The link points to the latest version. Typically you'll want
+      a specific version. You can find those here by browsing to the version
+      specific directory:
 
-      `<https://access.redhat.com/downloads/content/290/>`_
+      `<https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/>`_
 
 #. Install nmstate
 
@@ -610,7 +611,8 @@ install time.
 
       .. code-block:: bash
 
-         curl -L https://mirror.openshift.com/pub/openshift-v4/x86_64/clients/butane/latest/butane -o ~/.local/bin/butane
+         curl -L -k https://mirror.openshift.com/pub/openshift-v4/amd64/clients/butane/latest/butane \
+         -o ~/.local/bin/butane
          chmod +x ~/.local/bin/butane
 
    .. code-block:: bash
