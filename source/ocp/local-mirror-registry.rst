@@ -21,7 +21,7 @@ Prerequisites
       want a specific version. You can find those here by browsing to the
       version specific directory:
 
-      `<https://https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/>`_
+      `<https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/>`_
 
 #. SSH to the target server and run the following commands to place the
    binaries in their respective directories.
