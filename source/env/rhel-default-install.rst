@@ -582,7 +582,7 @@ Extend the logical volume
 
    .. tip:: Use ``-L`` to set Size[m|UNIT] or ``-l 100%FREE`` for percentage
 
-      If filesystem use ``-r`` to resizefs
+      If filesystem in place use ``-r`` to resizefs
 
    .. code-block:: bash
 
