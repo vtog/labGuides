@@ -6,9 +6,20 @@ Install Operator
 
 Basic OpenShift Virtualization install to get started.
 
-.. tip:: Be sure to have enough cpu, memory, and storage. My lab is KVM based.
-   For OCP Virt I start with a three node cluster, each node has 16 cores, 32G
-   memory, and small 900G ODF/Ceph deployment.
+.. important:: Be sure to have enough cpu, memory, and storage. My lab is KVM
+   based. For OCP Virt I start with a three node cluster, each node has 16
+   cores, 32G memory, and small 900G ODF/Ceph deployment.
+
+.. tip:: To check nodes for CPU virtualization extensions, run the following
+   command.
+
+   ``"kvm": null`` hardware not capable.
+
+   ``"kvm": "1k"`` hardware capable.
+
+   .. code-block:: bash
+
+      oc get nodes -o json|jq '.items[]|{"name": .metadata.name, "kvm": .status.allocatable["devices.kubevirt.io/kvm"]}'
 
 #. From the OCP Console select :menuselection:`Operators --> OperatorHub`. In
    the search box type "virtualization".
@@ -43,7 +54,6 @@ Basic OpenShift Virtualization install to get started.
 
 #. Go to :menuselection:`Virtualization --> Overview`. "Start Tour" if new to
    OpenShift Virtualization.
-
 
 Default Catalog (Connected)
 ---------------------------
