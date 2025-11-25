@@ -454,7 +454,7 @@ Upgrade Fedora
       sudo dnf system-upgrade download --releasever=41
 
    .. tip:: If you encounter conflicts during the upgrade, try adding
-      "--allowerasing" option.
+      ``--allowerasing`` option.
 
 #. Upgrade and Reboot.
 
