@@ -126,6 +126,11 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
    - Bluish-Dark-Icons
    - Tango2
 
+   .. code-block:: bash
+
+      gsettings set org.gnome.desktop.interface gtk-theme "Nordic-v40"
+      gsettings set org.gnome.desktop.wm.preferences theme "Nordic-v40"
+
 #. Install and update PIP. Install misc packages
 
    .. code-block:: bash

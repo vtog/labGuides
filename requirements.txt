@@ -1,6 +1,6 @@
 babel==2.17.0
 docutils==0.21.2
-pre_commit==4.3.0
+pre_commit==4.5.0
 Sphinx==8.2.3
 sphinx_copybutton==0.5.2
 sphinx_rtd_theme==3.0.2
