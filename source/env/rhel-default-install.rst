@@ -131,6 +131,12 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       gsettings set org.gnome.desktop.interface gtk-theme "Nordic-v40"
       gsettings set org.gnome.desktop.wm.preferences theme "Nordic-v40"
 
+   .. tip:: Install MS core fonts for clean font rendering.
+
+      .. code-block:: bash
+
+         sudo dnf install mscore-fonts
+
 #. Install and update PIP. Install misc packages
 
    .. code-block:: bash
