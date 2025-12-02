@@ -15,7 +15,7 @@ Create the PV
 #. Create the PV yaml file
 
    .. code-block:: bash
-      :emphasize-lines: 5, 8, 11-13
+      :emphasize-lines: 5,8,10,12-13
 
       cat << EOF | oc create -f -
       apiVersion: v1
@@ -45,12 +45,13 @@ Create the PV
 Create the PVC
 --------------
 
-.. important:: The pvc needs to match the pv's "accessModes", and "storage".
+.. important:: The pvc needs to match the pv's "accessModes", "storage", and
+   "volumeName".
 
 #. Create the PVC yaml file
 
    .. code-block:: bash
-      :emphasize-lines: 13, 16
+      :emphasize-lines: 13,16,18
 
       cat << EOF | oc create -f -
       apiVersion: v1
