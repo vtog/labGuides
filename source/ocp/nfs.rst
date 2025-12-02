@@ -26,7 +26,7 @@ Create the PV
         capacity:
           storage: 200Gi
         accessModes:
-        - ReadWriteOnce
+        - ReadWriteMany
         nfs:
           path: /mirror/nfs
           server: 192.168.1.72
@@ -64,11 +64,12 @@ Create the PVC
         namespace: openshift-image-registry
       spec:
         accessModes:
-        - ReadWriteOnce
+        - ReadWriteMany
         resources:
           requests:
             storage: 200Gi
         volumeMode: Filesystem
+        volumeName: bfg-nfs1
       EOF
 
 #. Verifiy the PVC
