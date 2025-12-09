@@ -3,6 +3,34 @@ Helpful Commands
 
 I'm always searching for ways to do the following:
 
+Gemini CLI - Testing
+--------------------
+
+Install NPM
+
+.. code-block:: bash
+
+   sudo dnf install npm
+
+Install gemini-cli
+
+.. code-block:: bash
+
+   npm install -g @google/gemini-cli
+
+Update gemini-cli
+
+.. code-block:: bash
+
+   npm install -g @google/gemini-cli@latest
+
+
+List globally installed NPM packages
+
+.. code-block:: bash
+
+   sudo npm -g ls
+
 General Linux Commands
 ----------------------
 
