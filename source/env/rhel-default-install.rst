@@ -102,6 +102,16 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       sudo dmesg | grep "iommu: Default"
 
+   .. tip:: How to remove argument
+
+      .. code-block:: bash
+
+         sudo grubby --update-kernel ALL --remove-args="intel_iommu=on iommu=pt"
+
+      .. code-block:: bash
+
+         sudo grubby --update-kernel ALL --remove-args="rhgb quiet"
+
 #. Install various packages (Optional)
 
    .. code-block:: bash
