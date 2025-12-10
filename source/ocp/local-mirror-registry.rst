@@ -213,16 +213,18 @@ Mirror Images to Local Registry (v2)
         }
       }
 
-#. Create the following ImageSetConfiguration files. In my lab I broke down the
-   process by platform, operators, and additionalImages. You could combine them
-   but I found it easier to manage the process with speration.
+#. Create the following ImageSetConfiguration files.
 
-   .. tip:: **"graph: true"** mirror's the graph data to the disconnected
+   .. important:: In my lab I broke down the process by platform, operators, and
+      additionalImages. You could combine them but I found it easier to manage
+      the process with speration.
+
+   .. hint:: **"graph: true"** mirror's the graph data to the disconnected
       registry. This information enables the disconnected cluster, via the
       update service operator, to show a visual representation of the available
       upgrades.
 
-   .. tip:: **"shortestPath: true"** instructs the oc mirror command to only pull
+   .. hint:: **"shortestPath: true"** instructs the oc mirror command to only pull
       the required version to upgrade from one version to the next. It will
       prune any unneeded version.
 
@@ -252,7 +254,7 @@ Mirror Images to Local Registry (v2)
 
    .. code-block:: yaml
       :caption: isc-4.18-operators.yaml
-      :emphasize-lines: 2,4-6,34
+      :emphasize-lines: 2,4-6,35
 
       cat << EOF > /mirror/oc-mirror/isc-4.18-operators.yaml
       kind: ImageSetConfiguration
