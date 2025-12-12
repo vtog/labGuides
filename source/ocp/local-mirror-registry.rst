@@ -154,8 +154,9 @@ Mirror Images to Local Registry (v2)
 .. important:: This section is now based on oc-mirror **v2** released with
    v4.18.
 
-#. Before mirroring images we need a copy of your Red Hat "Pull Secret" and update
-   it with the local mirror information. If you haven't done so download it here:
+#. Before mirroring images we need a copy of your Red Hat "Pull Secret" and
+   update it with the local mirror information. If you haven't done so download
+   it here:
    `your pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
 #. Convert and copy pull-secret.txt to ~/.docker/config.json
@@ -286,7 +287,6 @@ Mirror Images to Local Registry (v2)
           - name: openshift-gitops-operator
           - name: ptp-operator
           - name: quay-operator
-          - name: rhods-operator
           - name: skupper-operator
           - name: sriov-network-operator
           - name: topology-aware-lifecycle-manager

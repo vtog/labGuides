@@ -221,8 +221,9 @@ Create Node Host Mirror Registry
 Mirror Images to Node Registry
 ------------------------------
 
-#. Before mirroring images we need a copy of your Red Hat "Pull Secret" and update
-   it with the local mirror information. If you haven't done so download it here:
+#. Before mirroring images we need a copy of your Red Hat "Pull Secret" and
+   update it with the local mirror information. If you haven't done so download
+   it here:
    `your pull secret <https://console.redhat.com/openshift/install/pull-secret>`_
 
 #. Convert and copy pull-secret.txt to ~/.docker/config.json
