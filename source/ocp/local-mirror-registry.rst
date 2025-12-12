@@ -11,7 +11,7 @@ Prerequisites
 
    `Openshift Client <https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/latest/openshift-client-linux.tar.gz>`_
 
-   `Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/latest/oc-mirror.tar.gz>`_
+   `Mirror Plugin <https://mirror.openshift.com/pub/openshift-v4/amd64/clients/ocp/latest/oc-mirror.rhel9.tar.gz>`_
 
    `Mirror Registry for OpenShift <https://mirror.openshift.com/pub/cgw/mirror-registry/latest/mirror-registry-amd64.tar.gz>`_
 
@@ -123,7 +123,7 @@ Create Local Registry
 #. Test mirror availability via cli. The following command should return
    "Login Succeeded!" if everything is working.
 
-   .. hint:: Use the ''--tls-verify=false'' if not adding the rootCA to the trust.
+   .. hint:: Use the ``--tls-verify=false`` if not adding the rootCA to the trust.
 
    .. code-block:: bash
 
