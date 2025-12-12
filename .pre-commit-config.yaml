@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
         args: [--allow-multiple-documents]
@@ -12,18 +12,18 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
   - repo: https://github.com/python/black
-    rev: 23.12.1
+    rev: 25.12.0
     hooks:
       - id: black
         description: python code formatter
   - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
+    rev: 7.3.0
     hooks:
       - id: flake8
         description: enforcing style consistency across Python projects
         entry: flake8 --max-line-length 128 --max-doc-length 256 --ignore E501
   - repo: https://github.com/pycqa/doc8
-    rev: v1.1.1
+    rev: v2.0.0
     hooks:
       - id: doc8
         description: linting for rst files
