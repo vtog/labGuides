@@ -1,5 +1,5 @@
-Node Mirror & Registry
-======================
+Node Mirror & Registry (DEPRECATED)
+===================================
 
 .. warning:: **DEPRECATED**
 
