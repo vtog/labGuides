@@ -369,11 +369,16 @@ Mirror Images to Local Registry (v2)
 
             #!/bin/bash
 
-            OCPV=4.18
+            OCPV=$1
 
-            echo -e "\nMirroring $OCPV based on ./isc-$OCPV.yaml"
-            oc mirror --v2 -c ./isc-$OCPV.yaml --since 2025-03-12 \
-              --cache-dir /mirror/oc-mirror/$OCPV file:///mirror/oc-mirror/$OCPV
+            if [[ -z "$OCPV" ]]; then
+              echo -e "\nPlease specify ImageSetConfiguration!"
+            else
+              echo -e "\nMirroring $OCPV based on ./isc-$OCPV.yaml\n"
+
+              oc mirror --v2 -c ./isc-$OCPV.yaml --cache-dir /mirror/oc-mirror/$OCPV \
+                --since 2025-03-12 file:///mirror/oc-mirror/$OCPV
+            fi
 
    #. Disk-to-Mirror.
 
@@ -389,11 +394,16 @@ Mirror Images to Local Registry (v2)
 
             #!/bin/bash
 
-            OCPV=4.18
+            OCPV=$1
 
-            echo -e "\nMirroring $OCPV based on ./isc-$OCPV.yaml"
-            oc mirror --v2 -c ./isc-$OCPV.yaml --cache-dir /mirror/oc-mirror/$OCPV \
-              --from file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
+            if [[ -z "$OCPV" ]]; then
+              echo -e "\nPlease specify ImageSetConfiguration!"
+            else
+              echo -e "\nMirroring $OCPV based on ./isc-$OCPV.yaml\n"
+
+              oc mirror --v2 -c ./isc-$OCPV.yaml --cache-dir /mirror/oc-mirror/$OCPV \
+                --from file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
+            fi
 
 #. Make note of the information upon completion. Supporting yaml files can be
    found in "<directory_name>/working-dir/cluster-resources". These files will
@@ -523,16 +533,22 @@ following two step process.
 
       #!/bin/bash
 
-      OCPV=4.18
+      OCPV=$1
 
-      echo -e "\nDeleting $OCPV images based on ./delete-isc-$OCPV.yaml"
-      echo -e "\nGenerating..."
-      oc mirror delete --v2 -c ./delete-isc-$OCPV.yaml --cache-dir /mirror/oc-mirror/$OCPV \
-        --generate --workspace file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
+      if [[ -z "$OCPV" ]]; then
+        echo -e "\nPlease specify ImageSetConfiguration!"
+      else
+        echo -e "\nDeleting $OCPV images based on ./delete-isc-$OCPV.yaml"
+        echo -e "\nGenerating..."
 
-      echo -e "\nDeleting..."
-      oc mirror delete --v2 --cache-dir /mirror/oc-mirror/$OCPV --force-cache-delete \
-        --delete-yaml-file ./$OCPV/working-dir/delete/delete-images.yaml docker://$quayHostname:8443
+        oc mirror delete --v2 -c ./delete-isc-$OCPV.yaml --cache-dir /mirror/oc-mirror/$OCPV \
+          --generate --workspace file:///mirror/oc-mirror/$OCPV docker://$quayHostname:8443
+
+        echo -e "\nDeleting..."
+
+        oc mirror delete --v2 --cache-dir /mirror/oc-mirror/$OCPV --force-cache-delete \
+          --delete-yaml-file ./$OCPV/working-dir/delete/delete-images.yaml docker://$quayHostname:8443
+      fi
 
 Update Running Cluster
 ----------------------
