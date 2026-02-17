@@ -5,95 +5,123 @@ This document will describe the installation of the Local Storage Operator
 (LSO) and OpenShift Data Foundations (ODF). LSO is a pre-requisite for
 installing ODF on OpenShift nodes that will use local block devices.
 
-.. important:: With 4.11+ ODF added a wizard removing the need to manually
-   create all the required objects. The install and configuration process is
-   much easier. I've removed my old manual notes and replaced them with a
-   wizard walk-through.
+.. important:: This quick start is based on OCP 4.20.
 
-.. warning::
-   We’ve found that hugepages needs to be disabled before installing ODF
-   otherwise noobaa pods won’t start correctly. This can be re-enabled
-   afterwards.
+.. warning:: With 4.12 we found that hugepages needed to be disabled before
+   installing ODF, otherwise noobaa pods won’t start correctly. This can be
+   re-enabled afterwards. I have NOT retested this on newer code.
 
-Add Local Storage and ODF Operators
------------------------------------
+Local Storage Operator
+----------------------
 
-1. From the OCP Web Console go to :menuselection:`Operators --> OperatorHub`.
+.. important:: You must configure the Local Storage Discovery and VolumeSet
+   before configuring ODF. In previous versions, the ODF wizard did this for
+   you but now only works with SSD's as HDD's are not supported. To work-around
+   this requirement simply create the Local Storage objects first.
+
+1. From the OCP Web Console go to :menuselection:`Ecosystem --> Software
+   Catalog`.
 #. In the Filter by keyword box type, "local storage".
-#. Select **"Local Storage"** operator.
-#. Click "Install".
-#. By default, the "openshift-local-storage" namespace will be used. Accept the
-   defaults and click "Install".
-#. After install finishes go back to :menuselection:`Operators -->
-   OperatorHub`.
-#. In the Filter by keyword box type, "ODF".
-#. Select **"OpenShift Data Foundation"** operator.
-#. Click "Install".
-#. Accept the defaults and click "Install".
-#. Go to next section to configure ODF.
+#. Select **"Local Storage"** operator and click "Install".
+#. Leave/accept the defaults and click "Install".
+#. Watch progress.
+
+   .. code-block:: bash
+
+      watch oc get po -n openshift-local-storage
+
+#. Upon completion, click "View Operator".
+#. Go to "Local Volume Discovery" tab and click "Create LocalVolumeDiscovery".
+#. Expand "NodeSelector" section and "Remove nodeSelectorTerms".
+
+   .. image:: images/localvolumediscovery.png
+
+#. Click "Create".
+#. Go to "Local Volume Set" tab and click "Create LocalVolumeSet".
+#. Set Name and StorageClassName.
+#. Expand NodeSelector section and "Remove nodeSelectorTerms".
+#. Change configure via "Form view" to "YAML view".
+#. Remove the lines minSize and maxSize (or set to your preference).
+#. Click "Create".
+#. Confirm success. A new pod per block device, "diskmaker-manager-xxxxx"
+   should be created/running.
+
+   .. code-block:: bash
+
+      oc get po -n openshift-local-storage
+
+.. note:: Before starting the next section, ODF Operator, confirm new PV block
+   devices. Go to :menuselection:`Storage --> PersistentVolumes`.
+
+ODF Operator
+------------
+
+1. From the OCP Web Console go to :menuselection:`Ecosystem --> Software
+   Catalog`.
+#. In the Filter by keyword box type, "Data Foundation".
+#. Select **"OpenShift Data Foundation"** operator and click "Install".
+#. Enable "Console plugin".
+#. Leave/accept the other defaults and click "Install".
+#. Watch progress.
+
+   .. code-block:: bash
+
+      watch oc get po -n openshift-storage
+
+#. Upon successful deployment go to next section.
 
 Configure ODF
 -------------
 
-#. Frome the web console go to :menuselection:`Operators --> Installed
-   Operators`.
-#. Select "OpenShift Data Foundation".
-#. Enable Console plugin.
+1. Frome the web console go to :menuselection:`Storage --> Storage cluster`.
+#. Click "Configure Data Foundation".
+#. Select "Create Storage Cluster".
 
-   .. tip:: Be sure to wait a couple minutes and refresh browser.
-      The console should prompt you.
+   .. image:: images/createstoragecluster.png
 
-   .. image:: images/enableodfplugin.png
-
-#. Click "Create StorageSystem".
-
-#. Select "Create a new StorageClass using local storage devices".
+#. Select "Use an existing StorageClass".
+#. In the drop down box select the storage class previously created in the
+   Local Storage operator section.
 
    .. image:: images/createstoragesystem.png
 
-#. Click Next.
+#. Leave other defaults and click Next.
 
-   .. note:: This may take several minutes to discover the available block
-      devices.
+#. Confirm "Available raw capacity" and selected nodes. Configure perforamance,
+   if unsure leave default "Balanced mode".
 
-#. Set name of your LocalVolumeSet. Example: "odf-block".
-
-   .. image:: images/createlocalvolumeset.png
+   .. image:: images/capacityandnodes.png
 
 #. Click Next.
-#. Are you sure you want to continue? Select Yes for "Create LocalVolumeSet".
-
-   .. note:: This may take several minutes to create the LocalVolumeSet.
-
-#. Confirm Capacity and nodes.
-
-   .. note:: You should see the total "Available raw capacity" of your selected
-      nodes.
-
+#. Enable Security and network. Make changes appropriate to your environment. I
+   use the defaults.
 #. Click Next.
-#. Leave defaults for Security and network and click Next.
-#. Review the information, if acceptable click "Create StorageSystem".
+#. Review the information. If acceptable click "Create storage system".
+
+#. Watch progress.
+
+   .. code-block:: bash
+
+      watch oc get po -n openshift-storage
 
    .. note:: This can take several minutes to complete.
 
-#. Verify “ocs-storagecluster-cephfs” is created.
+#. Verify default storage class.
+
+   .. note:: Ceph block is the default (ocs-storagecluster-ceph-rbd)
 
    .. code-block:: bash
 
       oc get sc
 
-   .. attention:: Do NOT attempt the next step until you see the newly created
-      storage class.
-
    .. image:: images/ocgetsc.png
 
-#. Set the default storage class to “ocs-storagecluster-cephfs”.
+#. (OPTIONAL) If you prefer a different default storage class use the following
+   command. In this example I set Ceph fs (ocs-storagecluster-cephfs).
 
    .. code-block:: bash
 
       oc patch storageclass ocs-storagecluster-cephfs --patch '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
-
-   .. image:: images/ocgetscdef.png
 
 Optional: Disable NooBaa
 ------------------------
