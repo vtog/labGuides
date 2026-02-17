@@ -198,12 +198,16 @@ Host inventory (Disconnected)
    values. Add each osImage you plan on deploying for spoke clusters. The
    version information from last step will be used here.
 
-   .. warning:: I've had many issues with discovery when defining multiple
-      osImages.  I recommend starting with only defining the oldest needed
-      version. Then run node discovery. Then add the additional osImages.
+   .. warning:: I had many issues with discovery when defining multiple
+      osImages.  I also discovered that only 4.18 works for discovery. This
+      explains why multiple osImages fails because the discovery ISO will be
+      based on the newest osImage.
+
+      To work-around this, start with just 4.18 as described below. After the
+      discovery image is created, add the additional osImages.
 
    .. code-block:: yaml
-      :emphasize-lines: 11,17,23,25,27-41
+      :emphasize-lines: 11,17,23,25,27-31
 
       apiVersion: agent-install.openshift.io/v1beta1
       kind: AgentServiceConfig
@@ -231,21 +235,11 @@ Host inventory (Disconnected)
         mirrorRegistryRef:
           name: assisted-installer-mirror-config
         osImages:
-          - openshiftVersion: "4.15"
+          - openshiftVersion: "4.18"
             cpuArchitecture: "x86_64"
-            version: "415.92.202402201450-0"
-            url: "http://192.168.1.72/rhcos/rhcos-4.15.0-x86_64-live.x86_64.iso"
-            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.15.0-x86_64-live-rootfs.x86_64.img"
-          - openshiftVersion: "4.15"
-            cpuArchitecture: "x86_64"
-            version: "415.92.202407091355-0"
-            url: "http://192.168.1.72/rhcos/rhcos-4.15.23-x86_64-live.x86_64.iso"
-            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.15.23-x86_64-live-rootfs.x86_64.img"
-          - openshiftVersion: "4.16"
-            cpuArchitecture: "x86_64"
-            version: "416.94.202406251923-0"
-            url: "http://192.168.1.72/rhcos/rhcos-4.16.3-x86_64-live.x86_64.iso"
-            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.16.3-x86_64-live-rootfs.x86_64.img"
+            version: "418.94.202510081222-0"
+            url: "http://192.168.1.72/rhcos/rhcos-4.18.27-x86_64-live.x86_64.iso"
+            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.18.27-x86_64-live-rootfs.x86_64.img"
 
 #. Apply the agent service config yaml to the cluster.
 
@@ -279,9 +273,9 @@ Host inventory (Disconnected)
         labels:
           channel: stable
           visible: 'true'
-        name: img4.15.14-x86-64-appsub
+        name: img4.18.28-x86-64-appsub
       spec:
-        releaseImage: mirror.lab.local:8443/openshift/release-images:4.15.14-x86_64
+        releaseImage: mirror.lab.local:8443/openshift/release-images:4.18.28-x86_64
       ---
       apiVersion: hive.openshift.io/v1
       kind: ClusterImageSet
@@ -289,9 +283,9 @@ Host inventory (Disconnected)
         labels:
           channel: stable
           visible: 'true'
-        name: img4.15.28-x86-64-appsub
+        name: img4.19.23-x86-64-appsub
       spec:
-        releaseImage: mirror.lab.local:8443/openshift/release-images:4.15.28-x86_64
+        releaseImage: mirror.lab.local:8443/openshift/release-images:4.19.23-x86_64
       ---
       apiVersion: hive.openshift.io/v1
       kind: ClusterImageSet
@@ -299,9 +293,9 @@ Host inventory (Disconnected)
         labels:
           channel: stable
           visible: 'true'
-        name: img4.16.8-x86-64-appsub
+        name: img4.20.12-x86-64-appsub
       spec:
-        releaseImage: mirror.lab.local:8443/openshift/release-images:4.16.8-x86_64
+        releaseImage: mirror.lab.local:8443/openshift/release-images:4.20.12-x86_64
 
 Credentials
 ~~~~~~~~~~~
