@@ -19,8 +19,7 @@ Local Storage Operator
    you but now only works with SSD's as HDD's are not supported. To work-around
    this requirement simply create the Local Storage objects first.
 
-1. From the OCP Web Console go to :menuselection:`Ecosystem --> Software
-   Catalog`.
+1. From the Web Console go to :menuselection:`Ecosystem --> Software Catalog`.
 #. In the Filter by keyword box type, "local storage".
 #. Select **"Local Storage"** operator and click "Install".
 #. Leave/accept the defaults and click "Install".
@@ -56,8 +55,7 @@ Local Storage Operator
 ODF Operator
 ------------
 
-1. From the OCP Web Console go to :menuselection:`Ecosystem --> Software
-   Catalog`.
+1. From the Web Console go to :menuselection:`Ecosystem --> Software Catalog`.
 #. In the Filter by keyword box type, "Data Foundation".
 #. Select **"OpenShift Data Foundation"** operator and click "Install".
 #. Enable "Console plugin".
@@ -73,7 +71,7 @@ ODF Operator
 Configure ODF
 -------------
 
-1. Frome the web console go to :menuselection:`Storage --> Storage cluster`.
+1. From the web console go to :menuselection:`Storage --> Storage cluster`.
 #. Click "Configure Data Foundation".
 #. Select "Create Storage Cluster".
 
@@ -105,6 +103,11 @@ Configure ODF
       watch oc get po -n openshift-storage
 
    .. note:: This can take several minutes to complete.
+
+#. Verify storage cluster from the Web Console. Go to :menuselection:`Storage
+   --> Storage cluster`
+
+   .. image:: images/successstoragecluster.png
 
 #. Verify default storage class.
 

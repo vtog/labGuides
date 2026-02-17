@@ -7,7 +7,7 @@ This is a simple way to allocate local storage for the image registry.
 Install and Configure the Local Storage Operator
 ------------------------------------------------
 
-1. From the OCP Web Console go to :menuselection:`Operators --> OperatorHub`
+1. From the Web Console go to :menuselection:`Operators --> OperatorHub`
 
 #. In the Filter by keyword box type, "local storage"
 #. Select "Local Storage" operator
