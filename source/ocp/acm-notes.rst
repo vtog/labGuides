@@ -198,21 +198,22 @@ Host inventory (Disconnected)
    values. Add each osImage you plan on deploying for spoke clusters. The
    version information from last step will be used here.
 
-   .. warning:: I had many issues with discovery when defining multiple
-      osImages.  I also discovered that only 4.18 works for discovery. This
-      explains why multiple osImages fails because the discovery ISO will be
-      based on the newest osImage.
+   .. important:: The highlighted annotation below is critical for the
+      disconnected discovery ISO to work with 4.19+. Without it discovery will
+      not work.
 
-      To work-around this, start with just 4.18 as described below. After the
-      discovery image is created, add the additional osImages.
+   .. note:: When creating multiple osImages discovery will be based on the
+      latest version.
 
    .. code-block:: yaml
-      :emphasize-lines: 11,17,23,25,27-31
+      :emphasize-lines: 6,13,19,25,27,29,31,34,36,39,41,44,46
 
       apiVersion: agent-install.openshift.io/v1beta1
       kind: AgentServiceConfig
       metadata:
-       name: agent
+        name: agent
+        annotations:
+          unsupported.agent-install.openshift.io/assisted-service-allow-unrestricted-image-pulls: "true"
       spec:
         databaseStorage:
           accessModes:
@@ -240,6 +241,21 @@ Host inventory (Disconnected)
             version: "418.94.202510081222-0"
             url: "http://192.168.1.72/rhcos/rhcos-4.18.27-x86_64-live.x86_64.iso"
             rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.18.27-x86_64-live-rootfs.x86_64.img"
+          - openshiftVersion: "4.19"
+            cpuArchitecture: "x86_64"
+            version: "9.6.20251023-0"
+            url: "http://192.168.1.72/rhcos/rhcos-4.19.23-x86_64-live.x86_64.iso"
+            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.19.23-x86_64-live-rootfs.x86_64.img"
+          - openshiftVersion: "4.20"
+            cpuArchitecture: "x86_64"
+            version: "9.6.20251023-0"
+            url: "http://192.168.1.72/rhcos/rhcos-4.20.12-x86_64-live.x86_64.iso"
+            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.20.12-x86_64-live-rootfs.x86_64.img"
+          - openshiftVersion: "4.21"
+            cpuArchitecture: "x86_64"
+            version: "9.6.20251212-1"
+            url: "http://192.168.1.72/rhcos/rhcos-4.21.0-x86_64-live.x86_64.iso"
+            rootFSUrl: "http://192.168.1.72/rhcos/rhcos-4.21.0-x86_64-live-rootfs.x86_64.img"
 
 #. Apply the agent service config yaml to the cluster.
 
@@ -443,6 +459,10 @@ Together it creates three objects in the "output" directory.
               type: ethernet
               mtu: 1500
               state: up
+              ipv4:
+                enabled: false
+              ipv6:
+                enabled: false
             - name: enp1s0.122
               type: vlan
               state: up
@@ -480,8 +500,6 @@ Together it creates three objects in the "output" directory.
         annotations:
           bmac.agent-install.openshift.io/hostname: $HOST
           inspect.metal3.io: ""
-        finalizers:
-          - baremetalhost.metal3.io
         labels:
           infraenvs.agent-install.openshift.io: lablocal
         name: $HOST
