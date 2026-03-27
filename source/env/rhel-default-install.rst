@@ -132,9 +132,8 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
 #. Install themes & icons https://www.gnome-look.org/browse/
 
-   - Nordic-v40
-   - Bluish-Dark-Icons
-   - Tango2
+   - Nordic-v40 (https://www.gnome-look.org/p/1267246)
+   - Bluish-Dark-Icons (https://www.gnome-look.org/p/2055336)
 
    .. code-block:: bash
 
