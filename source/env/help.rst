@@ -84,6 +84,12 @@ Mount CIFS
    sudo mount -t cifs -o file_mode=0777,dir_mode=0777,rw,username=administrator,password=<passwd> \
    //192.168.1.190/share /mnt/win2k25
 
+Monitor a specific process
+
+.. code-block:: bash
+
+   htop -p $(pgrep -d ',' brave)
+
 Create auth key
 ---------------
 
