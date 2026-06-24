@@ -31,8 +31,10 @@ L2
 .. tip:: To expose the VIP with a service see:
    `Quick App Deployment <./openshift-day2.html#quick-app-deployment-route>`_
 
-   Here you'll find how to deploy a generic httpd service and expose a
+   There you'll find how to deploy a generic httpd service and expose a
    LoadBalancer Service.
+
+.. important:: You need a LoadBalancer Service for this to work.
 
 #. Create the IP Address Pool
 

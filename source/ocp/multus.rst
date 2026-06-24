@@ -11,7 +11,7 @@ I found the following helpful as well:
 .. important:: You can NOT use a ClusterIP service with these endpoints. Only
    the default Network IP can be exposed with a Route.
 
-   For external access use NodePort and LoadBalancer service to expose the
+   For external access use NodePort or LoadBalancer service to expose the
    endpoint.
 
 User Defined Networks
