@@ -70,6 +70,14 @@ Server
          sudo firewall-cmd --add-service={nfs3,mountd,rpc-bind} --permanent
          sudo firewall-cmd --reload
 
+   .. tip:: For the server to return an answer for rpcinfo request open the
+      following ports
+
+      .. code-block:: bash
+
+         sudo firewall-cmd --add-service={mountd,rpc-bind} --permanent
+         sudo firewall-cmd --reload
+
 Client
 ------
 
@@ -77,13 +85,21 @@ Client
 
    .. code-block:: bash
 
-      sudo dnf insatll nfs-utils -y
+      sudo dnf install nfs-utils -y
 
 #. Create the mount directory.
 
    .. code-block:: bash
 
       sudo mkdir -p /mnt/nfs
+
+#. Check remote nfs server
+
+   .. code-block:: bash
+
+      showmount -e 192.168.1.72
+
+      rpcinfo -p 192.168.1.72
 
 #. Mount the remote nfs directory.
 
@@ -96,3 +112,9 @@ Client
    .. code-block:: bash
 
       mount | grep -i nfs
+
+#. Make mount permanent by adding the line to "/etc/fstab"
+
+   .. code-block:: bash
+
+      192.168.1.69:/volume1/nfs                 /mnt/perl               nfs4    defaults        0 0
