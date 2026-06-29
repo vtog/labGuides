@@ -116,7 +116,19 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install bat btop neofetch neovim terminator slack
+      sudo dnf install bat btop neofetch neovim terminator slack nginx
+
+#. Start nginx service and open http on firewall
+
+   .. code-block:: bash
+
+      sudo systemctl enable --now nginx
+
+   .. code-block:: bash
+
+      sudo firewall-cmd --add-service=http --permanent
+      sudo firewall-cmd --reload
+      sudo firewall-cmd --list-all
 
 #. Install packages via Sofware store.
 
@@ -179,7 +191,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo firewall-cmd --add-service vnc-server --permanent
+      sudo firewall-cmd --add-service=vnc-server --permanent
       sudo firewall-cmd --reload
       sudo firewall-cmd --list-all
 

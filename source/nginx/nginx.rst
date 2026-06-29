@@ -5,3 +5,5 @@ NGiNX Lab Guides
    :maxdepth: 1
    :caption: Content:
 
+   conf
+   nginxone
