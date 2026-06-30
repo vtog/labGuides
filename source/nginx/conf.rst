@@ -55,16 +55,6 @@ Getting started
              include             /etc/nginx/mime.types;
              default_type        application/octet-stream;
          
-             server {
-                 listen       80;
-                 listen       [::]:80;
-                 server_name  _;
-                 root         /usr/share/nginx/html;
-         
-                 # Load configuration files for the default server block.
-                 include /etc/nginx/default.d/*.conf;
-             }
-         
              # Load modular configuration files from the /etc/nginx/conf.d directory.
              # See http://nginx.org/en/docs/ngx_core_module.html#include
              # for more information.
@@ -76,8 +66,9 @@ Getting started
       .. code-block:: bash
 
          server {
-             listen 8080;
-             server_name localhost;
+             listen            80;
+             listen       [::]:80;
+             server_name        _;
 
              location / {
                  root /usr/share/nginx/html;
@@ -88,6 +79,9 @@ Getting started
              location = /50x.html {
                  root /usr/share/nginx/html;
              }
+
+             # Load configuration files for the default server block.
+             include /etc/nginx/default.d/*.conf;
          }
 
 Multi-Server setup
