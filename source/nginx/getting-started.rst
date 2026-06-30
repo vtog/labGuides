@@ -1,8 +1,8 @@
-Simple Configuration
-====================
+Getting Started
+===============
 
-Getting started
----------------
+Basic configuration
+-------------------
 
 #. Useful NGINX Commands
 

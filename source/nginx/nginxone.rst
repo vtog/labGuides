@@ -1,8 +1,8 @@
-NGINX One
-=========
+NGINX One Console
+=================
 
-Agent
------
+Manually add the agent
+----------------------
 
 #. Manually installing the NGINX Agent on NGINX Plus and connect to NGINX One
 
