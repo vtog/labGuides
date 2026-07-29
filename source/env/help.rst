@@ -3,34 +3,6 @@ Helpful Commands
 
 I'm always searching for ways to do the following:
 
-Gemini CLI - Testing
---------------------
-
-Install NPM
-
-.. code-block:: bash
-
-   sudo dnf install npm
-
-Install gemini-cli
-
-.. code-block:: bash
-
-   npm install -g @google/gemini-cli
-
-Update gemini-cli
-
-.. code-block:: bash
-
-   npm install -g @google/gemini-cli@latest
-
-
-List globally installed NPM packages
-
-.. code-block:: bash
-
-   sudo npm -g ls
-
 General Linux Commands
 ----------------------
 
@@ -90,8 +62,21 @@ Monitor a specific process
 
    htop -p $(pgrep -d ',' brave)
 
+File checksums sha256 or sha384; You can decrypt and verify an RSA-SHA256/384
+signature using the openssl commands.
+
+.. code-block:: bash
+
+   openssl dgst -sha256 -verify archive-2k.pubkey.20251002.pem \
+    -signature BIGIP-21.1.0-0.0.38.iso.sig BIGIP-21.1.0-0.0.38.iso
+
+   openssl dgst -sha384 -verify archive-3k.pubkey.20251002.pem \
+    -signature BIGIP-21.1.0-0.0.38.iso.384.sig BIGIP-21.1.0-0.0.38.iso
+
+OpenSSL
+-------
 Create auth key
----------------
+~~~~~~~~~~~~~~~
 
 .. note::
 
@@ -115,7 +100,7 @@ Create auth key
    ssh-keygen -t rsa -b 4096
 
 Create key/cert pair with OpenSSL
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. tip:: For binding more then one key for auth, create ~/.ssh/config file
    with following info. This will check both keys (or more) when authenticating
@@ -150,25 +135,62 @@ Create key/cert pair with OpenSSL
       -passin file:passphrase.txt \
       -CA training-CA.pem -CAkey training-CA.key -CAcreateserial \
       -out training.crt -days 1825 -sha256 -extfile training.ext
-
+      
 GIT
 ---
 
 #. Add a new repo
 
-   - Create a directory to contain the project.
-   - Go into the new directory.
-   - Type "git init".
-   - Add some files.
-   - Type "git add ." to add the files.
-   - Type "git commit -m "note"".
+   - ``mkdir`` to contain the new project
+   - ``cd`` into the new directory
+   - Type ``git init``
+   - Add files
+   - Type ``git add .`` to add all the new files
+   - Type ``git commit -m <note>``
 
-#. Sync Rep with Github
+#. Sync Repo with Github
 
    - Go to github
    - Click new repo
    - Name repo (I use name of directory created above.)
    - Click create repo
-   - Type "git remote add origin git@github.com:username/new_repo"
-   - Type "git branch -M main"
-   - Type "git push -u origin main"
+   - Type ``git remote add origin git@github.com:username/new_repo``
+   - Type ``git branch -M main``
+   - Type ``git push -u origin main``
+
+KVM Notes
+---------
+
+#. Resize qcow2 disk.
+
+   .. code-block:: bash
+
+      sudo qemu-img resize <qcow2 file> +100G
+
+Gemini CLI - Testing
+--------------------
+
+#. Install NPM
+
+   .. code-block:: bash
+
+      sudo dnf install npm
+
+#. Install gemini-cli
+
+   .. code-block:: bash
+
+      npm install -g @google/gemini-cli
+
+#. Update gemini-cli
+
+   .. code-block:: bash
+
+      npm install -g @google/gemini-cli@latest
+
+
+#. List globally installed NPM packages
+
+   .. code-block:: bash
+
+      sudo npm -g ls
