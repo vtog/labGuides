@@ -98,9 +98,17 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       sudo grubby --update-kernel=ALL --args="intel_iommu=on iommu=pt"
 
+      sudo reboot
+
    .. code-block:: bash
 
       sudo dmesg | grep "iommu: Default"
+
+   .. code-block:: bash
+
+      cat /proc/cmdline
+
+      cat /proc/cmdline | tr ' ' '\n'
 
    .. tip:: How to remove argument
 

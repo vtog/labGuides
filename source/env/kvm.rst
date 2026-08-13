@@ -1,18 +1,8 @@
 KVM Install Notes
 =================
 
-#. Tagging on the **Guest**. Create the following file.
-
-   .. note:: In this example a **bridge** interface needs to be created on the
-      **host** first. The network is configured with trunked ports.
-
-   .. code-block:: xml
-
-      <network>
-        <name>br-enp3s0f0</name>
-        <forward mode="bridge"/>
-        <bridge name="br-enp3s0f0"/>
-      </network>
+#. Tagging on the **Guest**. In this example a **bridge** interface needs to be
+   created on the **host** first. The network is configured with trunked ports.
 
    .. attention:: When creating the VM a single network interface is added. Be
       sure to add the VLAN interfaces to the **guest** after booting.
@@ -20,32 +10,68 @@ KVM Install Notes
    .. warning:: Adding VLAN interfaces to the **host** will prevent the
       **guest** from seeing the VLAN.
 
-#. Tagging on the **Host**. Create the following file.
+   A. Create the folling xml file
 
-   .. note:: In these examples I have two VLANs, 122 & 132. Both **VLAN**
-      intefaces need to be created on the **host** first. The network is
-      configured with trunked ports.
+      .. code-block:: bash
 
-   .. code-block:: xml
+         cat << EOF > ./br-enp4s0f0.xml
+         <network>
+           <name>br-enp4s0f0</name>
+           <forward mode="bridge"/>
+           <bridge name="br-enp4s0f0"/>
+         </network>
+         EOF
 
-      <network>
-        <name>macvtap-122</name>
-        <forward mode="bridge">
-          <interface dev="enp3s0f0.122"/>
-        </forward>
-      </network>
+   #. Use virsh to create and start new network
 
-   .. code-block:: xml
+      .. code-block:: bash
 
-      <network>
-        <name>macvtap-132</name>
-        <forward mode="bridge">
-          <interface dev="enp3s0f0.132"/>
-        </forward>
-      </network>
+         sudo virsh net-define --file br-enp4s0f0.xml
+         sudo virsh net-start --network br-enp4s0f0
+         sudo virsh net-autostart --network br-enp4s0f0
+         sudo virsh net-list
+
+#. Tagging on the **Host**. In these examples I have two VLANs, 122 & 132. Both
+   **VLAN** intefaces need to be created on the **host** first. The network is
+   configured with trunked ports.
 
    .. attention:: When creating the VM add two network interfaces. Each will be
       on their respective VLAN.
+
+   A. Create the following xml files
+
+      .. code-block:: bash
+
+         cat << EOF > ./macvtap-122.xml
+         <network>
+           <name>macvtap-122</name>
+           <forward mode="bridge">
+             <interface dev="enp4s0f1.122"/>
+           </forward>
+         </network>
+         EOF
+
+         cat << EOF > ./macvtap-132.xml
+         <network>
+           <name>macvtap-132</name>
+           <forward mode="bridge">
+             <interface dev="enp4s0f1.132"/>
+           </forward>
+         </network>
+         EOF
+
+   #. Use virsh to create and start new network
+
+      .. code-block:: bash
+
+         sudo virsh net-define --file macvtap-122.xml
+         sudo virsh net-define --file macvtap-132.xml
+         sudo virsh net-start --network macvtap-122
+         sudo virsh net-start --network macvtap-132
+         sudo virsh net-autostart --network macvtap-122
+         sudo virsh net-autostart --network macvtap-132
+         sudo virsh net-list
+
 
 #. SRIOV Networks
 
