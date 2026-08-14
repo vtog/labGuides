@@ -1,6 +1,55 @@
 Getting Started
 ===============
 
+Install on RHEL
+---------------
+
+#. Add nginx repo
+
+   .. code-block:: bash
+      
+      cat << 'EOF' > ./nginx.repo
+      [nginx-stable]
+      name=nginx stable repo
+      baseurl=https://nginx.org/packages/centos/$releasever/$basearch/
+      gpgcheck=1
+      enabled=1
+      gpgkey=https://nginx.org/keys/nginx_signing.key
+      module_hotfixes=true
+      
+      [nginx-mainline]
+      name=nginx mainline repo
+      baseurl=https://nginx.org/packages/mainline/centos/$releasever/$basearch/
+      gpgcheck=1
+      enabled=0
+      gpgkey=https://nginx.org/keys/nginx_signing.key
+      module_hotfixes=true
+      EOF
+
+      sudo chown root: ./nginx.repo
+      sudo mv ./nginx.repo /etc/yum.repos.d/nginx.repo
+
+#. Add nginx package
+
+   .. code-block:: bash
+
+      sudo dnf install nginx
+
+#. Start nginx
+
+   .. code-block:: bash
+
+      sudo systemctl enable --now nginx
+
+#. Open firewall
+
+  .. code-block:: bash
+
+     sudo firewall-cmd --add-service={http,https} --permanent
+     sudo firewall-cmd --reload
+     sudo firewall-cmd --get-default-zone
+     sudo firewall-cmd --list-all
+
 Basic configuration
 -------------------
 
