@@ -124,13 +124,13 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install bat btop neofetch neovim terminator slack nginx
+      sudo dnf install bat btop neofetch neovim terminator slack httpd
 
-#. Start nginx service and open http on firewall
+#. Start httpd service and open port 80 on firewall
 
    .. code-block:: bash
 
-      sudo systemctl enable --now nginx
+      sudo systemctl enable --now httpd
 
    .. code-block:: bash
 
