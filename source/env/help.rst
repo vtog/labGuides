@@ -167,6 +167,24 @@ KVM Notes
 
       sudo qemu-img resize <qcow2 file> +100G
 
+#. virsh
+
+   .. code-block:: bash
+
+      virsh list --all
+
+      virsh console <vm-name>
+      
+      virsh start <vm-name>
+      
+      virsh shutdown <vm-name>
+
+   .. tip:: Shutdown all running VMs
+
+      .. code-block:: bash
+
+         for i in $(virsh list --state-running --name); do virsh shutdown "$i"; done
+
 Gemini CLI - Testing
 --------------------
 

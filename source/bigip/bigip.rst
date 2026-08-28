@@ -5,3 +5,4 @@ BigIP Lab Guides
    :maxdepth: 1
    :caption: Content:
 
+   getting-started
