@@ -1,7 +1,34 @@
 Setup Fedora/RHEL
+
 =================
 
 These instruction configure RHEL9 or Fedora with my preferred settings.
+
+#. Steps needed to register if not done at install.
+
+   .. code-block:: bash
+
+      sudo subscription-manager register 
+      sudo subscription-manager status
+      sudo insights-client --register
+
+   .. tip:: RHEL developer subs are free to use.
+
+#. Add addition repos via subscription-manager
+
+   .. code-block:: bash
+
+      sudo subscription-manager release --show
+      sudo subscription-manager release --set=10.2
+
+      sudo subscription-manager list
+      sudo subscription-manager repos --enable=rhel-9-for-x86_64-baseos-rpms
+      sudo subscription-manager repos --enable=rhel-9-for-x86_64-appstream-rpms
+      sudo subscription-manager repos --enable codeready-builder-for-rhel-10-$(arch)-rpms
+
+   .. tip:: Show "Enabled" repos
+
+      sudo subscription-manager repos --list | grep "Enabled:   1" -B3
 
 #. My default install of RHEL9 had ipv6 disabled. Here's how to enable it.
 
@@ -124,7 +151,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. code-block:: bash
 
-      sudo dnf install bat btop neofetch neovim terminator slack httpd
+      sudo dnf install btop fastfetch neovim terminator httpd nginx
 
 #. Start httpd service and open port 80 on firewall
 
@@ -389,7 +416,6 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       :emphasize-lines: 12
 
       sudo bash -c 'cat << EOF > /etc/gai.conf
-
       label  ::1/128       0
       label  ::/0          1
       label  2002::/16     2
