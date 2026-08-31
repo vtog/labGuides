@@ -1,10 +1,9 @@
 Setup Fedora/RHEL
-
 =================
 
 These instruction configure RHEL9 or Fedora with my preferred settings.
 
-#. Steps needed to register if not done at install.
+1. Steps needed to register if not done at install.
 
    .. code-block:: bash
 
@@ -12,7 +11,11 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       sudo subscription-manager status
       sudo insights-client --register
 
-   .. tip:: RHEL developer subs are free to use.
+   .. tip:: RHEL Developer Subs are free to use. Create an account here:
+
+      `Red Hat Developer
+      <https://developers.redhat.com/>`_
+        
 
 #. Add addition repos via subscription-manager
 
@@ -28,7 +31,9 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
    .. tip:: Show "Enabled" repos
 
-      sudo subscription-manager repos --list | grep "Enabled:   1" -B3
+      .. code-block:: bash
+
+         sudo subscription-manager repos --list | grep "Enabled:   1" -B3
 
 #. My default install of RHEL9 had ipv6 disabled. Here's how to enable it.
 
