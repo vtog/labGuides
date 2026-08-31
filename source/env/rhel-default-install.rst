@@ -12,10 +12,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       sudo insights-client --register
 
    .. tip:: RHEL Developer Subs are free to use. Create an account here:
-
-      `Red Hat Developer
-      <https://developers.redhat.com/>`_
-        
+      `Red Hat Developer <https://developers.redhat.com/>`_
 
 #. Add addition repos via subscription-manager
 
