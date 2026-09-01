@@ -158,6 +158,15 @@ GIT
    - Type ``git branch -M main``
    - Type ``git push -u origin main``
 
+#. Issue with SSL certs. If you see the following similar error you can resolve
+   this with by disabling sslVerify
+
+   ``SSL certificate OpenSSL verify result: self-signed certificate in certificate chain (19)``
+
+   .. code-block:: bash
+
+     git config --global http.sslVerify "false"
+
 KVM Notes
 ---------
 
