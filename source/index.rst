@@ -13,6 +13,7 @@ Last change: |today|
    bigip/bigip
    nginx/nginx
    xc/xc
+   k8s/k8s
    ocp/ocp
    ans/ans
    env/env
