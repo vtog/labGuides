@@ -47,3 +47,7 @@ ul li p:last-child {
   padding: 0px 0px !important;
   display: inline !important;
 }
+
+span.red {
+  color: red;
+}

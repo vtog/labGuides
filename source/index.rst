@@ -1,8 +1,9 @@
 Welcome to My Unoffocial Lab Guides!
 ====================================
-These guides are my personal documentation on how to complete verious tasks
-for RHEL, OpenShift, etc. They're based on the more complete Red Hat
-documentation and assume a working knowledge of each topic.
+These guides are my personal lab docs covering how to complete verious tasks
+for :red:`F5` (**BIGIP, NGINX, Distributed Cloud**) and :red:`RH` (**RHEL,
+OpenShift**). They're based on the more complete corporate documentation and
+assume a working knowledge of each topic.
 
 Last change: |today|
 

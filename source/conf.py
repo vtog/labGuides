@@ -39,4 +39,8 @@ html_theme_options = {
 html_logo = "_static/F5_supernetops.png"
 
 html_static_path = ["_static"]
-html_css_files = ["css/custom.css"]
+html_css_files = ["css/custom.css",]
+
+rst_epilog = """
+.. role:: red
+"""
