@@ -310,11 +310,11 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
       sudo firewall-cmd --add-service=ssh --permanent
       sudo firewall-cmd --reload
 
-#. Add user to wheel group **(If Needed)**
+#. Add user to required groups **(If Needed)**
 
    .. code-block:: bash
 
-      usermod -a -G wheel <user>
+      usermod -a -G wheel,cdrom,libvirt,named <user>
 
 #. Use vi with visudo, permanently change editor
 
