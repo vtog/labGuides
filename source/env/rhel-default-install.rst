@@ -62,7 +62,7 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
 
       sudo dnf install zsh git rsync NetworkManager-tui firewall-config \
       cockpit cockpit-machines cockpit-composer util-linux-user \
-      cronie cronie-anacron
+      cifs-utils cronie cronie-anacron
 
 #. Enable/start and open firewall for "cockpit" service
 
@@ -120,6 +120,13 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
          sudo firewall-cmd --add-source=192.168.122.0/24 --zone=home --permanent
          sudo firewall-cmd --add-service=dns --zone=home --permanent
          sudo firewall-cmd --reload
+
+   .. important:: I found recently I need to update the facl for my default
+      directory I use for boot images.
+
+      .. code-block:: bash
+
+         sudo setfacl -m u:qemu:--x /home /home/vince /home/vince/Downloads
 
 #. Enable IOMMU
 
@@ -499,6 +506,28 @@ These instruction configure RHEL9 or Fedora with my preferred settings.
    .. code-block:: bash
 
       systemctl mask tmp.mount
+
+#. **OPTIONAL** Packages to rip music
+
+   .. code-block:: bash
+
+      sudo dnf install abcde lame python3-eyed3
+
+   .. tip:: My abcde conf
+
+      .. code-block:: bash
+
+         OUTPUTDIR="$HOME/music-test"
+         EYED3OPTS="--non-std-genres"
+         ID3TAGV="id3v2.4"
+         OUTPUTTYPE="mp3"
+         LAMEOPTS="-V 2"
+         PADTRACKS="y"
+         MAXPROCS="8"
+         OUTPUTFORMAT='./${ARTISTFILE}/${ALBUMFILE}/${TRACKNUM} - ${TRACKFILE}'
+         VAOUTPUTFORMAT='./Various Artists/${ALBUMFILE}/${TRACKNUM} - ${TRACKFILE} - ${ARTISTFILE}'
+
+#. **OPTIONAL** Packages to rip DVD's
 
 Upgrade Fedora
 --------------
